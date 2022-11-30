@@ -1,6 +1,6 @@
 namespace Efficiency;
 
-public static class ChangeTrackingSequenceNumber
+public  static partial class Efficiency
 {
     public static async Task SetTrackedTables(this DbConnection connection, IEnumerable<string> tablesToTrack, uint retentionDays = 1,CancellationToken cancellation = default)
     {
@@ -123,7 +123,7 @@ from sys.databases as d inner join
             .IsRowVersion()
             .HasConversion<byte[]>();
 
-    public static async Task<string> LastTimeStamp(this DbContext context, CancellationToken token = default)
+    public static async Task<string> GetLastTimeStamp(this DbContext context, CancellationToken token = default)
     {
         // Do not dispose of this connection as it kill the context
         var connection = context.Database.GetDbConnection();
@@ -134,6 +134,30 @@ from sys.databases as d inner join
             command.Transaction = transaction.GetDbTransaction();
         }
 
+        if (connection.State != ConnectionState.Closed)
+        {
+            return await ExecuteTimestampQuery(command, token);
+        }
+
+        await connection.OpenAsync(token);
+        try
+        {
+            return await ExecuteTimestampQuery(command, token);
+        }
+        finally
+        {
+            await connection.CloseAsync();
+        }
+    }
+
+    public static async Task<string> GetLastTimeStamp(this DbConnection connection, CancellationToken token = default)
+    {
+        await using var command = connection.CreateCommand();
+        return await ExecuteTimestampQuery(command, token);
+    }
+
+    static async Task<string> ExecuteTimestampQuery(DbCommand command, CancellationToken token = default)
+    {
         command.CommandText = @"
 declare @changeTracking bigint = change_tracking_current_version();
 declare @timeStamp bigint = convert(bigint, @@dbts);
@@ -141,22 +165,8 @@ declare @timeStamp bigint = convert(bigint, @@dbts);
 if (@changeTracking is null)
     select cast(@timeStamp as varchar) 
 else
-    select cast(@changeTracking as varchar) + '_' + cast(@timeStamp as varchar) 
+    select cast(@timeStamp as varchar) + '_' + cast(@changeTracking as varchar) 
 ";
-
-        if (connection.State != ConnectionState.Closed)
-        {
-            return (string) (await command.ExecuteScalarAsync(token))!;
-        }
-
-        await connection.OpenAsync(token);
-        try
-        {
-            return (string) (await command.ExecuteScalarAsync(token))!;
-        }
-        finally
-        {
-            await connection.CloseAsync();
-        }
+        return (string) (await command.ExecuteScalarAsync(token))!;
     }
 }

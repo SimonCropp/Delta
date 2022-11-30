@@ -7,7 +7,7 @@
         await using var database = await LocalDb();
 
         var context = database.Context;
-        var timeStamp = await context.LastTimeStamp();
+        var timeStamp = await context.GetLastTimeStamp();
         Assert.IsNotEmpty(timeStamp);
         Assert.IsNotNull(timeStamp);
         var entity = new Company
@@ -15,7 +15,7 @@
             Content = "The company"
         };
         await database.AddDataUntracked(entity);
-        var newTimeStamp = await context.LastTimeStamp();
+        var newTimeStamp = await context.GetLastTimeStamp();
         Assert.IsNotEmpty(newTimeStamp);
         Assert.IsNotNull(newTimeStamp);
     }
@@ -27,7 +27,7 @@
 
         await database.Connection.EnableTracking();
         var context = database.Context;
-        var timeStamp = await context.LastTimeStamp();
+        var timeStamp = await context.GetLastTimeStamp();
         Assert.IsNotEmpty(timeStamp);
         Assert.IsNotNull(timeStamp);
         var entity = new Company
@@ -35,7 +35,7 @@
             Content = "The company"
         };
         await database.AddDataUntracked(entity);
-        var newTimeStamp = await context.LastTimeStamp();
+        var newTimeStamp = await context.GetLastTimeStamp();
         Assert.IsNotEmpty(newTimeStamp);
         Assert.IsNotNull(newTimeStamp);
     }
