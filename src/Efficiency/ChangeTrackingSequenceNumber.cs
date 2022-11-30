@@ -4,9 +4,9 @@ namespace Efficiency;
 
 public static class ChangeTrackingSequenceNumber
 {
-    public static async Task SetTrackedTables(this DbConnection connection, IEnumerable<string> tablesToTrack, CancellationToken cancellation = default)
+    public static async Task SetTrackedTables(this DbConnection connection, IEnumerable<string> tablesToTrack, uint retentionDays = 1,CancellationToken cancellation = default)
     {
-        await connection.EnableTracking(cancellation: cancellation);
+        await connection.EnableTracking(retentionDays, cancellation: cancellation);
 
         var tablesBeingTracked = await connection.GetTrackedTables(cancellation: cancellation);
 
@@ -25,12 +25,12 @@ public static class ChangeTrackingSequenceNumber
             builder.AppendLine($"alter table [{table}] disable change_tracking;");
         }
 
-        await using var trackChangesTableCommand = connection.CreateCommand();
-        trackChangesTableCommand.CommandText = builder.ToString();
-        await trackChangesTableCommand.ExecuteNonQueryAsync(cancellation);
+        await using var command = connection.CreateCommand();
+        command.CommandText = builder.ToString();
+        await command.ExecuteNonQueryAsync(cancellation);
     }
 
-    public static async Task EnableTracking(this DbConnection connection, CancellationToken cancellation = default)
+    public static async Task EnableTracking(this DbConnection connection, uint retentionDays = 1, CancellationToken cancellation = default)
     {
         if (await IsTrackingEnabled(connection, cancellation))
         {
@@ -42,7 +42,7 @@ public static class ChangeTrackingSequenceNumber
 alter database {connection.Database}
 set change_tracking = on
 (
-    change_retention = 30 days,
+    change_retention = {retentionDays} days,
     auto_cleanup = on
 )";
         await command.ExecuteNonQueryAsync(cancellation);
