@@ -1,7 +1,7 @@
 # <img src="/src/icon.png" height="30px"> Delta
 
 [![Build status](https://ci.appveyor.com/api/projects/status/20t96gnsmysklh09/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Delta)
-[![NuGet Status](https://img.shields.io/nuget/v/Efficiency.svg?label=Delta)](https://www.nuget.org/packages/Delta/)
+[![NuGet Status](https://img.shields.io/nuget/v/Delta.svg)](https://www.nuget.org/packages/Delta/)
 
 .
 
