@@ -165,7 +165,7 @@ declare @timeStamp bigint = convert(bigint, @@dbts);
 if (@changeTracking is null)
     select cast(@timeStamp as varchar) 
 else
-    select cast(@timeStamp as varchar) + '_' + cast(@changeTracking as varchar) 
+    select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar) 
 ";
         return (string) (await command.ExecuteScalarAsync(token))!;
     }

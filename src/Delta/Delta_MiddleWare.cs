@@ -84,8 +84,7 @@ public static partial class Delta
             etag += "-" + suffix(context);
         }
 
-        etag = $"\"{etag}\"";
-        response.Headers.Add("ETag", etag);
+        response.Headers.Add("ETag", $"\"{etag}\"");
         if (!request.Headers.TryGetValue("If-None-Match", out var ifNoneMatch))
         {
             return false;
