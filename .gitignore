@@ -1,0 +1,9 @@
+*.suo
+*.user
+bin/
+obj/
+.vs/
+*.DotSettings.user
+.idea/
+*.received.*
+nugets/
