@@ -22,7 +22,7 @@ set change_tracking = on
         await command.ExecuteNonQueryAsync(cancellation);
     }
 
-    public static async Task<IReadOnlyList<string>> GetTablesBeingTracked(this DbConnection connection, CancellationToken cancellation = default)
+    public static async Task<IReadOnlyList<string>> GetTrackedTables(this DbConnection connection, CancellationToken cancellation = default)
     {
         await using var command = connection.CreateCommand();
         command.CommandText = @"
@@ -54,8 +54,15 @@ where d.name = '{connection.Database}'";
 
     public static async Task DisableTracking(this DbConnection connection, CancellationToken cancellation = default)
     {
+        var stringBuilder = new StringBuilder();
+        foreach (var table in await connection.GetTrackedTables(cancellation: cancellation))
+        {
+            stringBuilder.AppendLine($"alter table [{table}] disable change_tracking;");
+        }
+
+        stringBuilder.AppendLine($"alter database [{connection.Database}] set change_tracking = off;");
         await using var command = connection.CreateCommand();
-        command.CommandText = $"alter database [{connection.Database}] set change_tracking = off;";
+        command.CommandText = stringBuilder.ToString();
         await command.ExecuteNonQueryAsync(cancellation);
     }
 
