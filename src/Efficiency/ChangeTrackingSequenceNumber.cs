@@ -24,9 +24,20 @@ set change_tracking = on
 
     public static async Task<bool> IsTrackingEnabled(this DbConnection connection)
     {
-        var dbNames = await GetDatabasesWithTracking(connection);
-        // Enable tracked changes if this DB is not in the list
-        return dbNames.Contains(connection.Database);
+        await using var command = connection.CreateCommand();
+        command.CommandText = @"
+select count(d.name)
+from sys.databases as d inner join
+     sys.change_tracking_databases as t on
+     t.database_id = d.database_id
+where d.name = @name";
+        var parameter = command.CreateParameter();
+        parameter.ParameterName = "name";
+        parameter.DbType = DbType.String;
+        parameter.Value = connection.Database;
+        command.Parameters.Add(parameter);
+        var x  = (int)(await command.ExecuteScalarAsync())!;
+        return x == 1;
     }
 
     public static async Task DisableTracking(this DbConnection connection)
