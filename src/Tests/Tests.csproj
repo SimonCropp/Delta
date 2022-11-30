@@ -15,5 +15,6 @@
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="24.5.0" PrivateAssets="all" />
     <ProjectReference Include="..\Efficiency\Efficiency.csproj" />
     <PackageReference Include="ProjectDefaults" Version="1.0.82" PrivateAssets="all" />
+    <ProjectReference Include="..\WebApplication\WebApplication.csproj" />
   </ItemGroup>
 </Project>
