@@ -1,4 +1,4 @@
-namespace Efficiency;
+namespace Delta;
 
 public interface IRowVersion
 {

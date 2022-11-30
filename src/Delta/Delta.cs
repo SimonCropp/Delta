@@ -1,6 +1,6 @@
-namespace Efficiency;
+namespace Delta;
 
-public  static partial class Efficiency
+public  static partial class Delta
 {
     public static async Task SetTrackedTables(this DbConnection connection, IEnumerable<string> tablesToTrack, uint retentionDays = 1,CancellationToken cancellation = default)
     {

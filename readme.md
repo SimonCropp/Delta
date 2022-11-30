@@ -1,13 +1,13 @@
-# <img src="/src/icon.png" height="30px"> Efficiency
+# <img src="/src/icon.png" height="30px"> Delta
 
-[![Build status](https://ci.appveyor.com/api/projects/status/5tus48rgc00y1gic/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Efficiency)
-[![NuGet Status](https://img.shields.io/nuget/v/Efficiency.svg?label=Efficiency)](https://www.nuget.org/packages/Efficiency/)
+[![Build status](https://ci.appveyor.com/api/projects/status/5tus48rgc00y1gic/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Delta)
+[![NuGet Status](https://img.shields.io/nuget/v/Efficiency.svg?label=Delta)](https://www.nuget.org/packages/Delta/)
 
 .
 
 ## NuGet
 
-https://nuget.org/packages/Efficiency/
+https://nuget.org/packages/Delta/
 
 ### Usage
 
