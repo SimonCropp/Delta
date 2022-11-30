@@ -43,17 +43,12 @@ where c.[object_id] is not null";
     public static async Task<bool> IsTrackingEnabled(this DbConnection connection, CancellationToken cancellation = default)
     {
         await using var command = connection.CreateCommand();
-        command.CommandText = @"
+        command.CommandText = $@"
 select count(d.name)
 from sys.databases as d inner join
      sys.change_tracking_databases as t on
      t.database_id = d.database_id
-where d.name = @name";
-        var parameter = command.CreateParameter();
-        parameter.ParameterName = "name";
-        parameter.DbType = DbType.String;
-        parameter.Value = connection.Database;
-        command.Parameters.Add(parameter);
+where d.name = '{connection.Database}'";
         return await command.ExecuteScalarAsync(cancellation) is 1;
     }
 
