@@ -25,10 +25,10 @@ public abstract class LocalDbTestBase
         var test = TestContext.CurrentContext.Test;
         if (testSuffix == null)
         {
-            return $"{test.ClassName}_{test.MethodName}";
+            return test.MethodName!;
         }
 
-        return $"{test.ClassName}_{test.MethodName}_{testSuffix}";
+        return $"{test.MethodName}_{testSuffix}";
     }
 
     string testFile;

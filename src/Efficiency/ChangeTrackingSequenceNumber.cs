@@ -4,6 +4,32 @@ namespace Efficiency;
 
 public static class ChangeTrackingSequenceNumber
 {
+    public static async Task SetTrackedTables(this DbConnection connection, IEnumerable<string> tablesToTrack, CancellationToken cancellation = default)
+    {
+        await connection.EnableTracking(cancellation: cancellation);
+
+        var tablesBeingTracked = await connection.GetTrackedTables(cancellation: cancellation);
+
+        tablesToTrack = tablesToTrack.ToList();
+
+        var builder = new StringBuilder();
+        var except = tablesToTrack.Except(tablesBeingTracked, StringComparer.OrdinalIgnoreCase).ToList();
+        foreach (var table in except)
+        {
+            builder.AppendLine($"alter table [{table}] enable change_tracking;");
+        }
+
+        var tablesToDisable = tablesBeingTracked.Except(tablesToTrack);
+        foreach (var table in tablesToDisable)
+        {
+            builder.AppendLine($"alter table [{table}] disable change_tracking;");
+        }
+
+        await using var trackChangesTableCommand = connection.CreateCommand();
+        trackChangesTableCommand.CommandText = builder.ToString();
+        await trackChangesTableCommand.ExecuteNonQueryAsync(cancellation);
+    }
+
     public static async Task EnableTracking(this DbConnection connection, CancellationToken cancellation = default)
     {
         if (await IsTrackingEnabled(connection, cancellation))
@@ -54,15 +80,20 @@ where d.name = '{connection.Database}'";
 
     public static async Task DisableTracking(this DbConnection connection, CancellationToken cancellation = default)
     {
-        var stringBuilder = new StringBuilder();
-        foreach (var table in await connection.GetTrackedTables(cancellation: cancellation))
+        if (!await IsTrackingEnabled(connection, cancellation))
         {
-            stringBuilder.AppendLine($"alter table [{table}] disable change_tracking;");
+            return;
         }
 
-        stringBuilder.AppendLine($"alter database [{connection.Database}] set change_tracking = off;");
+        var builder = new StringBuilder();
+        foreach (var table in await connection.GetTrackedTables(cancellation: cancellation))
+        {
+            builder.AppendLine($"alter table [{table}] disable change_tracking;");
+        }
+
+        builder.AppendLine($"alter database [{connection.Database}] set change_tracking = off;");
         await using var command = connection.CreateCommand();
-        command.CommandText = stringBuilder.ToString();
+        command.CommandText = builder.ToString();
         await command.ExecuteNonQueryAsync(cancellation);
     }
 
