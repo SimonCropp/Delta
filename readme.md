@@ -1,6 +1,6 @@
 # <img src="/src/icon.png" height="30px"> Delta
 
-[![Build status](https://ci.appveyor.com/api/projects/status/5tus48rgc00y1gic/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Delta)
+[![Build status](https://ci.appveyor.com/api/projects/status/20t96gnsmysklh09/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Delta)
 [![NuGet Status](https://img.shields.io/nuget/v/Efficiency.svg?label=Delta)](https://www.nuget.org/packages/Delta/)
 
 .
@@ -16,4 +16,4 @@ https://nuget.org/packages/Delta/
 
 ## Icon
 
-[Naughty](https://thenounproject.com/term/naughty/1777956/) designed by [AomAm](https://thenounproject.com/AomAm/) from [The Noun Project](https://thenounproject.com).
+[Estuary](https://thenounproject.com/term/estuary/1847616/) designed by [Daan](https://thenounproject.com/Asphaleia/) from [The Noun Project](https://thenounproject.com).
