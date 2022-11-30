@@ -28,7 +28,7 @@ set change_tracking = on
         command.CommandText = @"
 select t.Name
 from sys.tables as t left join
-     sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
+    sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
 where c.[object_id] is not null";
         await using var reader = await command.ExecuteReaderAsync(cancellation);
         var list = new List<string>();
@@ -46,8 +46,8 @@ where c.[object_id] is not null";
         command.CommandText = $@"
 select count(d.name)
 from sys.databases as d inner join
-     sys.change_tracking_databases as t on
-     t.database_id = d.database_id
+    sys.change_tracking_databases as t on
+    t.database_id = d.database_id
 where d.name = '{connection.Database}'";
         return await command.ExecuteScalarAsync(cancellation) is 1;
     }
@@ -65,8 +65,8 @@ where d.name = '{connection.Database}'";
         command.CommandText = @"
 select d.name
 from sys.databases as d inner join
-     sys.change_tracking_databases as t on
-     t.database_id = d.database_id";
+    sys.change_tracking_databases as t on
+    t.database_id = d.database_id";
         await using var reader = await command.ExecuteReaderAsync(cancellation);
         var list = new List<string>();
         while (await reader.ReadAsync(cancellation))
@@ -99,9 +99,9 @@ declare @changeTracking bigint = change_tracking_current_version();
 declare @timeStamp bigint = convert(bigint, @@dbts);
 
 if (@changeTracking is null)
-  select cast(@timeStamp as varchar) 
+    select cast(@timeStamp as varchar) 
 else
-  select cast(@changeTracking as varchar) + '_' + cast(@timeStamp as varchar) 
+    select cast(@changeTracking as varchar) + '_' + cast(@timeStamp as varchar) 
 ";
 
         if (connection.State != ConnectionState.Closed)
