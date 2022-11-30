@@ -43,7 +43,7 @@ where d.name = @name";
     public static async Task DisableTracking(this DbConnection connection)
     {
         await using var command = connection.CreateCommand();
-        command.CommandText = $"ALTER DATABASE [{connection.Database}] SET CHANGE_TRACKING = OFF;";
+        command.CommandText = $"alter database [{connection.Database}] set change_tracking = off;";
         await command.ExecuteNonQueryAsync();
     }
 
@@ -89,7 +89,7 @@ declare @timeStamp bigint = convert(bigint, @@dbts);
 if (@changeTracking is null)
   select cast(@timeStamp as varchar) 
 else
-  select cast(@changeTracking as varchar) + '_'+ cast(@timeStamp as varchar) 
+  select cast(@changeTracking as varchar) + '_' + cast(@timeStamp as varchar) 
 ";
 
         if (connection.State != ConnectionState.Closed)
