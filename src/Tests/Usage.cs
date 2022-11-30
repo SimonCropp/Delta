@@ -46,7 +46,7 @@
         await using var database = await LocalDb();
         var connection = database.Connection;
         await connection.EnableTracking();
-        Assert.IsNotEmpty(await connection.GetDatabasesWithTracking());
+        Assert.IsNotEmpty(await connection.GetTrackedDatabases());
     }
 
     [Test]

@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 namespace Efficiency;
 
 public static class ChangeTrackingSequenceNumber
@@ -8,18 +6,18 @@ public static class ChangeTrackingSequenceNumber
     {
         await connection.EnableTracking(retentionDays, cancellation: cancellation);
 
-        var tablesBeingTracked = await connection.GetTrackedTables(cancellation: cancellation);
+        var trackedTables = await connection.GetTrackedTables(cancellation: cancellation);
 
         tablesToTrack = tablesToTrack.ToList();
 
         var builder = new StringBuilder();
-        var except = tablesToTrack.Except(tablesBeingTracked, StringComparer.OrdinalIgnoreCase).ToList();
+        var except = tablesToTrack.Except(trackedTables, StringComparer.OrdinalIgnoreCase).ToList();
         foreach (var table in except)
         {
             builder.AppendLine($"alter table [{table}] enable change_tracking;");
         }
 
-        var tablesToDisable = tablesBeingTracked.Except(tablesToTrack);
+        var tablesToDisable = trackedTables.Except(tablesToTrack);
         foreach (var table in tablesToDisable)
         {
             builder.AppendLine($"alter table [{table}] disable change_tracking;");
@@ -97,7 +95,7 @@ where d.name = '{connection.Database}'";
         await command.ExecuteNonQueryAsync(cancellation);
     }
 
-    public static async Task<IReadOnlyList<string>> GetDatabasesWithTracking(this DbConnection connection, CancellationToken cancellation = default)
+    public static async Task<IReadOnlyList<string>> GetTrackedDatabases(this DbConnection connection, CancellationToken cancellation = default)
     {
         await using var command = connection.CreateCommand();
         command.CommandText = @"
@@ -118,6 +116,10 @@ from sys.databases as d inner join
     public static void AddRowVersionProperty<T>(this EntityTypeBuilder<T> builder)
         where T : class, IRowVersion =>
         builder.Property(nameof(IRowVersion.RowVersion))
+            .IsBytesRowVersion();
+
+    public static void IsBytesRowVersion(this PropertyBuilder property) =>
+        property
             .IsRowVersion()
             .HasConversion<byte[]>();
 
