@@ -11,15 +11,15 @@ public static class ChangeTrackingSequenceNumber
             return;
         }
 
-        await using var trackChangesOnDbCommand = connection.CreateCommand();
-        trackChangesOnDbCommand.CommandText = $@"
+        await using var command = connection.CreateCommand();
+        command.CommandText = $@"
 alter database {connection.Database}
 set change_tracking = on
 (
     change_retention = 30 days,
     auto_cleanup = on
 )";
-        await trackChangesOnDbCommand.ExecuteNonQueryAsync();
+        await command.ExecuteNonQueryAsync();
     }
 
     public static async Task<bool> IsTrackingEnabled(this DbConnection connection)
