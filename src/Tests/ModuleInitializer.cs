@@ -6,5 +6,7 @@
         VerifyEntityFramework.Enable();
         VerifySqlServer.Enable();
         VerifyDiffPlex.Initialize();
+        VerifyMicrosoftLogging.Enable();
+        VerifyAspNetCore.Enable();
     }
 }

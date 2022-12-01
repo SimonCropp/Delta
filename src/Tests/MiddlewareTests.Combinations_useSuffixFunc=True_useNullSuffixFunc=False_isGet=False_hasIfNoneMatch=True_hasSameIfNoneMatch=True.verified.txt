@@ -1,0 +1,21 @@
+﻿{
+  target: {
+    notModified: false,
+    httpContext: {
+      Request: {
+        Headers: {
+          If-None-Match: "AssemblyWriteTime-rowVersion-suffix"
+        }
+      },
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: OK
+      }
+    }
+  },
+  logs: [
+    {
+      Information: Skipping since request is POST
+    }
+  ]
+}

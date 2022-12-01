@@ -2,7 +2,7 @@ namespace Delta;
 
 public static partial class Delta
 {
-    static string assemblyWriteTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location).Ticks.ToString();
+    internal static string AssemblyWriteTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location).Ticks.ToString();
 
     public static IApplicationBuilder UseDelta<T>(this IApplicationBuilder builder, Func<HttpContext, string?>? suffix = null)
         where T : DbContext
@@ -67,8 +67,15 @@ public static partial class Delta
             return await next(context);
         });
 
-    static async Task<bool> HandleRequest<T>(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix)
-        where T : DbContext
+    internal static Task<bool> HandleRequest<T>(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix)
+        where T : DbContext =>
+        HandleRequest(context, logger, suffix, () =>
+        {
+            var data = context.RequestServices.GetRequiredService<T>();
+            return data.GetLastTimeStamp();
+        });
+
+    internal static async Task<bool> HandleRequest(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<Task<string>> getTimeStamp)
     {
         var request = context.Request;
         var response = context.Response;
@@ -84,16 +91,10 @@ public static partial class Delta
             return false;
         }
 
-        var data = context.RequestServices.GetRequiredService<T>();
-        var rowVersion = await data.GetLastTimeStamp();
-        var etag = $"{assemblyWriteTime}-{rowVersion}";
+        var rowVersion = await getTimeStamp();
         var suffixValue = suffix?.Invoke(context);
-        if (suffixValue != null)
-        {
-            etag += "-" + suffixValue;
-        }
-
-        response.Headers.Add("ETag", $"\"{etag}\"");
+        var etag = BuildEtag(rowVersion, suffixValue);
+        response.Headers.Add("ETag", etag);
         if (!request.Headers.TryGetValue("If-None-Match", out var ifNoneMatch))
         {
             logger.LogInformation("Skipping since request has no If-None-Match");
@@ -111,5 +112,17 @@ ETag: {etag}");
         logger.LogInformation("304");
         response.StatusCode = 304;
         return true;
+    }
+
+    internal static string BuildEtag(string rowVersion, string? suffixValue)
+    {
+        var etag = $"{AssemblyWriteTime}-{rowVersion}";
+        if (suffixValue != null)
+        {
+            etag += "-" + suffixValue;
+        }
+
+        etag = $"\"{etag}\"";
+        return etag;
     }
 }
