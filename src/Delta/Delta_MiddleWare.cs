@@ -116,13 +116,11 @@ ETag: {etag}");
 
     internal static string BuildEtag(string rowVersion, string? suffixValue)
     {
-        var etag = $"{AssemblyWriteTime}-{rowVersion}";
-        if (suffixValue != null)
+        if (suffixValue == null)
         {
-            etag += "-" + suffixValue;
+            return $"\"{AssemblyWriteTime}-{rowVersion}\"";
         }
 
-        etag = $"\"{etag}\"";
-        return etag;
+        return $"\"{AssemblyWriteTime}-{rowVersion}-{suffixValue}\"";
     }
 }

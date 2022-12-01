@@ -4,7 +4,7 @@ public class MiddlewareTests :
     LocalDbTestBase
 {
     [TestCaseSource(nameof(Cases))]
-    public async Task Combinations(bool useSuffixFunc, bool useNullSuffixFunc, bool isGet, bool hasIfNoneMatch, bool hasSameIfNoneMatch)
+    public async Task Combinations(bool useSuffixFunc, bool useNullSuffixFunc, bool isGet, bool hasIfNoneMatch, bool hasSameIfNoneMatch, bool alreadyHasEtag)
     {
         var provider = LoggerRecording.Start();
         var httpContext = new DefaultHttpContext();
@@ -12,6 +12,11 @@ public class MiddlewareTests :
         var suffixValue = useSuffixFunc && !useNullSuffixFunc ? "suffix" : null;
         var etag = Delta.Delta.BuildEtag("rowVersion", suffixValue);
         var request = httpContext.Request;
+        if (alreadyHasEtag)
+        {
+            httpContext.Response.Headers.ETag = "existingEtag";
+        }
+
         if (isGet)
         {
             request.Method = "GET";
@@ -59,10 +64,11 @@ public class MiddlewareTests :
         foreach (var isGet in bools)
         foreach (var hasIfNoneMatch in bools)
         foreach (var hasSameIfNoneMatch in bools)
+        foreach (var alreadyHasEtag in bools)
         {
             yield return new object[]
             {
-                useSuffixFunc, useNullSuffixFunc, isGet, hasIfNoneMatch, hasSameIfNoneMatch
+                useSuffixFunc, useNullSuffixFunc, isGet, hasIfNoneMatch, hasSameIfNoneMatch, alreadyHasEtag
             };
         }
     }
