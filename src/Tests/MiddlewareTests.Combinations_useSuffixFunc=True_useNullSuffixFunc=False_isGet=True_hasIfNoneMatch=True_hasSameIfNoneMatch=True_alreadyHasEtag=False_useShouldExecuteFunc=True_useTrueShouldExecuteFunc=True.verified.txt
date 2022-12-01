@@ -1,0 +1,24 @@
+﻿{
+  target: {
+    notModified: true,
+    httpContext: {
+      Request: {
+        Headers: {
+          If-None-Match: "AssemblyWriteTime-rowVersion-suffix"
+        }
+      },
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: NotModified,
+        Headers: {
+          ETag: "AssemblyWriteTime-rowVersion-suffix"
+        }
+      }
+    }
+  },
+  logs: [
+    {
+      Information: Delta /path: 304
+    }
+  ]
+}

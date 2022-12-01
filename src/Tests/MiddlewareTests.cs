@@ -4,7 +4,7 @@ public class MiddlewareTests :
     LocalDbTestBase
 {
     [TestCaseSource(nameof(Cases))]
-    public async Task Combinations(bool useSuffixFunc, bool useNullSuffixFunc, bool isGet, bool hasIfNoneMatch, bool hasSameIfNoneMatch, bool alreadyHasEtag)
+    public async Task Combinations(bool useSuffixFunc, bool useNullSuffixFunc, bool isGet, bool hasIfNoneMatch, bool hasSameIfNoneMatch, bool alreadyHasEtag, bool useShouldExecuteFunc, bool useTrueShouldExecuteFunc)
     {
         var provider = LoggerRecording.Start();
         var httpContext = new DefaultHttpContext();
@@ -43,7 +43,8 @@ public class MiddlewareTests :
             httpContext,
             provider,
             useSuffixFunc ? _ => suffixValue : null,
-            _ => Task.FromResult("rowVersion"));
+            _ => Task.FromResult("rowVersion"),
+            useShouldExecuteFunc ? _ => useTrueShouldExecuteFunc : null);
         await Verify(new
             {
                 notModified,
@@ -66,10 +67,19 @@ public class MiddlewareTests :
         foreach (var hasIfNoneMatch in bools)
         foreach (var hasSameIfNoneMatch in bools)
         foreach (var alreadyHasEtag in bools)
+        foreach (var useShouldExecuteFunc in bools)
+        foreach (var useTrueShouldExecuteFunc in bools)
         {
             yield return new object[]
             {
-                useSuffixFunc, useNullSuffixFunc, isGet, hasIfNoneMatch, hasSameIfNoneMatch, alreadyHasEtag
+                useSuffixFunc,
+                useNullSuffixFunc,
+                isGet,
+                hasIfNoneMatch,
+                hasSameIfNoneMatch,
+                alreadyHasEtag,
+                useShouldExecuteFunc,
+                useTrueShouldExecuteFunc
             };
         }
     }

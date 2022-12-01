@@ -1,0 +1,20 @@
+﻿{
+  target: {
+    notModified: false,
+    httpContext: {
+      Request: {},
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: OK,
+        Headers: {
+          ETag: "AssemblyWriteTime-rowVersion"
+        }
+      }
+    }
+  },
+  logs: [
+    {
+      Information: Delta /path: Skipping since request has no If-None-Match
+    }
+  ]
+}

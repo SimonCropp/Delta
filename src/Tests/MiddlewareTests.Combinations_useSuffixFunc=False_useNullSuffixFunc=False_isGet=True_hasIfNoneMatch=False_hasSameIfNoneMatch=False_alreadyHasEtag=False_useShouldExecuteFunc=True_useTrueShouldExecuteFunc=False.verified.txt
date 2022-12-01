@@ -1,0 +1,17 @@
+﻿{
+  target: {
+    notModified: false,
+    httpContext: {
+      Request: {},
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: OK
+      }
+    }
+  },
+  logs: [
+    {
+      Information: Delta /path: Skipping since shouldExecute is false
+    }
+  ]
+}

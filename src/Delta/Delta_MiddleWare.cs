@@ -4,14 +4,14 @@ public static partial class Delta
 {
     internal static string AssemblyWriteTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location).Ticks.ToString();
 
-    public static IApplicationBuilder UseDelta<T>(this IApplicationBuilder builder, Func<HttpContext, string?>? suffix = null)
+    public static IApplicationBuilder UseDelta<T>(this IApplicationBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
         where T : DbContext
     {
         var loggerFactory = builder.ApplicationServices.GetRequiredService<ILoggerFactory>();
         var logger = loggerFactory.CreateLogger("Delta");
         return builder.Use(async (context, next) =>
         {
-            if (await HandleRequest<T>(context, logger, suffix))
+            if (await HandleRequest<T>(context, logger, suffix, shouldExecute))
             {
                 return;
             }
@@ -20,46 +20,46 @@ public static partial class Delta
         });
     }
 
-    public static ComponentEndpointConventionBuilder UseDelta<TDbContext>(this ComponentEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null)
+    public static ComponentEndpointConventionBuilder UseDelta<TDbContext>(this ComponentEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
         where TDbContext : DbContext =>
-        builder.UseDelta<ComponentEndpointConventionBuilder, TDbContext>(suffix);
+        builder.UseDelta<ComponentEndpointConventionBuilder, TDbContext>(suffix, shouldExecute);
 
-    public static ConnectionEndpointRouteBuilder UseDelta<TDbContext>(ConnectionEndpointRouteBuilder builder, Func<HttpContext, string?>? suffix = null)
+    public static ConnectionEndpointRouteBuilder UseDelta<TDbContext>(ConnectionEndpointRouteBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
         where TDbContext : DbContext =>
-        builder.UseDelta<ConnectionEndpointRouteBuilder, TDbContext>(suffix);
+        builder.UseDelta<ConnectionEndpointRouteBuilder, TDbContext>(suffix, shouldExecute);
 
-    public static ControllerActionEndpointConventionBuilder UseDelta<TDbContext>(this ControllerActionEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null)
+    public static ControllerActionEndpointConventionBuilder UseDelta<TDbContext>(this ControllerActionEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
         where TDbContext : DbContext =>
-        builder.UseDelta<ControllerActionEndpointConventionBuilder, TDbContext>(suffix);
+        builder.UseDelta<ControllerActionEndpointConventionBuilder, TDbContext>(suffix, shouldExecute);
 
-    public static HubEndpointConventionBuilder UseDelta<TDbContext>(this HubEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null)
+    public static HubEndpointConventionBuilder UseDelta<TDbContext>(this HubEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
         where TDbContext : DbContext =>
-        builder.UseDelta<HubEndpointConventionBuilder, TDbContext>(suffix);
+        builder.UseDelta<HubEndpointConventionBuilder, TDbContext>(suffix, shouldExecute);
 
-    public static IHubEndpointConventionBuilder UseDelta<TDbContext>(this IHubEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null)
+    public static IHubEndpointConventionBuilder UseDelta<TDbContext>(this IHubEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
         where TDbContext : DbContext =>
-        builder.UseDelta<IHubEndpointConventionBuilder, TDbContext>(suffix);
+        builder.UseDelta<IHubEndpointConventionBuilder, TDbContext>(suffix, shouldExecute);
 
-    public static PageActionEndpointConventionBuilder UseDelta<TDbContext>(this PageActionEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null)
+    public static PageActionEndpointConventionBuilder UseDelta<TDbContext>(this PageActionEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
         where TDbContext : DbContext =>
-        builder.UseDelta<PageActionEndpointConventionBuilder, TDbContext>(suffix);
+        builder.UseDelta<PageActionEndpointConventionBuilder, TDbContext>(suffix, shouldExecute);
 
-    public static RouteGroupBuilder UseDelta<TDbContext>(this RouteGroupBuilder builder, Func<HttpContext, string?>? suffix = null)
+    public static RouteGroupBuilder UseDelta<TDbContext>(this RouteGroupBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
         where TDbContext : DbContext =>
-        builder.UseDelta<RouteGroupBuilder, TDbContext>(suffix);
+        builder.UseDelta<RouteGroupBuilder, TDbContext>(suffix, shouldExecute);
 
-    public static RouteHandlerBuilder UseDelta<TDbContext>(this RouteHandlerBuilder builder, Func<HttpContext, string?>? suffix = null)
+    public static RouteHandlerBuilder UseDelta<TDbContext>(this RouteHandlerBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
         where TDbContext : DbContext =>
-        builder.UseDelta<RouteHandlerBuilder, TDbContext>(suffix);
+        builder.UseDelta<RouteHandlerBuilder, TDbContext>(suffix, shouldExecute);
 
-    public static TBuilder UseDelta<TBuilder, TDbContext>(this TBuilder builder, Func<HttpContext, string?>? suffix = null)
+    public static TBuilder UseDelta<TBuilder, TDbContext>(this TBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
         where TBuilder : IEndpointConventionBuilder
         where TDbContext : DbContext =>
         builder.AddEndpointFilter(async (context, next) =>
         {
             var loggerFactory = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger("Delta");
-            if (await HandleRequest<TDbContext>(context.HttpContext, logger, suffix))
+            if (await HandleRequest<TDbContext>(context.HttpContext, logger, suffix, shouldExecute))
             {
                 return Results.Empty;
             }
@@ -67,7 +67,7 @@ public static partial class Delta
             return await next(context);
         });
 
-    internal static Task<bool> HandleRequest<T>(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix)
+    internal static Task<bool> HandleRequest<T>(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, bool>? shouldExecute)
         where T : DbContext =>
         HandleRequest(
             context,
@@ -75,13 +75,23 @@ public static partial class Delta
             suffix,
             _ => _.RequestServices
                 .GetRequiredService<T>()
-                .GetLastTimeStamp());
+                .GetLastTimeStamp(),
+            shouldExecute);
 
-    internal static async Task<bool> HandleRequest(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, Task<string>> getTimeStamp)
+    internal static async Task<bool> HandleRequest(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, Task<string>> getTimeStamp, Func<HttpContext, bool>? shouldExecute)
     {
         var request = context.Request;
         var response = context.Response;
         var path = request.Path;
+        if (shouldExecute != null)
+        {
+            if (!shouldExecute(context))
+            {
+                logger.LogInformation($"Delta {path}: Skipping since shouldExecute is false");
+                return false;
+            }
+        }
+
         if (request.Method != "GET")
         {
             logger.LogInformation($"Delta {path}: Skipping since request is {request.Method}");
