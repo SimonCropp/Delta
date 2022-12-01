@@ -5,16 +5,20 @@ public static partial class Delta
     static string assemblyWriteTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location).Ticks.ToString();
 
     public static IApplicationBuilder UseDelta<T>(this IApplicationBuilder builder, Func<HttpContext, string?>? suffix = null)
-        where T : DbContext =>
-        builder.Use(async (context, next) =>
+        where T : DbContext
+    {
+        var loggerFactory = builder.ApplicationServices.GetRequiredService<ILoggerFactory>();
+        var logger = loggerFactory.CreateLogger("Delta");
+        return builder.Use(async (context, next) =>
         {
-            if (await HandleRequest<T>(context, suffix))
+            if (await HandleRequest<T>(context, logger, suffix))
             {
                 return;
             }
 
             await next();
         });
+    }
 
     public static ComponentEndpointConventionBuilder UseDelta<TDbContext>(this ComponentEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null)
         where TDbContext : DbContext =>
@@ -53,7 +57,9 @@ public static partial class Delta
         where TDbContext : DbContext =>
         builder.AddEndpointFilter(async (context, next) =>
         {
-            if (await HandleRequest<TDbContext>(context.HttpContext, suffix))
+            var loggerFactory = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger("Delta");
+            if (await HandleRequest<TDbContext>(context.HttpContext, logger, suffix))
             {
                 return Results.Empty;
             }
@@ -61,18 +67,20 @@ public static partial class Delta
             return await next(context);
         });
 
-    static async Task<bool> HandleRequest<T>(HttpContext context, Func<HttpContext, string?>? suffix)
+    static async Task<bool> HandleRequest<T>(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix)
         where T : DbContext
     {
         var request = context.Request;
         var response = context.Response;
         if (request.Method != "GET")
         {
+            logger.LogInformation($"Skipping since request is {request.Method}");
             return false;
         }
 
         if (response.Headers.ETag.Any())
         {
+            logger.LogInformation("Skipping since response has an ETag");
             return false;
         }
 
@@ -88,14 +96,17 @@ public static partial class Delta
         response.Headers.Add("ETag", $"\"{etag}\"");
         if (!request.Headers.TryGetValue("If-None-Match", out var ifNoneMatch))
         {
+            logger.LogInformation("Skipping since request has no If-None-Match");
             return false;
         }
 
         if (ifNoneMatch != etag)
         {
+            logger.LogInformation("Skipping since ifNoneMatch != etag");
             return false;
         }
 
+        logger.LogInformation("304");
         response.StatusCode = 304;
         return true;
     }
