@@ -102,7 +102,9 @@ public static partial class Delta
 
         if (ifNoneMatch != etag)
         {
-            logger.LogInformation("Skipping since ifNoneMatch != etag");
+            logger.LogInformation(@$"Skipping since If-None-Match != ETag
+If-None-Match: {ifNoneMatch}
+ETag: {etag}");
             return false;
         }
 
