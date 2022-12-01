@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 public class MiddlewareTests :
     LocalDbTestBase
@@ -44,7 +45,8 @@ public class MiddlewareTests :
             provider,
             useSuffixFunc ? _ => suffixValue : null,
             _ => Task.FromResult("rowVersion"),
-            useShouldExecuteFunc ? _ => useTrueShouldExecuteFunc : null);
+            useShouldExecuteFunc ? _ => useTrueShouldExecuteFunc : null,
+            LogLevel.Information);
         await Verify(new
             {
                 notModified,

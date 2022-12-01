@@ -4,14 +4,14 @@ public static partial class Delta
 {
     internal static string AssemblyWriteTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location).Ticks.ToString();
 
-    public static IApplicationBuilder UseDelta<T>(this IApplicationBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
+    public static IApplicationBuilder UseDelta<T>(this IApplicationBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where T : DbContext
     {
         var loggerFactory = builder.ApplicationServices.GetRequiredService<ILoggerFactory>();
         var logger = loggerFactory.CreateLogger("Delta");
         return builder.Use(async (context, next) =>
         {
-            if (await HandleRequest<T>(context, logger, suffix, shouldExecute))
+            if (await HandleRequest<T>(context, logger, suffix, shouldExecute, logLevel))
             {
                 return;
             }
@@ -20,46 +20,46 @@ public static partial class Delta
         });
     }
 
-    public static ComponentEndpointConventionBuilder UseDelta<TDbContext>(this ComponentEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
+    public static ComponentEndpointConventionBuilder UseDelta<TDbContext>(this ComponentEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TDbContext : DbContext =>
-        builder.UseDelta<ComponentEndpointConventionBuilder, TDbContext>(suffix, shouldExecute);
+        builder.UseDelta<ComponentEndpointConventionBuilder, TDbContext>(suffix, shouldExecute, logLevel);
 
-    public static ConnectionEndpointRouteBuilder UseDelta<TDbContext>(ConnectionEndpointRouteBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
+    public static ConnectionEndpointRouteBuilder UseDelta<TDbContext>(ConnectionEndpointRouteBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TDbContext : DbContext =>
-        builder.UseDelta<ConnectionEndpointRouteBuilder, TDbContext>(suffix, shouldExecute);
+        builder.UseDelta<ConnectionEndpointRouteBuilder, TDbContext>(suffix, shouldExecute, logLevel);
 
-    public static ControllerActionEndpointConventionBuilder UseDelta<TDbContext>(this ControllerActionEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
+    public static ControllerActionEndpointConventionBuilder UseDelta<TDbContext>(this ControllerActionEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TDbContext : DbContext =>
-        builder.UseDelta<ControllerActionEndpointConventionBuilder, TDbContext>(suffix, shouldExecute);
+        builder.UseDelta<ControllerActionEndpointConventionBuilder, TDbContext>(suffix, shouldExecute, logLevel);
 
-    public static HubEndpointConventionBuilder UseDelta<TDbContext>(this HubEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
+    public static HubEndpointConventionBuilder UseDelta<TDbContext>(this HubEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TDbContext : DbContext =>
-        builder.UseDelta<HubEndpointConventionBuilder, TDbContext>(suffix, shouldExecute);
+        builder.UseDelta<HubEndpointConventionBuilder, TDbContext>(suffix, shouldExecute, logLevel);
 
-    public static IHubEndpointConventionBuilder UseDelta<TDbContext>(this IHubEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
+    public static IHubEndpointConventionBuilder UseDelta<TDbContext>(this IHubEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TDbContext : DbContext =>
-        builder.UseDelta<IHubEndpointConventionBuilder, TDbContext>(suffix, shouldExecute);
+        builder.UseDelta<IHubEndpointConventionBuilder, TDbContext>(suffix, shouldExecute, logLevel);
 
-    public static PageActionEndpointConventionBuilder UseDelta<TDbContext>(this PageActionEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
+    public static PageActionEndpointConventionBuilder UseDelta<TDbContext>(this PageActionEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TDbContext : DbContext =>
-        builder.UseDelta<PageActionEndpointConventionBuilder, TDbContext>(suffix, shouldExecute);
+        builder.UseDelta<PageActionEndpointConventionBuilder, TDbContext>(suffix, shouldExecute, logLevel);
 
-    public static RouteGroupBuilder UseDelta<TDbContext>(this RouteGroupBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
+    public static RouteGroupBuilder UseDelta<TDbContext>(this RouteGroupBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TDbContext : DbContext =>
-        builder.UseDelta<RouteGroupBuilder, TDbContext>(suffix, shouldExecute);
+        builder.UseDelta<RouteGroupBuilder, TDbContext>(suffix, shouldExecute, logLevel);
 
-    public static RouteHandlerBuilder UseDelta<TDbContext>(this RouteHandlerBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
+    public static RouteHandlerBuilder UseDelta<TDbContext>(this RouteHandlerBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TDbContext : DbContext =>
-        builder.UseDelta<RouteHandlerBuilder, TDbContext>(suffix, shouldExecute);
+        builder.UseDelta<RouteHandlerBuilder, TDbContext>(suffix, shouldExecute, logLevel);
 
-    public static TBuilder UseDelta<TBuilder, TDbContext>(this TBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null)
+    public static TBuilder UseDelta<TBuilder, TDbContext>(this TBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TBuilder : IEndpointConventionBuilder
         where TDbContext : DbContext =>
         builder.AddEndpointFilter(async (context, next) =>
         {
             var loggerFactory = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger("Delta");
-            if (await HandleRequest<TDbContext>(context.HttpContext, logger, suffix, shouldExecute))
+            if (await HandleRequest<TDbContext>(context.HttpContext, logger, suffix, shouldExecute, logLevel))
             {
                 return Results.Empty;
             }
@@ -67,7 +67,7 @@ public static partial class Delta
             return await next(context);
         });
 
-    internal static Task<bool> HandleRequest<T>(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, bool>? shouldExecute)
+    internal static Task<bool> HandleRequest<T>(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, bool>? shouldExecute, LogLevel logLevel)
         where T : DbContext =>
         HandleRequest(
             context,
@@ -76,9 +76,10 @@ public static partial class Delta
             _ => _.RequestServices
                 .GetRequiredService<T>()
                 .GetLastTimeStamp(),
-            shouldExecute);
+            shouldExecute,
+            logLevel);
 
-    internal static async Task<bool> HandleRequest(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, Task<string>> getTimeStamp, Func<HttpContext, bool>? shouldExecute)
+    internal static async Task<bool> HandleRequest(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, Task<string>> getTimeStamp, Func<HttpContext, bool>? shouldExecute, LogLevel logLevel)
     {
         var request = context.Request;
         var response = context.Response;
@@ -87,20 +88,20 @@ public static partial class Delta
         {
             if (!shouldExecute(context))
             {
-                logger.LogInformation($"Delta {path}: Skipping since shouldExecute is false");
+                logger.Log(logLevel, $"Delta {path}: Skipping since shouldExecute is false");
                 return false;
             }
         }
 
         if (request.Method != "GET")
         {
-            logger.LogInformation($"Delta {path}: Skipping since request is {request.Method}");
+            logger.Log(logLevel, $"Delta {path}: Skipping since request is {request.Method}");
             return false;
         }
 
         if (response.Headers.ETag.Any())
         {
-            logger.LogInformation($"Delta {path}: Skipping since response has an ETag");
+            logger.Log(logLevel, $"Delta {path}: Skipping since response has an ETag");
             return false;
         }
 
@@ -110,19 +111,19 @@ public static partial class Delta
         response.Headers.Add("ETag", etag);
         if (!request.Headers.TryGetValue("If-None-Match", out var ifNoneMatch))
         {
-            logger.LogInformation($"Delta {path}: Skipping since request has no If-None-Match");
+            logger.Log(logLevel, $"Delta {path}: Skipping since request has no If-None-Match");
             return false;
         }
 
         if (ifNoneMatch != etag)
         {
-            logger.LogInformation(@$"Delta {path}: Skipping since If-None-Match != ETag
+            logger.Log(logLevel, @$"Delta {path}: Skipping since If-None-Match != ETag
 If-None-Match: {ifNoneMatch}
 ETag: {etag}");
             return false;
         }
 
-        logger.LogInformation($"Delta {path}: 304");
+        logger.Log(logLevel, $"Delta {path}: 304");
         response.StatusCode = 304;
         return true;
     }
