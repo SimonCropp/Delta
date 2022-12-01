@@ -14,7 +14,7 @@
   },
   logs: [
     {
-      Information: Skipping since response has an ETag
+      Information: Delta /path: Skipping since response has an ETag
     }
   ]
 }

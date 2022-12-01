@@ -69,47 +69,50 @@ public static partial class Delta
 
     internal static Task<bool> HandleRequest<T>(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix)
         where T : DbContext =>
-        HandleRequest(context, logger, suffix, () =>
-        {
-            var data = context.RequestServices.GetRequiredService<T>();
-            return data.GetLastTimeStamp();
-        });
+        HandleRequest(
+            context,
+            logger,
+            suffix,
+            _ => _.RequestServices
+                .GetRequiredService<T>()
+                .GetLastTimeStamp());
 
-    internal static async Task<bool> HandleRequest(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<Task<string>> getTimeStamp)
+    internal static async Task<bool> HandleRequest(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, Task<string>> getTimeStamp)
     {
         var request = context.Request;
         var response = context.Response;
+        var path = request.Path;
         if (request.Method != "GET")
         {
-            logger.LogInformation($"Skipping since request is {request.Method}");
+            logger.LogInformation($"Delta {path}: Skipping since request is {request.Method}");
             return false;
         }
 
         if (response.Headers.ETag.Any())
         {
-            logger.LogInformation("Skipping since response has an ETag");
+            logger.LogInformation($"Delta {path}: Skipping since response has an ETag");
             return false;
         }
 
-        var rowVersion = await getTimeStamp();
+        var rowVersion = await getTimeStamp(context);
         var suffixValue = suffix?.Invoke(context);
         var etag = BuildEtag(rowVersion, suffixValue);
         response.Headers.Add("ETag", etag);
         if (!request.Headers.TryGetValue("If-None-Match", out var ifNoneMatch))
         {
-            logger.LogInformation("Skipping since request has no If-None-Match");
+            logger.LogInformation($"Delta {path}: Skipping since request has no If-None-Match");
             return false;
         }
 
         if (ifNoneMatch != etag)
         {
-            logger.LogInformation(@$"Skipping since If-None-Match != ETag
+            logger.LogInformation(@$"Delta {path}: Skipping since If-None-Match != ETag
 If-None-Match: {ifNoneMatch}
 ETag: {etag}");
             return false;
         }
 
-        logger.LogInformation("304");
+        logger.LogInformation($"Delta {path}: 304");
         response.StatusCode = 304;
         return true;
     }

@@ -17,6 +17,7 @@ public class MiddlewareTests :
             httpContext.Response.Headers.ETag = "existingEtag";
         }
 
+        request.Path = "/path";
         if (isGet)
         {
             request.Method = "GET";
@@ -42,7 +43,7 @@ public class MiddlewareTests :
             httpContext,
             provider,
             useSuffixFunc ? _ => suffixValue : null,
-            () => Task.FromResult("rowVersion"));
+            _ => Task.FromResult("rowVersion"));
         await Verify(new
             {
                 notModified,
