@@ -23,6 +23,11 @@ public  static partial class Delta
             builder.AppendLine($"alter table [{table}] disable change_tracking;");
         }
 
+        if (builder.Length == 0)
+        {
+            return;
+        }
+
         await using var command = connection.CreateCommand();
         command.CommandText = builder.ToString();
         await command.ExecuteNonQueryAsync(cancellation);

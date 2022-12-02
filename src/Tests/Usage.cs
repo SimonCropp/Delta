@@ -60,6 +60,23 @@
     }
 
     [Test]
+    public async Task DuplicateSetTrackedTables()
+    {
+        await using var database = await LocalDb();
+        var connection = database.Connection;
+        await connection.SetTrackedTables(new []{"Companies"});
+        await connection.SetTrackedTables(new []{"Companies"});
+    }
+
+    [Test]
+    public async Task EmptySetTrackedTables()
+    {
+        await using var database = await LocalDb();
+        var connection = database.Connection;
+        await connection.SetTrackedTables(new string[]{});
+    }
+
+    [Test]
     public async Task DisableTracking()
     {
         await using var database = await LocalDb();
