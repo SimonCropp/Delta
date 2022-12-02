@@ -1,4 +1,4 @@
-﻿public class Employee : IRowVersion
+﻿public class Employee
 {
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public int Id { get; set; }

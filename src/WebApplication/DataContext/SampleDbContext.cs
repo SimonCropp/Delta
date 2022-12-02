@@ -11,14 +11,20 @@
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var companyBuilder = modelBuilder.Entity<Company>();
-        companyBuilder
+        var company = modelBuilder.Entity<Company>();
+        company
             .HasMany(c => c.Employees)
             .WithOne(e => e.Company)
             .IsRequired();
-        companyBuilder.TryAddRowVersionProperty();
+        company
+            .Property(_ => _.RowVersion)
+            .IsRowVersion()
+            .HasConversion<byte[]>();
 
-        var employeeBuilder = modelBuilder.Entity<Employee>();
-        employeeBuilder.TryAddRowVersionProperty();
+        var employee = modelBuilder.Entity<Employee>();
+        employee
+            .Property(_ => _.RowVersion)
+            .IsRowVersion()
+            .HasConversion<byte[]>();
     }
 }

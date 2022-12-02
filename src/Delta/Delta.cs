@@ -113,25 +113,6 @@ from sys.databases as d inner join
         return list;
     }
 
-    public static void AddRowVersionProperty<T>(this EntityTypeBuilder<T> builder)
-        where T : class, IRowVersion =>
-        builder.Property(nameof(IRowVersion.RowVersion))
-            .IsBytesRowVersion();
-
-    public static void TryAddRowVersionProperty<T>(this EntityTypeBuilder<T> builder)
-        where T : class
-    {
-        if (typeof(T).IsAssignableTo(typeof(IRowVersion)))
-        {
-            builder.Property(nameof(IRowVersion.RowVersion)).IsBytesRowVersion();
-        }
-    }
-
-    public static void IsBytesRowVersion(this PropertyBuilder property) =>
-        property
-            .IsRowVersion()
-            .HasConversion<byte[]>();
-
     public static async Task<string> GetLastTimeStamp(this DbContext context, CancellationToken token = default)
     {
         // Do not dispose of this connection as it kill the context
