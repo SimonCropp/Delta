@@ -118,6 +118,15 @@ from sys.databases as d inner join
         builder.Property(nameof(IRowVersion.RowVersion))
             .IsBytesRowVersion();
 
+    public static void TryAddRowVersionProperty<T>(this EntityTypeBuilder<T> builder)
+        where T : class
+    {
+        if (typeof(T).IsAssignableTo(typeof(IRowVersion)))
+        {
+            builder.Property(nameof(IRowVersion.RowVersion)).IsBytesRowVersion();
+        }
+    }
+
     public static void IsBytesRowVersion(this PropertyBuilder property) =>
         property
             .IsRowVersion()

@@ -16,9 +16,9 @@
             .HasMany(c => c.Employees)
             .WithOne(e => e.Company)
             .IsRequired();
-        companyBuilder.AddRowVersionProperty();
+        companyBuilder.TryAddRowVersionProperty();
 
         var employeeBuilder = modelBuilder.Entity<Employee>();
-        employeeBuilder.AddRowVersionProperty();
+        employeeBuilder.TryAddRowVersionProperty();
     }
 }
