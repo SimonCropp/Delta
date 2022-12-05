@@ -22,15 +22,17 @@ Assume the following combination of technologies are being used:
 ```mermaid
 graph TD
     Request
-    IfNoneMatch{Has If-None-Match<br/>header?}
-    EtagMatch{Etag match?}
-    200[Response:<br/>200 OK + ETag header]
+    CalculateEtag[Calculate current ETag<br/>based on timestamp<br/>from web assembly and SQL]
+    IfNoneMatch{Has<br/>If-None-Match<br/>header?}
+    EtagMatch{Current<br/>Etag matches<br/>If-None-Match?}
+    200[Response:<br/>200 OK + current ETag header]
     304[Response:<br/>304 Not-Modified]
-    Request --> IfNoneMatch
+    Request --> CalculateEtag
+    CalculateEtag --> IfNoneMatch
     IfNoneMatch -->|Yes| EtagMatch
     IfNoneMatch -->|No| 200
-    EtagMatch -->|Yes| 304
     EtagMatch -->|No| 200
+    EtagMatch -->|Yes| 304
 ```
 
 
