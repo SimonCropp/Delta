@@ -11,7 +11,7 @@ public class MiddlewareTests :
         var httpContext = new DefaultHttpContext();
 
         var suffixValue = useSuffixFunc && !useNullSuffixFunc ? "suffix" : null;
-        var etag = Delta.Delta.BuildEtag("rowVersion", suffixValue);
+        var etag = DeltaExtensions.BuildEtag("rowVersion", suffixValue);
         var request = httpContext.Request;
         if (alreadyHasEtag)
         {
@@ -40,7 +40,7 @@ public class MiddlewareTests :
             }
         }
 
-        var notModified = await Delta.Delta.HandleRequest(
+        var notModified = await DeltaExtensions.HandleRequest(
             httpContext,
             provider,
             useSuffixFunc ? _ => suffixValue : null,
@@ -52,7 +52,7 @@ public class MiddlewareTests :
                 notModified,
                 httpContext
             })
-            .AddScrubber(_ => _.Replace(Delta.Delta.AssemblyWriteTime, "AssemblyWriteTime"));
+            .AddScrubber(_ => _.Replace(DeltaExtensions.AssemblyWriteTime, "AssemblyWriteTime"));
     }
 
     static bool[] bools =

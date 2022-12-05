@@ -1,6 +1,19 @@
-﻿public class Usage :
+﻿using Microsoft.AspNetCore.Builder;
+
+public class Usage :
     LocalDbTestBase
 {
+    public void Suffix(WebApplicationBuilder builder)
+    {
+        #region Suffix
+
+        var app = builder.Build();
+        app.UseDelta<SampleDbContext>(
+            suffix: httpContext => "MySuffix");
+
+        #endregion
+    }
+
     [Test]
     public async Task LastTimeStampRowVersion()
     {

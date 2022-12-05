@@ -1,7 +1,7 @@
 ﻿{
   "$schema": "https://raw.githubusercontent.com/SimonCropp/MarkdownSnippets/master/schema.json",
   "TocExcludes": [ "Release Notes", "Icon" ],
-  "MaxWidth": 80,
+  "MaxWidth": 130,
   "ValidateContent": true,
   "Convention": "InPlaceOverwrite"
 }

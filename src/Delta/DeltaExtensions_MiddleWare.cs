@@ -1,8 +1,12 @@
 namespace Delta;
 
-public static partial class Delta
+public static partial class DeltaExtensions
 {
+    #region AssemblyWriteTime
+
     internal static string AssemblyWriteTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location).Ticks.ToString();
+
+    #endregion
 
     public static IApplicationBuilder UseDelta<T>(this IApplicationBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where T : DbContext
@@ -105,9 +109,9 @@ public static partial class Delta
             return false;
         }
 
-        var rowVersion = await getTimeStamp(context);
+        var timeStamp = await getTimeStamp(context);
         var suffixValue = suffix?.Invoke(context);
-        var etag = BuildEtag(rowVersion, suffixValue);
+        var etag = BuildEtag(timeStamp, suffixValue);
         response.Headers.Add("ETag", etag);
         if (!request.Headers.TryGetValue("If-None-Match", out var ifNoneMatch))
         {
@@ -128,13 +132,17 @@ ETag: {etag}");
         return true;
     }
 
-    internal static string BuildEtag(string rowVersion, string? suffixValue)
+    #region BuildEtag
+
+    internal static string BuildEtag(string timeStamp, string? suffix)
     {
-        if (suffixValue == null)
+        if (suffix == null)
         {
-            return $"\"{AssemblyWriteTime}-{rowVersion}\"";
+            return $"\"{AssemblyWriteTime}-{timeStamp}\"";
         }
 
-        return $"\"{AssemblyWriteTime}-{rowVersion}-{suffixValue}\"";
+        return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
     }
+
+    #endregion
 }
