@@ -25,13 +25,13 @@ graph TD
     CalculateEtag[Calculate current ETag<br/>based on timestamp<br/>from web assembly and SQL]
     IfNoneMatch{Has<br/>If-None-Match<br/>header?}
     EtagMatch{Current<br/>Etag matches<br/>If-None-Match?}
-    200[Response:<br/>200 OK + current ETag header]
-    304[Response:<br/>304 Not-Modified]
+    AddETag[Add current ETag<br/>to Response headers]
+    304[Respond with<br/>304 Not-Modified]
     Request --> CalculateEtag
     CalculateEtag --> IfNoneMatch
     IfNoneMatch -->|Yes| EtagMatch
-    IfNoneMatch -->|No| 200
-    EtagMatch -->|No| 200
+    IfNoneMatch -->|No| AddETag
+    EtagMatch -->|No| AddETag
     EtagMatch -->|Yes| 304
 ```
 
