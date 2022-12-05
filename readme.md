@@ -6,6 +6,15 @@
 Delta is an opinionated approach to implement a [304 Not Modified](https://www.keycdn.com/support/304-not-modified)
 
 
+## Assumptions
+
+Assume the following combination of technologies are being used:
+
+ * [ASP.net Core](https://learn.microsoft.com/en-us/aspnet/core/)
+ * [Entity Framework Core](https://learn.microsoft.com/en-us/ef/)
+ * [Microsoft SQL Server EF Core Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/)
+ * Either [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
+
 
 ## 304 Not Modified Flow
 
