@@ -62,7 +62,15 @@ else
 
 An option string suffix that is dynamically caculated at runtime based on the current `HttpContext`.
 
-snippet: Suffix
+<!-- snippet: Suffix -->
+<a id='snippet-suffix'></a>
+```cs
+var app = builder.Build();
+app.UseDelta<SampleDbContext>(
+    suffix: httpContext => "MySuffix");
+```
+<sup><a href='/src/Tests/Usage.cs#L8-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-suffix' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 
 ### Combining the above
