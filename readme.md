@@ -22,8 +22,8 @@ Assume the following combination of technologies are being used:
 ```mermaid
 graph TD
     Request
-    IfNoneMatch[Has If-None-Match header]
-    EtagMatch[Etag match]
+    IfNoneMatch{Has If-None-Match<br/>header?}
+    EtagMatch{Etag match}
     200[Response:<br/>200 OK + ETag header]
     304[Response:<br/>304 Not-Modified]
     Request --> IfNoneMatch
