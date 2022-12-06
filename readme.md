@@ -219,7 +219,7 @@ var timeStamp = await dbContext.GetLastTimeStamp();
 <!-- endSnippet -->
 
 
-### For a `DbConnection`:
+#### For a `DbConnection`:
 
 <!-- snippet: GetLastTimeStampDbConnection -->
 <a id='snippet-getlasttimestampdbconnection'></a>
