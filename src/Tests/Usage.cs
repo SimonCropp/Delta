@@ -14,6 +14,21 @@ public class Usage :
         #endregion
     }
 
+    public void ShouldExecute(WebApplicationBuilder builder)
+    {
+        #region ShouldExecute
+
+        var app = builder.Build();
+        app.UseDelta<SampleDbContext>(
+            shouldExecute: httpContext =>
+            {
+                var path = httpContext.Request.Path.ToString();
+                return path.Contains("match");
+            });
+
+        #endregion
+    }
+
     [Test]
     public async Task LastTimeStampRowVersion()
     {

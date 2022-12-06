@@ -18,7 +18,6 @@ Assume the following combination of technologies are being used:
 
 ## 304 Not Modified Flow
 
-
 ```mermaid
 graph TD
     Request
@@ -178,6 +177,25 @@ app.MapGroup("/group")
 <!-- endSnippet -->
 
 
+### ShouldExecute
+
+Optional control what requests Delta is executed on.
+
+<!-- snippet: ShouldExecute -->
+<a id='snippet-shouldexecute'></a>
+```cs
+var app = builder.Build();
+app.UseDelta<SampleDbContext>(
+    shouldExecute: httpContext =>
+    {
+        var path = httpContext.Request.Path.ToString();
+        return path.Contains("match");
+    });
+```
+<sup><a href='/src/Tests/Usage.cs#L19-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-shouldexecute' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
 ## EF/SQL helpers
 
 
@@ -192,7 +210,7 @@ For a `DbContext`:
 ```cs
 var timeStamp = await dbContext.GetLastTimeStamp();
 ```
-<sup><a href='/src/Tests/Usage.cs#L43-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-getlasttimestampdbcontext' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Usage.cs#L58-L62' title='Snippet source file'>snippet source</a> | <a href='#snippet-getlasttimestampdbcontext' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -203,13 +221,13 @@ For a `DbConnection`:
 ```cs
 var timeStamp = await sqlConnection.GetLastTimeStamp();
 ```
-<sup><a href='/src/Tests/Usage.cs#L59-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-getlasttimestampdbconnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Usage.cs#L74-L78' title='Snippet source file'>snippet source</a> | <a href='#snippet-getlasttimestampdbconnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
 ### GetDatabasesWithTracking
 
-Get a list of all databases with change traching enabled.
+Get a list of all databases with change tracking enabled.
 
 <!-- snippet: GetDatabasesWithTracking -->
 <a id='snippet-getdatabaseswithtracking'></a>
@@ -220,7 +238,7 @@ foreach (var db in trackedDatabases)
     Trace.WriteLine(db);
 }
 ```
-<sup><a href='/src/Tests/Usage.cs#L95-L103' title='Snippet source file'>snippet source</a> | <a href='#snippet-getdatabaseswithtracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Usage.cs#L110-L118' title='Snippet source file'>snippet source</a> | <a href='#snippet-getdatabaseswithtracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -250,7 +268,7 @@ foreach (var db in trackedTables)
     Trace.WriteLine(db);
 }
 ```
-<sup><a href='/src/Tests/Usage.cs#L125-L133' title='Snippet source file'>snippet source</a> | <a href='#snippet-gettrackedtables' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Usage.cs#L140-L148' title='Snippet source file'>snippet source</a> | <a href='#snippet-gettrackedtables' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -276,7 +294,7 @@ Determine if change tracking is enabled for a database.
 ```cs
 var isTrackingEnabled = await sqlConnection.IsTrackingEnabled();
 ```
-<sup><a href='/src/Tests/Usage.cs#L194-L198' title='Snippet source file'>snippet source</a> | <a href='#snippet-istrackingenabled' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Usage.cs#L209-L213' title='Snippet source file'>snippet source</a> | <a href='#snippet-istrackingenabled' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -303,7 +321,7 @@ Enable change tracking for a database.
 ```cs
 await sqlConnection.EnableTracking();
 ```
-<sup><a href='/src/Tests/Usage.cs#L188-L192' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Usage.cs#L203-L207' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -332,7 +350,7 @@ Disable change tracking for a database and all tables within that database.
 ```cs
 await sqlConnection.DisableTracking();
 ```
-<sup><a href='/src/Tests/Usage.cs#L173-L177' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Usage.cs#L188-L192' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -364,7 +382,7 @@ await sqlConnection.SetTrackedTables(
         "Companies"
     });
 ```
-<sup><a href='/src/Tests/Usage.cs#L115-L123' title='Snippet source file'>snippet source</a> | <a href='#snippet-settrackedtables' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Usage.cs#L130-L138' title='Snippet source file'>snippet source</a> | <a href='#snippet-settrackedtables' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
