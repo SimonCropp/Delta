@@ -37,8 +37,10 @@ graph TD
 
 ## ETag calculation logic
 
+The ETag is calcualted from a combination several parts
 
-### AssemblyWriteTime
+
+#### AssemblyWriteTime
 
 The last write time of the web entry point assembly
 
@@ -52,7 +54,7 @@ AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 <!-- endSnippet -->
 
 
-### SQL timestamp
+#### SQL timestamp
 
 <!-- snippet: SqlTimestamp -->
 <a id='snippet-sqltimestamp'></a>
@@ -69,7 +71,7 @@ else
 <!-- endSnippet -->
 
 
-### Suffix
+#### Suffix
 
 An optional string suffix that is dynamically caculated at runtime based on the current `HttpContext`.
 
