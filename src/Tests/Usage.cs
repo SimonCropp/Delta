@@ -34,6 +34,38 @@ public class Usage :
     }
 
     [Test]
+    public async Task GetLastTimeStampDbContext()
+    {
+        await using var database = await LocalDb();
+
+        var dbContext = database.Context;
+
+        #region GetLastTimeStampDbContext
+
+        var timeStamp = await dbContext.GetLastTimeStamp();
+
+        #endregion
+
+        Assert.IsNotNull(timeStamp);
+    }
+
+    [Test]
+    public async Task GetLastTimeStampDbConnection()
+    {
+        await using var database = await LocalDb();
+
+        var sqlConnection = database.Connection;
+
+        #region GetLastTimeStampDbConnection
+
+        var timeStamp = await sqlConnection.GetLastTimeStamp();
+
+        #endregion
+
+        Assert.IsNotNull(timeStamp);
+    }
+
+    [Test]
     public async Task LastTimeStampRowVersionAndTracking()
     {
         await using var database = await LocalDb();
@@ -57,54 +89,114 @@ public class Usage :
     public async Task GetDatabasesWithTracking()
     {
         await using var database = await LocalDb();
-        var connection = database.Connection;
-        await connection.EnableTracking();
-        Assert.IsNotEmpty(await connection.GetTrackedDatabases());
+        var sqlConnection = database.Connection;
+        await sqlConnection.EnableTracking();
+
+        #region GetDatabasesWithTracking
+
+        var trackedDatabases = await sqlConnection.GetTrackedDatabases();
+        foreach (var db in trackedDatabases)
+        {
+            Trace.WriteLine(db);
+        }
+
+        #endregion
+
+        Assert.IsNotEmpty(trackedDatabases);
     }
 
     [Test]
     public async Task GetTrackedTables()
     {
         var database = await LocalDb();
-        var connection = database.Connection;
-        await connection.DisableTracking();
-        await connection.SetTrackedTables(new []{"Companies"});
-        await Verify(connection.GetTrackedTables());
+        var sqlConnection = database.Connection;
+        await sqlConnection.DisableTracking();
+
+        #region SetTrackedTables
+
+        await sqlConnection.SetTrackedTables(
+            new[]
+            {
+                "Companies"
+            });
+
+        #endregion
+
+        #region GetTrackedTables
+
+        var trackedTables = await sqlConnection.GetTrackedTables();
+        foreach (var db in trackedTables)
+        {
+            Trace.WriteLine(db);
+        }
+
+        #endregion
+
+        await Verify(sqlConnection.GetTrackedTables());
     }
 
     [Test]
     public async Task DuplicateSetTrackedTables()
     {
         await using var database = await LocalDb();
-        var connection = database.Connection;
-        await connection.SetTrackedTables(new []{"Companies"});
-        await connection.SetTrackedTables(new []{"Companies"});
+        var sqlConnection = database.Connection;
+        await sqlConnection.SetTrackedTables(new[]
+        {
+            "Companies"
+        });
+        await sqlConnection.SetTrackedTables(new[]
+        {
+            "Companies"
+        });
     }
 
     [Test]
     public async Task EmptySetTrackedTables()
     {
         await using var database = await LocalDb();
-        var connection = database.Connection;
-        await connection.SetTrackedTables(new string[]{});
+        var sqlConnection = database.Connection;
+        await sqlConnection.SetTrackedTables(new string[]
+        {
+        });
     }
 
     [Test]
     public async Task DisableTracking()
     {
         await using var database = await LocalDb();
-        var connection = database.Connection;
-        await connection.SetTrackedTables(new []{"Companies"});
-        await connection.DisableTracking();
-        Assert.IsFalse(await connection.IsTrackingEnabled());
+        var sqlConnection = database.Connection;
+        await sqlConnection.SetTrackedTables(new[]
+        {
+            "Companies"
+        });
+
+        #region DisableTracking
+
+        await sqlConnection.DisableTracking();
+
+        #endregion
+
+        Assert.IsFalse(await sqlConnection.IsTrackingEnabled());
     }
 
     [Test]
     public async Task IsTrackingEnabled()
     {
         await using var database = await LocalDb();
-        var connection = database.Connection;
-        await connection.EnableTracking();
-        Assert.IsTrue(await connection.IsTrackingEnabled());
+        var sqlConnection = database.Connection;
+
+        #region EnableTracking
+
+        await sqlConnection.EnableTracking();
+
+        #endregion
+
+        #region IsTrackingEnabled
+
+        var isTrackingEnabled = await sqlConnection.IsTrackingEnabled();
+
+        #endregion
+
+        Assert.IsTrue(isTrackingEnabled);
     }
 }

@@ -65,7 +65,7 @@ if (@changeTracking is null)
 else
     select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
-<sup><a href='/src/Delta/DeltaExtensions.cs#L157-L165' title='Snippet source file'>snippet source</a> | <a href='#snippet-sqltimestamp' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions.cs#L178-L186' title='Snippet source file'>snippet source</a> | <a href='#snippet-sqltimestamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -175,6 +175,227 @@ app.MapGroup("/group")
     .MapGet("/", () => "Hello Group!");
 ```
 <sup><a href='/src/WebApplication/Program.cs#L17-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-usedeltamapgroup' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+## EF/SQL helpers
+
+
+### GetLastTimeStamp
+
+
+For a `DbContext`:
+
+
+<!-- snippet: GetLastTimeStampDbContext -->
+<a id='snippet-getlasttimestampdbcontext'></a>
+```cs
+var timeStamp = await dbContext.GetLastTimeStamp();
+```
+<sup><a href='/src/Tests/Usage.cs#L43-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-getlasttimestampdbcontext' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+For a `DbConnection`:
+
+<!-- snippet: GetLastTimeStampDbConnection -->
+<a id='snippet-getlasttimestampdbconnection'></a>
+```cs
+var timeStamp = await sqlConnection.GetLastTimeStamp();
+```
+<sup><a href='/src/Tests/Usage.cs#L59-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-getlasttimestampdbconnection' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### GetDatabasesWithTracking
+
+Get a list of all databases with change traching enabled.
+
+<!-- snippet: GetDatabasesWithTracking -->
+<a id='snippet-getdatabaseswithtracking'></a>
+```cs
+var trackedDatabases = await sqlConnection.GetTrackedDatabases();
+foreach (var db in trackedDatabases)
+{
+    Trace.WriteLine(db);
+}
+```
+<sup><a href='/src/Tests/Usage.cs#L95-L103' title='Snippet source file'>snippet source</a> | <a href='#snippet-getdatabaseswithtracking' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Uses the following SQL:
+
+<!-- snippet: GetTrackedDatabasesSql -->
+<a id='snippet-gettrackeddatabasessql'></a>
+```cs
+select d.name
+from sys.databases as d inner join
+    sys.change_tracking_databases as t on
+    t.database_id = d.database_id
+```
+<sup><a href='/src/Delta/DeltaExtensions.cs#L126-L131' title='Snippet source file'>snippet source</a> | <a href='#snippet-gettrackeddatabasessql' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### GetTrackedTables
+
+Get a list of all tracked tables in database.
+
+<!-- snippet: GetTrackedTables -->
+<a id='snippet-gettrackedtables'></a>
+```cs
+var trackedTables = await sqlConnection.GetTrackedTables();
+foreach (var db in trackedTables)
+{
+    Trace.WriteLine(db);
+}
+```
+<sup><a href='/src/Tests/Usage.cs#L125-L133' title='Snippet source file'>snippet source</a> | <a href='#snippet-gettrackedtables' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Uses the following SQL:
+
+<!-- snippet: GetTrackedTablesSql -->
+<a id='snippet-gettrackedtablessql'></a>
+```cs
+select t.Name
+from sys.tables as t left join
+    sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
+where c.[object_id] is not null
+```
+<sup><a href='/src/Delta/DeltaExtensions.cs#L66-L71' title='Snippet source file'>snippet source</a> | <a href='#snippet-gettrackedtablessql' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### IsTrackingEnabled
+
+Determine if change tracking is enabled for a database.
+
+<!-- snippet: IsTrackingEnabled -->
+<a id='snippet-istrackingenabled'></a>
+```cs
+var isTrackingEnabled = await sqlConnection.IsTrackingEnabled();
+```
+<sup><a href='/src/Tests/Usage.cs#L194-L198' title='Snippet source file'>snippet source</a> | <a href='#snippet-istrackingenabled' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Uses the following SQL:
+
+<!-- snippet: IsTrackingEnabledSql -->
+<a id='snippet-istrackingenabledsql'></a>
+```cs
+select count(d.name)
+from sys.databases as d inner join
+    sys.change_tracking_databases as t on
+    t.database_id = d.database_id
+where d.name = '{connection.Database}'
+```
+<sup><a href='/src/Delta/DeltaExtensions.cs#L86-L92' title='Snippet source file'>snippet source</a> | <a href='#snippet-istrackingenabledsql' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### EnableTracking
+
+Enable change tracking for a database.
+
+<!-- snippet: EnableTracking -->
+<a id='snippet-enabletracking'></a>
+```cs
+await sqlConnection.EnableTracking();
+```
+<sup><a href='/src/Tests/Usage.cs#L188-L192' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletracking' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Uses the following SQL:
+
+<!-- snippet: EnableTrackingSql -->
+<a id='snippet-enabletrackingsql'></a>
+```cs
+alter database {connection.Database}
+set change_tracking = on
+(
+    change_retention = {retentionDays} days,
+    auto_cleanup = on
+)
+```
+<sup><a href='/src/Delta/DeltaExtensions.cs#L51-L58' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletrackingsql' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+
+### DisableTracking
+
+Disable change tracking for a database and all tables within that database.
+
+<!-- snippet: DisableTracking -->
+<a id='snippet-disabletracking'></a>
+```cs
+await sqlConnection.DisableTracking();
+```
+<sup><a href='/src/Tests/Usage.cs#L173-L177' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletracking' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Uses the following SQL:
+
+<!-- snippet: DisableTrackingSql -->
+<a id='snippet-disabletrackingsql'></a>
+```cs
+alter table [{table}] disable change_tracking;
+```
+<sup><a href='/src/Delta/DeltaExtensions.cs#L107-L109' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletrackingsql' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-disabletrackingsql-1'></a>
+```cs
+alter database [{connection.Database}] set change_tracking = off;
+```
+<sup><a href='/src/Delta/DeltaExtensions.cs#L114-L116' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletrackingsql-1' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### SetTrackedTables
+
+Enables change tracking for all tables listed, and disables change tracking for all tables not listed.
+
+<!-- snippet: SetTrackedTables -->
+<a id='snippet-settrackedtables'></a>
+```cs
+await sqlConnection.SetTrackedTables(
+    new[]
+    {
+        "Companies"
+    });
+```
+<sup><a href='/src/Tests/Usage.cs#L115-L123' title='Snippet source file'>snippet source</a> | <a href='#snippet-settrackedtables' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Uses the following SQL:
+
+<!-- snippet: EnableTrackingSql -->
+<a id='snippet-enabletrackingsql'></a>
+```cs
+alter database {connection.Database}
+set change_tracking = on
+(
+    change_retention = {retentionDays} days,
+    auto_cleanup = on
+)
+```
+<sup><a href='/src/Delta/DeltaExtensions.cs#L51-L58' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletrackingsql' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: EnableTrackingTableSql -->
+<a id='snippet-enabletrackingtablesql'></a>
+```cs
+alter table [{table}] enable change_tracking
+```
+<sup><a href='/src/Delta/DeltaExtensions.cs#L18-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletrackingtablesql' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: DisableTrackingTableSql -->
+<a id='snippet-disabletrackingtablesql'></a>
+```cs
+alter table [{table}] disable change_tracking;
+```
+<sup><a href='/src/Delta/DeltaExtensions.cs#L27-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletrackingtablesql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
