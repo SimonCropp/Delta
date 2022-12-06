@@ -3,7 +3,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/20t96gnsmysklh09/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Delta)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.svg)](https://www.nuget.org/packages/Delta/)
 
-Delta is an opinionated approach to implement a [304 Not Modified](https://www.keycdn.com/support/304-not-modified)
+Delta is an opinionated approach to implementing a [304 Not Modified](https://www.keycdn.com/support/304-not-modified)
 
 
 ## Assumptions
@@ -35,7 +35,7 @@ graph TD
 ```
 
 
-## ETag value
+## ETag calculation logic
 
 
 ### AssemblyWriteTime
@@ -70,7 +70,7 @@ else
 
 ### Suffix
 
-An option string suffix that is dynamically caculated at runtime based on the current `HttpContext`.
+An optional string suffix that is dynamically caculated at runtime based on the current `HttpContext`.
 
 <!-- snippet: Suffix -->
 <a id='snippet-suffix'></a>
@@ -202,8 +202,7 @@ app.UseDelta<SampleDbContext>(
 ### GetLastTimeStamp
 
 
-For a `DbContext`:
-
+#### For a `DbContext`:
 
 <!-- snippet: GetLastTimeStampDbContext -->
 <a id='snippet-getlasttimestampdbcontext'></a>
@@ -214,7 +213,7 @@ var timeStamp = await dbContext.GetLastTimeStamp();
 <!-- endSnippet -->
 
 
-For a `DbConnection`:
+### For a `DbConnection`:
 
 <!-- snippet: GetLastTimeStampDbConnection -->
 <a id='snippet-getlasttimestampdbconnection'></a>
