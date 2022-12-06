@@ -5,11 +5,18 @@
 
 Delta is an opinionated approach to implementing a [304 Not Modified](https://www.keycdn.com/support/304-not-modified)
 
+The approach uses a last updated timestamp from the database to generate an [ETag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag). All dynamic requests then have that ETag checked/applied.
+
+This approach works well when the frequency of updates is realtively low. In this scenario, the majory of requests will leverage the result in a 304 Not Modified being returned and the browser loading the content its cache.
+
+Effectively consumers will always receive the most current data, while the load on the server remains very low.
+
 
 ## Assumptions
 
 Assume the following combination of technologies are being used:
 
+ * Frequency of updates to data is realtively low
  * [ASP.net Core](https://learn.microsoft.com/en-us/aspnet/core/)
  * [Entity Framework Core](https://learn.microsoft.com/en-us/ef/)
  * [Microsoft SQL Server EF Core Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/)
