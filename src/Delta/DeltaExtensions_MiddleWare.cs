@@ -2,11 +2,18 @@ namespace Delta;
 
 public static partial class DeltaExtensions
 {
-    #region AssemblyWriteTime
 
-    internal static string AssemblyWriteTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location).Ticks.ToString();
+    internal static string AssemblyWriteTime;
 
-    #endregion
+    static DeltaExtensions()
+    {
+        #region AssemblyWriteTime
+
+        var webAssemblyLocation = Assembly.GetEntryAssembly()!.Location;
+        AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
+
+        #endregion
+    }
 
     public static IApplicationBuilder UseDelta<T>(this IApplicationBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where T : DbContext

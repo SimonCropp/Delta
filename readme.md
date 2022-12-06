@@ -45,9 +45,10 @@ The last write time of the web entry point assembly
 <!-- snippet: AssemblyWriteTime -->
 <a id='snippet-assemblywritetime'></a>
 ```cs
-internal static string AssemblyWriteTime = File.GetLastWriteTime(Assembly.GetEntryAssembly()!.Location).Ticks.ToString();
+var webAssemblyLocation = Assembly.GetEntryAssembly()!.Location;
+AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 ```
-<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L5-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-assemblywritetime' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L10-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-assemblywritetime' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -98,7 +99,7 @@ internal static string BuildEtag(string timeStamp, string? suffix)
     return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L135-L147' title='Snippet source file'>snippet source</a> | <a href='#snippet-buildetag' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L142-L154' title='Snippet source file'>snippet source</a> | <a href='#snippet-buildetag' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
