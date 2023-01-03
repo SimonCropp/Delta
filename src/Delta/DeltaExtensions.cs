@@ -4,6 +4,9 @@ namespace Delta;
 
 public static partial class DeltaExtensions
 {
+    public static void NoStore(this HttpResponse response) =>
+        response.Headers.Append(HeaderNames.CacheControl, "no-store, max-age=0");
+
     public static void CacheForever(this HttpResponse response) =>
         response.Headers.Append(HeaderNames.CacheControl, "public, max-age=31536000, immutable");
 
