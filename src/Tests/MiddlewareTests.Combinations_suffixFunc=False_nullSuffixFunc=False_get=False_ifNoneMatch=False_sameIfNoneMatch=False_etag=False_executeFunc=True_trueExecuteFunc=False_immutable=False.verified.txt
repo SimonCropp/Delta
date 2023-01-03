@@ -11,7 +11,7 @@
   },
   logs: [
     {
-      Information: Delta /path: Skipping since shouldExecute is false
+      Information: Delta /path: Skipping since request is POST
     }
   ]
 }

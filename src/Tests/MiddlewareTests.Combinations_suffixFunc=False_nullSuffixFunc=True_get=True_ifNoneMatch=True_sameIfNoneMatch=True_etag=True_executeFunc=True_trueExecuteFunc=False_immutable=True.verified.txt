@@ -19,7 +19,7 @@
   },
   logs: [
     {
-      Information: Delta /path: Skipping since shouldExecute is false
+      Information: Delta /path: Skipping since response has an ETag
     }
   ]
 }

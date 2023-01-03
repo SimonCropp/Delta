@@ -95,14 +95,6 @@ public static partial class DeltaExtensions
         var request = context.Request;
         var response = context.Response;
         var path = request.Path;
-        if (shouldExecute != null)
-        {
-            if (!shouldExecute(context))
-            {
-                logger.Log(logLevel, $"Delta {path}: Skipping since shouldExecute is false");
-                return false;
-            }
-        }
 
         if (request.Method != "GET")
         {
@@ -120,6 +112,15 @@ public static partial class DeltaExtensions
         {
             logger.Log(logLevel, $"Delta {path}: Skipping since response has CacheControl=immutable");
             return false;
+        }
+
+        if (shouldExecute != null)
+        {
+            if (!shouldExecute(context))
+            {
+                logger.Log(logLevel, $"Delta {path}: Skipping since shouldExecute is false");
+                return false;
+            }
         }
 
         var timeStamp = await getTimeStamp(context);
