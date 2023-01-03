@@ -1,0 +1,25 @@
+﻿{
+  target: {
+    notModified: false,
+    httpContext: {
+      Request: {
+        Headers: {
+          If-None-Match: "AssemblyWriteTime-rowVersion"
+        }
+      },
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: OK,
+        Headers: {
+          Cache-Control: public, max-age=31536000, immutable,
+          ETag: existingEtag
+        }
+      }
+    }
+  },
+  logs: [
+    {
+      Information: Delta /path: Skipping since response has an ETag
+    }
+  ]
+}

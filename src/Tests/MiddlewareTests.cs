@@ -1,25 +1,27 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 
 public class MiddlewareTests :
     LocalDbTestBase
 {
     [TestCaseSource(nameof(Cases))]
-    public async Task Combinations(bool useSuffixFunc, bool useNullSuffixFunc, bool isGet, bool hasIfNoneMatch, bool hasSameIfNoneMatch, bool alreadyHasEtag, bool useShouldExecuteFunc, bool useTrueShouldExecuteFunc)
+    public async Task Combinations(bool suffixFunc, bool nullSuffixFunc, bool get, bool ifNoneMatch, bool sameIfNoneMatch, bool etag, bool executeFunc, bool trueExecuteFunc, bool immutable)
     {
         var provider = LoggerRecording.Start();
         var httpContext = new DefaultHttpContext();
 
-        var suffixValue = useSuffixFunc && !useNullSuffixFunc ? "suffix" : null;
-        var etag = DeltaExtensions.BuildEtag("rowVersion", suffixValue);
+        var suffixValue = suffixFunc && !nullSuffixFunc ? "suffix" : null;
         var request = httpContext.Request;
-        if (alreadyHasEtag)
+        var response = httpContext.Response;
+
+        if (etag)
         {
-            httpContext.Response.Headers.ETag = "existingEtag";
+            response.Headers.ETag = "existingEtag";
         }
 
         request.Path = "/path";
-        if (isGet)
+        if (get)
         {
             request.Method = "GET";
         }
@@ -28,11 +30,11 @@ public class MiddlewareTests :
             request.Method = "POST";
         }
 
-        if (hasIfNoneMatch)
+        if (ifNoneMatch)
         {
-            if (hasSameIfNoneMatch)
+            if (sameIfNoneMatch)
             {
-                request.Headers.IfNoneMatch = etag;
+                request.Headers.IfNoneMatch = DeltaExtensions.BuildEtag("rowVersion", suffixValue);
             }
             else
             {
@@ -40,12 +42,17 @@ public class MiddlewareTests :
             }
         }
 
+        if (immutable)
+        {
+            response.Headers.Append(HeaderNames.CacheControl, "public, max-age=31536000, immutable");
+        }
+
         var notModified = await DeltaExtensions.HandleRequest(
             httpContext,
             provider,
-            useSuffixFunc ? _ => suffixValue : null,
+            suffixFunc ? _ => suffixValue : null,
             _ => Task.FromResult("rowVersion"),
-            useShouldExecuteFunc ? _ => useTrueShouldExecuteFunc : null,
+            executeFunc ? _ => trueExecuteFunc : null,
             LogLevel.Information);
         await Verify(new
             {
@@ -67,6 +74,7 @@ public class MiddlewareTests :
         foreach (var useNullSuffixFunc in bools)
         foreach (var isGet in bools)
         foreach (var hasIfNoneMatch in bools)
+        foreach (var hasImmutableCache in bools)
         foreach (var hasSameIfNoneMatch in bools)
         foreach (var alreadyHasEtag in bools)
         foreach (var useShouldExecuteFunc in bools)
@@ -81,7 +89,8 @@ public class MiddlewareTests :
                 hasSameIfNoneMatch,
                 alreadyHasEtag,
                 useShouldExecuteFunc,
-                useTrueShouldExecuteFunc
+                useTrueShouldExecuteFunc,
+                hasImmutableCache
             };
         }
     }
