@@ -77,7 +77,7 @@ if (@changeTracking is null)
 else
     select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
-<sup><a href='/src/Delta/DeltaExtensions.cs#L178-L186' title='Snippet source file'>snippet source</a> | <a href='#snippet-sqltimestamp' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions.cs#L183-L191' title='Snippet source file'>snippet source</a> | <a href='#snippet-sqltimestamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -263,7 +263,7 @@ from sys.databases as d inner join
     sys.change_tracking_databases as t on
     t.database_id = d.database_id
 ```
-<sup><a href='/src/Delta/DeltaExtensions.cs#L126-L131' title='Snippet source file'>snippet source</a> | <a href='#snippet-gettrackeddatabasessql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions.cs#L131-L136' title='Snippet source file'>snippet source</a> | <a href='#snippet-gettrackeddatabasessql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -293,7 +293,7 @@ from sys.tables as t left join
     sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
 where c.[object_id] is not null
 ```
-<sup><a href='/src/Delta/DeltaExtensions.cs#L66-L71' title='Snippet source file'>snippet source</a> | <a href='#snippet-gettrackedtablessql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions.cs#L71-L76' title='Snippet source file'>snippet source</a> | <a href='#snippet-gettrackedtablessql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -320,7 +320,7 @@ from sys.databases as d inner join
     t.database_id = d.database_id
 where d.name = '{connection.Database}'
 ```
-<sup><a href='/src/Delta/DeltaExtensions.cs#L86-L92' title='Snippet source file'>snippet source</a> | <a href='#snippet-istrackingenabledsql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions.cs#L91-L97' title='Snippet source file'>snippet source</a> | <a href='#snippet-istrackingenabledsql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -348,7 +348,7 @@ set change_tracking = on
     auto_cleanup = on
 )
 ```
-<sup><a href='/src/Delta/DeltaExtensions.cs#L51-L58' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletrackingsql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions.cs#L56-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletrackingsql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -372,12 +372,12 @@ Uses the following SQL:
 ```cs
 alter table [{table}] disable change_tracking;
 ```
-<sup><a href='/src/Delta/DeltaExtensions.cs#L107-L109' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletrackingsql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions.cs#L112-L114' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletrackingsql' title='Start of snippet'>anchor</a></sup>
 <a id='snippet-disabletrackingsql-1'></a>
 ```cs
 alter database [{connection.Database}] set change_tracking = off;
 ```
-<sup><a href='/src/Delta/DeltaExtensions.cs#L114-L116' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletrackingsql-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions.cs#L119-L121' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletrackingsql-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -409,7 +409,7 @@ set change_tracking = on
     auto_cleanup = on
 )
 ```
-<sup><a href='/src/Delta/DeltaExtensions.cs#L51-L58' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletrackingsql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions.cs#L56-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletrackingsql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: EnableTrackingTableSql -->
@@ -417,7 +417,7 @@ set change_tracking = on
 ```cs
 alter table [{table}] enable change_tracking
 ```
-<sup><a href='/src/Delta/DeltaExtensions.cs#L18-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletrackingtablesql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions.cs#L23-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletrackingtablesql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: DisableTrackingTableSql -->
@@ -425,7 +425,7 @@ alter table [{table}] enable change_tracking
 ```cs
 alter table [{table}] disable change_tracking;
 ```
-<sup><a href='/src/Delta/DeltaExtensions.cs#L27-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletrackingtablesql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions.cs#L32-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-disabletrackingtablesql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

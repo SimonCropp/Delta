@@ -1,7 +1,12 @@
+using Microsoft.Net.Http.Headers;
+
 namespace Delta;
 
 public static partial class DeltaExtensions
 {
+    public static void CacheForever(this HttpResponse response) =>
+        response.Headers.Append(HeaderNames.CacheControl, "public, max-age=31536000, immutable");
+
     public static async Task SetTrackedTables(this DbConnection connection, IEnumerable<string> tablesToTrack, uint retentionDays = 1,CancellationToken cancellation = default)
     {
         await connection.EnableTracking(retentionDays, cancellation: cancellation);

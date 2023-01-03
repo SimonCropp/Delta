@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
 
 public class MiddlewareTests :
     LocalDbTestBase
@@ -44,7 +43,7 @@ public class MiddlewareTests :
 
         if (immutable)
         {
-            response.Headers.Append(HeaderNames.CacheControl, "public, max-age=31536000, immutable");
+            response.CacheForever();
         }
 
         var notModified = await DeltaExtensions.HandleRequest(
