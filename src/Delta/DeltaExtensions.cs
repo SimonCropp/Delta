@@ -10,6 +10,26 @@ public static partial class DeltaExtensions
     public static void CacheForever(this HttpResponse response) =>
         response.Headers.Append(HeaderNames.CacheControl, "public, max-age=31536000, immutable");
 
+    internal static bool IsImmutableCache(this HttpResponse response)
+    {
+        foreach (var header in response.Headers.CacheControl)
+        {
+            if (header is null)
+            {
+                continue;
+            }
+
+            if (header
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .Any(_ => _ == "immutable"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static async Task SetTrackedTables(this DbConnection connection, IEnumerable<string> tablesToTrack, uint retentionDays = 1,CancellationToken cancellation = default)
     {
         await connection.EnableTracking(retentionDays, cancellation: cancellation);

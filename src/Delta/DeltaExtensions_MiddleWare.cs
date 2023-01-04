@@ -108,7 +108,7 @@ public static partial class DeltaExtensions
             return false;
         }
 
-        if (IsImmutableCache(response))
+        if (response.IsImmutableCache())
         {
             logger.Log(logLevel, $"Delta {path}: Skipping since response has CacheControl=immutable");
             return false;
@@ -144,26 +144,6 @@ ETag: {etag}");
         logger.Log(logLevel, $"Delta {path}: 304");
         response.StatusCode = 304;
         return true;
-    }
-
-    static bool IsImmutableCache(HttpResponse response)
-    {
-        foreach (var header in response.Headers.CacheControl)
-        {
-            if (header is null)
-            {
-                continue;
-            }
-
-            if (header
-                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                .Any(_ => _ == "immutable"))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     #region BuildEtag
