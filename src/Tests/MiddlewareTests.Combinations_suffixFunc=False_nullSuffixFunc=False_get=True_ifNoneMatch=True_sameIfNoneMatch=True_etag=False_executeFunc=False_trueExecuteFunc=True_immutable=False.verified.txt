@@ -11,6 +11,7 @@
       Response: {
         StatusCode: NotModified,
         Headers: {
+          Cache-Control: no-cache,
           ETag: "AssemblyWriteTime-rowVersion"
         }
       }

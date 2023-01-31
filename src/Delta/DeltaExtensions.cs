@@ -13,7 +13,7 @@ public static partial class DeltaExtensions
     public static void CacheForever(this HttpResponse response) =>
         response.Headers.Append(HeaderNames.CacheControl, "public, max-age=31536000, immutable");
 
-    internal static bool IsImmutableCache(this HttpResponse response)
+    static bool IsImmutableCache(this HttpResponse response)
     {
         foreach (var header in response.Headers.CacheControl)
         {
