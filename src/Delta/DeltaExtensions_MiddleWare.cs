@@ -143,6 +143,7 @@ ETag: {etag}");
 
         logger.Log(logLevel, $"Delta {path}: 304");
         response.StatusCode = 304;
+        response.NoCache();
         return true;
     }
 
