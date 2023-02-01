@@ -22,9 +22,7 @@ public static partial class DeltaExtensions
                 continue;
             }
 
-            if (header
-                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                .Any(_ => _ == "immutable"))
+            if (header.Contains("immutable"))
             {
                 return true;
             }
