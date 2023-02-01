@@ -14,7 +14,15 @@
   },
   logs: [
     {
-      Information: Delta /path: Skipping since response has CacheControl=immutable
+      Information: Delta /path: Skipping since response has CacheControl=immutable,
+      State: [
+        {
+          0: /path
+        },
+        {
+          {OriginalFormat}: Delta {0}: Skipping since response has CacheControl=immutable
+        }
+      ]
     }
   ]
 }

@@ -14,7 +14,18 @@
   },
   logs: [
     {
-      Information: Delta /path: Skipping since request is POST
+      Information: Delta /path: Skipping since request is POST,
+      State: [
+        {
+          0: /path
+        },
+        {
+          1: POST
+        },
+        {
+          {OriginalFormat}: Delta {0}: Skipping since request is {1}
+        }
+      ]
     }
   ]
 }

@@ -19,7 +19,15 @@
   },
   logs: [
     {
-      Information: Delta /path: 304
+      Information: Delta /path: 304,
+      State: [
+        {
+          0: /path
+        },
+        {
+          {OriginalFormat}: Delta {0}: 304
+        }
+      ]
     }
   ]
 }

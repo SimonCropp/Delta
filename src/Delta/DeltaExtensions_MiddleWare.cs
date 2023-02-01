@@ -98,19 +98,19 @@ public static partial class DeltaExtensions
 
         if (request.Method != "GET")
         {
-            logger.Log(logLevel, $"Delta {path}: Skipping since request is {request.Method}");
+            logger.Log(logLevel, "Delta {0}: Skipping since request is {1}", path, request.Method);
             return false;
         }
 
         if (response.Headers.ETag.Any())
         {
-            logger.Log(logLevel, $"Delta {path}: Skipping since response has an ETag");
+            logger.Log(logLevel, "Delta {0}: Skipping since response has an ETag", path);
             return false;
         }
 
         if (response.IsImmutableCache())
         {
-            logger.Log(logLevel, $"Delta {path}: Skipping since response has CacheControl=immutable");
+            logger.Log(logLevel, "Delta {0}: Skipping since response has CacheControl=immutable", path);
             return false;
         }
 
@@ -118,7 +118,7 @@ public static partial class DeltaExtensions
         {
             if (!shouldExecute(context))
             {
-                logger.Log(logLevel, $"Delta {path}: Skipping since shouldExecute is false");
+                logger.Log(logLevel, "Delta {0}: Skipping since shouldExecute is false", path);
                 return false;
             }
         }
@@ -129,19 +129,21 @@ public static partial class DeltaExtensions
         response.Headers.Add("ETag", etag);
         if (!request.Headers.TryGetValue("If-None-Match", out var ifNoneMatch))
         {
-            logger.Log(logLevel, $"Delta {path}: Skipping since request has no If-None-Match");
+            logger.Log(logLevel, "Delta {0}: Skipping since request has no If-None-Match", path);
             return false;
         }
 
         if (ifNoneMatch != etag)
         {
-            logger.Log(logLevel, @$"Delta {path}: Skipping since If-None-Match != ETag
-If-None-Match: {ifNoneMatch}
-ETag: {etag}");
+            logger.Log(logLevel, """
+                Delta {0}: Skipping since If-None-Match != ETag
+                If-None-Match: {1}
+                ETag: {2}
+                """, path, ifNoneMatch, etag);
             return false;
         }
 
-        logger.Log(logLevel, $"Delta {path}: 304");
+        logger.Log(logLevel, "Delta {0}: 304", path);
         response.StatusCode = 304;
         response.NoCache();
         return true;

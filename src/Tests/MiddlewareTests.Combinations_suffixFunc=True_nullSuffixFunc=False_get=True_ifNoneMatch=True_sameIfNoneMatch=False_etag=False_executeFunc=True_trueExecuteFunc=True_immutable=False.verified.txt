@@ -21,7 +21,26 @@
       Information:
 Delta /path: Skipping since If-None-Match != ETag
 If-None-Match: diffEtag
-ETag: "AssemblyWriteTime-rowVersion-suffix"
+ETag: "AssemblyWriteTime-rowVersion-suffix",
+      State: [
+        {
+          0: /path
+        },
+        {
+          1: [
+            diffEtag
+          ]
+        },
+        {
+          2: "AssemblyWriteTime-rowVersion-suffix"
+        },
+        {
+          {OriginalFormat}:
+Delta {0}: Skipping since If-None-Match != ETag
+If-None-Match: {1}
+ETag: {2}
+        }
+      ]
     }
   ]
 }

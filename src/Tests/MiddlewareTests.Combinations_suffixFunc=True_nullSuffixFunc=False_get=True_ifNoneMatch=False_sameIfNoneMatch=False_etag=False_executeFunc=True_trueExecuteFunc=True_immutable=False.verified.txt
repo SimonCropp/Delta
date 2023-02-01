@@ -14,7 +14,15 @@
   },
   logs: [
     {
-      Information: Delta /path: Skipping since request has no If-None-Match
+      Information: Delta /path: Skipping since request has no If-None-Match,
+      State: [
+        {
+          0: /path
+        },
+        {
+          {OriginalFormat}: Delta {0}: Skipping since request has no If-None-Match
+        }
+      ]
     }
   ]
 }
