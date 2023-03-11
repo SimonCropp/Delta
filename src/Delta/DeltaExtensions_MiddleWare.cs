@@ -2,7 +2,6 @@ namespace Delta;
 
 public static partial class DeltaExtensions
 {
-
     internal static string AssemblyWriteTime;
 
     static DeltaExtensions()
@@ -20,15 +19,16 @@ public static partial class DeltaExtensions
     {
         var loggerFactory = builder.ApplicationServices.GetRequiredService<ILoggerFactory>();
         var logger = loggerFactory.CreateLogger("Delta");
-        return builder.Use(async (context, next) =>
-        {
-            if (await HandleRequest<T>(context, logger, suffix, shouldExecute, logLevel))
+        return builder.Use(
+            async (context, next) =>
             {
-                return;
-            }
+                if (await HandleRequest<T>(context, logger, suffix, shouldExecute, logLevel))
+                {
+                    return;
+                }
 
-            await next();
-        });
+                await next();
+            });
     }
 
     public static ComponentEndpointConventionBuilder UseDelta<TDbContext>(this ComponentEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
@@ -138,11 +138,16 @@ public static partial class DeltaExtensions
 
         if (ifNoneMatch != etag)
         {
-            logger.Log(level, """
+            logger.Log(
+                level,
+                """
                 Delta {0}: Skipping since If-None-Match != ETag
                 If-None-Match: {1}
                 ETag: {2}
-                """, path, ifNoneMatch, etag);
+                """,
+                path,
+                ifNoneMatch,
+                etag);
             return false;
         }
 

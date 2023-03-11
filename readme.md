@@ -57,7 +57,7 @@ The last write time of the web entry point assembly
 var webAssemblyLocation = Assembly.GetEntryAssembly()!.Location;
 AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 ```
-<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L10-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-assemblywritetime' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L9-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-assemblywritetime' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -73,9 +73,9 @@ declare @changeTracking bigint = change_tracking_current_version();
 declare @timeStamp bigint = convert(bigint, @@dbts);
 
 if (@changeTracking is null)
-    select cast(@timeStamp as varchar)
+  select cast(@timeStamp as varchar)
 else
-    select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
 <sup><a href='/src/Delta/DeltaExtensions.cs#L207-L215' title='Snippet source file'>snippet source</a> | <a href='#snippet-sqltimestamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
@@ -111,7 +111,7 @@ internal static string BuildEtag(string timeStamp, string? suffix)
     return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L155-L167' title='Snippet source file'>snippet source</a> | <a href='#snippet-buildetag' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L160-L172' title='Snippet source file'>snippet source</a> | <a href='#snippet-buildetag' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -260,8 +260,8 @@ Uses the following SQL:
 ```cs
 select d.name
 from sys.databases as d inner join
-    sys.change_tracking_databases as t on
-    t.database_id = d.database_id
+  sys.change_tracking_databases as t on
+  t.database_id = d.database_id
 ```
 <sup><a href='/src/Delta/DeltaExtensions.cs#L155-L160' title='Snippet source file'>snippet source</a> | <a href='#snippet-gettrackeddatabasessql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
@@ -290,7 +290,7 @@ Uses the following SQL:
 ```cs
 select t.Name
 from sys.tables as t left join
-    sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
+  sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
 where c.[object_id] is not null
 ```
 <sup><a href='/src/Delta/DeltaExtensions.cs#L95-L100' title='Snippet source file'>snippet source</a> | <a href='#snippet-gettrackedtablessql' title='Start of snippet'>anchor</a></sup>
@@ -316,8 +316,8 @@ Uses the following SQL:
 ```cs
 select count(d.name)
 from sys.databases as d inner join
-    sys.change_tracking_databases as t on
-    t.database_id = d.database_id
+  sys.change_tracking_databases as t on
+  t.database_id = d.database_id
 where d.name = '{connection.Database}'
 ```
 <sup><a href='/src/Delta/DeltaExtensions.cs#L115-L121' title='Snippet source file'>snippet source</a> | <a href='#snippet-istrackingenabledsql' title='Start of snippet'>anchor</a></sup>
@@ -344,8 +344,8 @@ Uses the following SQL:
 alter database {connection.Database}
 set change_tracking = on
 (
-    change_retention = {retentionDays} days,
-    auto_cleanup = on
+  change_retention = {retentionDays} days,
+  auto_cleanup = on
 )
 ```
 <sup><a href='/src/Delta/DeltaExtensions.cs#L80-L87' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletrackingsql' title='Start of snippet'>anchor</a></sup>
@@ -405,8 +405,8 @@ Uses the following SQL:
 alter database {connection.Database}
 set change_tracking = on
 (
-    change_retention = {retentionDays} days,
-    auto_cleanup = on
+  change_retention = {retentionDays} days,
+  auto_cleanup = on
 )
 ```
 <sup><a href='/src/Delta/DeltaExtensions.cs#L80-L87' title='Snippet source file'>snippet source</a> | <a href='#snippet-enabletrackingsql' title='Start of snippet'>anchor</a></sup>

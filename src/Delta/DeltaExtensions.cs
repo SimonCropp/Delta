@@ -31,11 +31,11 @@ public static partial class DeltaExtensions
         return false;
     }
 
-    public static async Task SetTrackedTables(this DbConnection connection, IEnumerable<string> tablesToTrack, uint retentionDays = 1,CancellationToken cancellation = default)
+    public static async Task SetTrackedTables(this DbConnection connection, IEnumerable<string> tablesToTrack, uint retentionDays = 1, Cancellation cancellation = default)
     {
-        await connection.EnableTracking(retentionDays, cancellation: cancellation);
+        await connection.EnableTracking(retentionDays, cancellation);
 
-        var trackedTables = await connection.GetTrackedTables(cancellation: cancellation);
+        var trackedTables = await connection.GetTrackedTables(cancellation);
 
         tablesToTrack = tablesToTrack.ToList();
 
@@ -68,7 +68,7 @@ alter table [{table}] disable change_tracking;
         await command.ExecuteNonQueryAsync(cancellation);
     }
 
-    public static async Task EnableTracking(this DbConnection connection, uint retentionDays = 1, CancellationToken cancellation = default)
+    public static async Task EnableTracking(this DbConnection connection, uint retentionDays = 1, Cancellation cancellation = default)
     {
         if (await IsTrackingEnabled(connection, cancellation))
         {
@@ -81,21 +81,21 @@ alter table [{table}] disable change_tracking;
 alter database {connection.Database}
 set change_tracking = on
 (
-    change_retention = {retentionDays} days,
-    auto_cleanup = on
+  change_retention = {retentionDays} days,
+  auto_cleanup = on
 )
 -- end-snippet";
         await command.ExecuteNonQueryAsync(cancellation);
     }
 
-    public static async Task<IReadOnlyList<string>> GetTrackedTables(this DbConnection connection, CancellationToken cancellation = default)
+    public static async Task<IReadOnlyList<string>> GetTrackedTables(this DbConnection connection, Cancellation cancellation = default)
     {
         await using var command = connection.CreateCommand();
         command.CommandText = @"
 -- begin-snippet: GetTrackedTablesSql
 select t.Name
 from sys.tables as t left join
-    sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
+  sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
 where c.[object_id] is not null
 -- end-snippet";
         await using var reader = await command.ExecuteReaderAsync(cancellation);
@@ -108,21 +108,21 @@ where c.[object_id] is not null
         return list;
     }
 
-    public static async Task<bool> IsTrackingEnabled(this DbConnection connection, CancellationToken cancellation = default)
+    public static async Task<bool> IsTrackingEnabled(this DbConnection connection, Cancellation cancellation = default)
     {
         await using var command = connection.CreateCommand();
         command.CommandText = $@"
 -- begin-snippet: IsTrackingEnabledSql
 select count(d.name)
 from sys.databases as d inner join
-    sys.change_tracking_databases as t on
-    t.database_id = d.database_id
+  sys.change_tracking_databases as t on
+  t.database_id = d.database_id
 where d.name = '{connection.Database}'
 -- end-snippet";
         return await command.ExecuteScalarAsync(cancellation) is 1;
     }
 
-    public static async Task DisableTracking(this DbConnection connection, CancellationToken cancellation = default)
+    public static async Task DisableTracking(this DbConnection connection, Cancellation cancellation = default)
     {
         if (!await IsTrackingEnabled(connection, cancellation))
         {
@@ -130,7 +130,7 @@ where d.name = '{connection.Database}'
         }
 
         var builder = new StringBuilder();
-        foreach (var table in await connection.GetTrackedTables(cancellation: cancellation))
+        foreach (var table in await connection.GetTrackedTables(cancellation))
         {
             builder.AppendLine($@"
 -- begin-snippet: DisableTrackingSql
@@ -148,15 +148,15 @@ alter database [{connection.Database}] set change_tracking = off;
         await command.ExecuteNonQueryAsync(cancellation);
     }
 
-    public static async Task<IReadOnlyList<string>> GetTrackedDatabases(this DbConnection connection, CancellationToken cancellation = default)
+    public static async Task<IReadOnlyList<string>> GetTrackedDatabases(this DbConnection connection, Cancellation cancellation = default)
     {
         await using var command = connection.CreateCommand();
         command.CommandText = @"
 -- begin-snippet: GetTrackedDatabasesSql
 select d.name
 from sys.databases as d inner join
-    sys.change_tracking_databases as t on
-    t.database_id = d.database_id
+  sys.change_tracking_databases as t on
+  t.database_id = d.database_id
 -- end-snippet";
         await using var reader = await command.ExecuteReaderAsync(cancellation);
         var list = new List<string>();
@@ -168,7 +168,7 @@ from sys.databases as d inner join
         return list;
     }
 
-    public static async Task<string> GetLastTimeStamp(this DbContext context, CancellationToken token = default)
+    public static async Task<string> GetLastTimeStamp(this DbContext context, Cancellation cancellation = default)
     {
         // Do not dispose of this connection as it kill the context
         var connection = context.Database.GetDbConnection();
@@ -181,13 +181,13 @@ from sys.databases as d inner join
 
         if (connection.State != ConnectionState.Closed)
         {
-            return await ExecuteTimestampQuery(command, token);
+            return await ExecuteTimestampQuery(command, cancellation);
         }
 
-        await connection.OpenAsync(token);
+        await connection.OpenAsync(cancellation);
         try
         {
-            return await ExecuteTimestampQuery(command, token);
+            return await ExecuteTimestampQuery(command, cancellation);
         }
         finally
         {
@@ -195,13 +195,13 @@ from sys.databases as d inner join
         }
     }
 
-    public static async Task<string> GetLastTimeStamp(this DbConnection connection, CancellationToken token = default)
+    public static async Task<string> GetLastTimeStamp(this DbConnection connection, Cancellation cancellation = default)
     {
         await using var command = connection.CreateCommand();
-        return await ExecuteTimestampQuery(command, token);
+        return await ExecuteTimestampQuery(command, cancellation);
     }
 
-    static async Task<string> ExecuteTimestampQuery(DbCommand command, CancellationToken token = default)
+    static async Task<string> ExecuteTimestampQuery(DbCommand command, Cancellation cancellation = default)
     {
         command.CommandText = @"
 -- begin-snippet: SqlTimestamp
@@ -209,11 +209,11 @@ declare @changeTracking bigint = change_tracking_current_version();
 declare @timeStamp bigint = convert(bigint, @@dbts);
 
 if (@changeTracking is null)
-    select cast(@timeStamp as varchar)
+  select cast(@timeStamp as varchar)
 else
-    select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 -- end-snippet 
 ";
-        return (string) (await command.ExecuteScalarAsync(token))!;
+        return (string) (await command.ExecuteScalarAsync(cancellation))!;
     }
 }

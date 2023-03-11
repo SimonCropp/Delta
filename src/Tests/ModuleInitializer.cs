@@ -3,10 +3,10 @@
     [ModuleInitializer]
     public static void Init()
     {
-        VerifyEntityFramework.Enable();
-        VerifySqlServer.Enable();
+        VerifyEntityFramework.Initialize();
+        VerifySqlServer.Initialize();
         VerifyDiffPlex.Initialize();
-        VerifyMicrosoftLogging.Enable();
-        VerifyAspNetCore.Enable();
+        VerifyMicrosoftLogging.Initialize();
+        VerifyAspNetCore.Initialize();
     }
 }
