@@ -3,7 +3,7 @@
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EfLocalDb" Version="15.1.1" />
+    <PackageReference Include="EfLocalDb" Version="15.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="Verify.NUnit" Version="20.6.0" />
