@@ -9,7 +9,7 @@
     <ItemGroup>
         <PackageReference Include="EfLocalDb" Version="15.4.0" />
         <PackageReference Include="ProjectDefaults" Version="1.0.91" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10" />
         <ProjectReference Include="..\Delta\Delta.csproj" />
     </ItemGroup>
 </Project>
