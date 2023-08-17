@@ -13,7 +13,7 @@
     <PackageReference Include="Verify.MicrosoftLogging" Version="3.3.0" />
     <PackageReference Include="Verify.AspNetCore" Version="3.4.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="25.1.0" PrivateAssets="all" />
     <ProjectReference Include="..\Delta\Delta.csproj" />
     <PackageReference Include="ProjectDefaults" Version="1.0.91" PrivateAssets="all" />
