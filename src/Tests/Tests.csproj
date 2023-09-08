@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="25.1.0" PrivateAssets="all" />
     <ProjectReference Include="..\Delta\Delta.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.93" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.94" PrivateAssets="all" />
     <ProjectReference Include="..\WebApplication\WebApplication.csproj" />
   </ItemGroup>
 </Project>
