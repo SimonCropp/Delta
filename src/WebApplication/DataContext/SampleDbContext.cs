@@ -14,7 +14,7 @@
         var company = modelBuilder.Entity<Company>();
         company
             .HasMany(_ => _.Employees)
-            .WithOne(e => e.Company)
+            .WithOne(_ => _.Company)
             .IsRequired();
         company
             .Property(_ => _.RowVersion)
