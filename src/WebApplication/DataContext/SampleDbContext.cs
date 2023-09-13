@@ -13,7 +13,7 @@
     {
         var company = modelBuilder.Entity<Company>();
         company
-            .HasMany(c => c.Employees)
+            .HasMany(_ => _.Employees)
             .WithOne(e => e.Company)
             .IsRequired();
         company

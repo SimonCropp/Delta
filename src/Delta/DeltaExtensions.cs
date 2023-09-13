@@ -1,4 +1,5 @@
 using Microsoft.Net.Http.Headers;
+// ReSharper disable UseRawString
 
 namespace Delta;
 
@@ -212,7 +213,7 @@ if (@changeTracking is null)
   select cast(@timeStamp as varchar)
 else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
--- end-snippet 
+-- end-snippet
 ";
         return (string) (await command.ExecuteScalarAsync(cancel))!;
     }
