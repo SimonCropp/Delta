@@ -11,6 +11,8 @@ This approach works well when the frequency of updates is realtively low. In thi
 
 Effectively consumers will always receive the most current data, while the load on the server remains very low.
 
+**See [Milestones](../../milestones?state=closed) for release notes.**
+
 
 ## Assumptions
 
