@@ -16,7 +16,7 @@ Effectively consumers will always receive the most current data, while the load 
 
 ## Assumptions
 
-Assume the following combination of technologies are being used:
+Assumes the following combination of technologies are being used:
 
  * Frequency of updates to data is relatively low compared to reads
  * [ASP.net Core](https://learn.microsoft.com/en-us/aspnet/core/)
