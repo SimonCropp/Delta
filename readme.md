@@ -127,6 +127,8 @@ https://nuget.org/packages/Delta/
 
 ### DbContext using RowVersion
 
+Enable row versioning in Entity Framework
+
 <!-- snippet: SampleDbContext.cs -->
 <a id='snippet-SampleDbContext.cs'></a>
 ```cs
