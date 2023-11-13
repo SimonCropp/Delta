@@ -1,7 +1,7 @@
 ﻿{
   target: {
     notModified: false,
-    httpContext: {
+    context: {
       Request: {
         Headers: {
           If-None-Match: "AssemblyWriteTime-rowVersion"
@@ -16,17 +16,15 @@
       }
     }
   },
-  logs: [
-    {
-      Information: Delta /path: Skipping since response has an ETag,
-      State: [
-        {
-          0: /path
-        },
-        {
-          {OriginalFormat}: Delta {0}: Skipping since response has an ETag
-        }
-      ]
-    }
-  ]
+  logs: {
+    Information: Delta /path: Skipping since response has an ETag,
+    State: [
+      {
+        0: /path
+      },
+      {
+        {OriginalFormat}: Delta {0}: Skipping since response has an ETag
+      }
+    ]
+  }
 }

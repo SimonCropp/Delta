@@ -1,7 +1,7 @@
 ﻿{
   target: {
     notModified: false,
-    httpContext: {
+    context: {
       Request: {
         Headers: {
           If-None-Match: "AssemblyWriteTime-rowVersion-suffix"
@@ -17,20 +17,18 @@
       }
     }
   },
-  logs: [
-    {
-      Information: Delta /path: Skipping since request is POST,
-      State: [
-        {
-          0: /path
-        },
-        {
-          1: POST
-        },
-        {
-          {OriginalFormat}: Delta {0}: Skipping since request is {1}
-        }
-      ]
-    }
-  ]
+  logs: {
+    Information: Delta /path: Skipping since request is POST,
+    State: [
+      {
+        0: /path
+      },
+      {
+        1: POST
+      },
+      {
+        {OriginalFormat}: Delta {0}: Skipping since request is {1}
+      }
+    ]
+  }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using VerifyTests.MicrosoftLogging;
 
 public class MiddlewareTests :
     LocalDbTestBase
@@ -7,12 +8,12 @@ public class MiddlewareTests :
     [TestCaseSource(nameof(Cases))]
     public async Task Combinations(bool suffixFunc, bool nullSuffixFunc, bool get, bool ifNoneMatch, bool sameIfNoneMatch, bool etag, bool executeFunc, bool trueExecuteFunc, bool immutable)
     {
-        var provider = LoggerRecording.Start();
-        var httpContext = new DefaultHttpContext();
+        Recording.Start();
+        var context = new DefaultHttpContext();
 
         var suffixValue = suffixFunc && !nullSuffixFunc ? "suffix" : null;
-        var request = httpContext.Request;
-        var response = httpContext.Response;
+        var request = context.Request;
+        var response = context.Response;
 
         if (etag)
         {
@@ -47,17 +48,18 @@ public class MiddlewareTests :
         }
 
         var notModified = await DeltaExtensions.HandleRequest(
-            httpContext,
-            provider,
+            context,
+            new RecordingLogger(),
             suffixFunc ? _ => suffixValue : null,
             _ => Task.FromResult("rowVersion"),
             executeFunc ? _ => trueExecuteFunc : null,
             LogLevel.Information);
-        await Verify(new
-            {
-                notModified,
-                httpContext
-            })
+        await Verify(
+                new
+                {
+                    notModified,
+                    context
+                })
             .AddScrubber(_ => _.Replace(DeltaExtensions.AssemblyWriteTime, "AssemblyWriteTime"));
     }
 

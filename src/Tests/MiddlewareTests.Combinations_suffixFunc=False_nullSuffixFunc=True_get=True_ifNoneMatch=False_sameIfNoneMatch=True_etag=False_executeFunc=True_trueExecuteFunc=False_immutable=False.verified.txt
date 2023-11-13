@@ -1,7 +1,7 @@
 ﻿{
   target: {
     notModified: false,
-    httpContext: {
+    context: {
       Request: {},
       IsAbortedRequested: false,
       Response: {
@@ -9,17 +9,15 @@
       }
     }
   },
-  logs: [
-    {
-      Information: Delta /path: Skipping since shouldExecute is false,
-      State: [
-        {
-          0: /path
-        },
-        {
-          {OriginalFormat}: Delta {0}: Skipping since shouldExecute is false
-        }
-      ]
-    }
-  ]
+  logs: {
+    Information: Delta /path: Skipping since shouldExecute is false,
+    State: [
+      {
+        0: /path
+      },
+      {
+        {OriginalFormat}: Delta {0}: Skipping since shouldExecute is false
+      }
+    ]
+  }
 }

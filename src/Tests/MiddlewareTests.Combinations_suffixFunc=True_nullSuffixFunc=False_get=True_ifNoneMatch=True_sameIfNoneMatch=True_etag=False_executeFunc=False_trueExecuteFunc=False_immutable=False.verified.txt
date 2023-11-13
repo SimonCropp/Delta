@@ -1,7 +1,7 @@
 ﻿{
   target: {
     notModified: true,
-    httpContext: {
+    context: {
       Request: {
         Headers: {
           If-None-Match: "AssemblyWriteTime-rowVersion-suffix"
@@ -17,17 +17,15 @@
       }
     }
   },
-  logs: [
-    {
-      Information: Delta /path: 304,
-      State: [
-        {
-          0: /path
-        },
-        {
-          {OriginalFormat}: Delta {0}: 304
-        }
-      ]
-    }
-  ]
+  logs: {
+    Information: Delta /path: 304,
+    State: [
+      {
+        0: /path
+      },
+      {
+        {OriginalFormat}: Delta {0}: 304
+      }
+    ]
+  }
 }
