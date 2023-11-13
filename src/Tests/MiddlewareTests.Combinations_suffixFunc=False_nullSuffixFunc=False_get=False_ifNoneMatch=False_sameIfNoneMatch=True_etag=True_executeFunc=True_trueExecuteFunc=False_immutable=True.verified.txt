@@ -13,7 +13,7 @@
       }
     }
   },
-  logs: {
+  log: {
     Information: Delta /path: Skipping since request is POST,
     State: [
       {

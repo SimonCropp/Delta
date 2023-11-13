@@ -12,7 +12,7 @@
       }
     }
   },
-  logs: {
+  log: {
     Information: Delta /path: Skipping since request has no If-None-Match,
     State: [
       {

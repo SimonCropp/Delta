@@ -17,7 +17,7 @@
       }
     }
   },
-  logs: {
+  log: {
     Information: Delta /path: Skipping since response has an ETag,
     State: [
       {

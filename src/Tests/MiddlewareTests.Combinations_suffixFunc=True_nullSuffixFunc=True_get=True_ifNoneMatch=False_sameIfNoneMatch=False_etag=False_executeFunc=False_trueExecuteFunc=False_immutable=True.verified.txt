@@ -12,7 +12,7 @@
       }
     }
   },
-  logs: {
+  log: {
     Information: Delta /path: Skipping since response has CacheControl=immutable,
     State: [
       {

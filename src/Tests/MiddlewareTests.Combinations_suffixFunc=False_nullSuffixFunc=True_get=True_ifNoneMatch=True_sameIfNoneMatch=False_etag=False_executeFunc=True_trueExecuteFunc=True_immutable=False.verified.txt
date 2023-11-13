@@ -16,7 +16,7 @@
       }
     }
   },
-  logs: {
+  log: {
     Information:
 Delta /path: Skipping since If-None-Match != ETag
 If-None-Match: diffEtag
