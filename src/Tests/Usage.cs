@@ -36,16 +36,16 @@ public class Usage :
 
         var context = database.Context;
         var timeStamp = await context.GetLastTimeStamp();
-        Assert.IsNotEmpty(timeStamp);
-        Assert.IsNotNull(timeStamp);
+        IsNotEmpty(timeStamp);
+        IsNotNull(timeStamp);
         var entity = new Company
         {
             Content = "The company"
         };
         await database.AddDataUntracked(entity);
         var newTimeStamp = await context.GetLastTimeStamp();
-        Assert.IsNotEmpty(newTimeStamp);
-        Assert.IsNotNull(newTimeStamp);
+        IsNotEmpty(newTimeStamp);
+        IsNotNull(newTimeStamp);
     }
 
     [Test]
@@ -61,7 +61,7 @@ public class Usage :
 
         #endregion
 
-        Assert.IsNotNull(timeStamp);
+        IsNotNull(timeStamp);
     }
 
     [Test]
@@ -77,7 +77,7 @@ public class Usage :
 
         #endregion
 
-        Assert.IsNotNull(timeStamp);
+        IsNotNull(timeStamp);
     }
 
     [Test]
@@ -88,16 +88,16 @@ public class Usage :
         await database.Connection.EnableTracking();
         var context = database.Context;
         var timeStamp = await context.GetLastTimeStamp();
-        Assert.IsNotEmpty(timeStamp);
-        Assert.IsNotNull(timeStamp);
+        IsNotEmpty(timeStamp);
+        IsNotNull(timeStamp);
         var entity = new Company
         {
             Content = "The company"
         };
         await database.AddDataUntracked(entity);
         var newTimeStamp = await context.GetLastTimeStamp();
-        Assert.IsNotEmpty(newTimeStamp);
-        Assert.IsNotNull(newTimeStamp);
+        IsNotEmpty(newTimeStamp);
+        IsNotNull(newTimeStamp);
     }
 
     [Test]
@@ -117,7 +117,7 @@ public class Usage :
 
         #endregion
 
-        Assert.IsNotEmpty(trackedDatabases);
+        IsNotEmpty(trackedDatabases);
     }
 
     [Test]
@@ -191,7 +191,7 @@ public class Usage :
 
         #endregion
 
-        Assert.IsFalse(await sqlConnection.IsTrackingEnabled());
+        IsFalse(await sqlConnection.IsTrackingEnabled());
     }
 
     [Test]
@@ -212,6 +212,6 @@ public class Usage :
 
         #endregion
 
-        Assert.IsTrue(isTrackingEnabled);
+        IsTrue(isTrackingEnabled);
     }
 }
