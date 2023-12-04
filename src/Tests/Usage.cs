@@ -129,11 +129,7 @@ public class Usage :
 
         #region SetTrackedTables
 
-        await sqlConnection.SetTrackedTables(
-            new[]
-            {
-                "Companies"
-            });
+        await sqlConnection.SetTrackedTables(["Companies"]);
 
         #endregion
 
@@ -155,14 +151,8 @@ public class Usage :
     {
         await using var database = await LocalDb();
         var sqlConnection = database.Connection;
-        await sqlConnection.SetTrackedTables(new[]
-        {
-            "Companies"
-        });
-        await sqlConnection.SetTrackedTables(new[]
-        {
-            "Companies"
-        });
+        await sqlConnection.SetTrackedTables(["Companies"]);
+        await sqlConnection.SetTrackedTables(["Companies"]);
     }
 
     [Test]
@@ -170,9 +160,7 @@ public class Usage :
     {
         await using var database = await LocalDb();
         var sqlConnection = database.Connection;
-        await sqlConnection.SetTrackedTables(new string[]
-        {
-        });
+        await sqlConnection.SetTrackedTables([]);
     }
 
     [Test]
@@ -180,10 +168,7 @@ public class Usage :
     {
         await using var database = await LocalDb();
         var sqlConnection = database.Connection;
-        await sqlConnection.SetTrackedTables(new[]
-        {
-            "Companies"
-        });
+        await sqlConnection.SetTrackedTables(["Companies"]);
 
         #region DisableTracking
 

@@ -32,7 +32,11 @@ public static partial class DeltaExtensions
         return false;
     }
 
-    public static async Task SetTrackedTables(this DbConnection connection, IEnumerable<string> tablesToTrack, uint retentionDays = 1, Cancel cancel = default)
+    public static async Task SetTrackedTables(
+        this DbConnection connection,
+        IEnumerable<string> tablesToTrack,
+        uint retentionDays = 1,
+        Cancel cancel = default)
     {
         await connection.EnableTracking(retentionDays, cancel);
 
@@ -41,7 +45,7 @@ public static partial class DeltaExtensions
         tablesToTrack = tablesToTrack.ToList();
 
         var builder = new StringBuilder();
-        var except = tablesToTrack.Except(trackedTables, StringComparer.OrdinalIgnoreCase).ToList();
+        var except = tablesToTrack.Except(trackedTables, StringComparer.OrdinalIgnoreCase);
         foreach (var table in except)
         {
             builder.AppendLine($@"
@@ -69,7 +73,10 @@ alter table [{table}] disable change_tracking;
         await command.ExecuteNonQueryAsync(cancel);
     }
 
-    public static async Task EnableTracking(this DbConnection connection, uint retentionDays = 1, Cancel cancel = default)
+    public static async Task EnableTracking(
+        this DbConnection connection,
+        uint retentionDays = 1,
+        Cancel cancel = default)
     {
         if (await IsTrackingEnabled(connection, cancel))
         {
@@ -149,7 +156,9 @@ alter database [{connection.Database}] set change_tracking = off;
         await command.ExecuteNonQueryAsync(cancel);
     }
 
-    public static async Task<IReadOnlyList<string>> GetTrackedDatabases(this DbConnection connection, Cancel cancel = default)
+    public static async Task<IReadOnlyList<string>> GetTrackedDatabases(
+        this DbConnection connection,
+        Cancel cancel = default)
     {
         await using var command = connection.CreateCommand();
         command.CommandText = @"
