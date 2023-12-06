@@ -33,6 +33,6 @@ public abstract class LocalDbTestBase
 
     string testFile;
 
-    protected LocalDbTestBase([CallerFilePath] string sourceFile = "")  =>
+    protected LocalDbTestBase([CallerFilePath] string sourceFile = "") =>
         testFile = GetType().Name;
 }
