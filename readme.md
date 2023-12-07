@@ -356,7 +356,6 @@ set change_tracking = on
 <!-- endSnippet -->
 
 
-
 ### DisableTracking
 
 Disable change tracking for a database and all tables within that database.

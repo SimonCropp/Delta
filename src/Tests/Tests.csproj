@@ -5,8 +5,8 @@
   <ItemGroup>
     <PackageReference Include="EfLocalDb" Version="16.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
-    <PackageReference Include="NUnit" Version="4.0.0" />
-    <PackageReference Include="Verify.Nunit" Version="22.6.0" />
+    <PackageReference Include="NUnit" Version="4.0.1" />
+    <PackageReference Include="Verify.Nunit" Version="22.8.0" />
     <PackageReference Include="Verify.SqlServer" Version="8.0.1" />
     <PackageReference Include="Verify.DiffPlex" Version="2.3.0" />
     <PackageReference Include="Verify.EntityFramework" Version="12.0.0" />
@@ -14,9 +14,9 @@
     <PackageReference Include="Verify.AspNetCore" Version="4.0.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="MarkdownSnippets.MsBuild" Version="25.1.0" PrivateAssets="all" />
+    <PackageReference Include="MarkdownSnippets.MsBuild" Version="26.0.0" PrivateAssets="all" />
     <ProjectReference Include="..\Delta\Delta.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.102" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.106" PrivateAssets="all" />
     <ProjectReference Include="..\WebApplication\WebApplication.csproj" />
     <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
     <Using Include="NUnit.Framework.Assert" Static="True" />
