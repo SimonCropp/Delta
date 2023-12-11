@@ -181,7 +181,7 @@ from sys.databases as d inner join
 
     public static async Task<string> GetLastTimeStamp(this DbContext context, Cancel cancel = default)
     {
-        // Do not dispose of this connection as it kill the context
+        // Do not dispose of this connection as it kills the context
         var connection = context.Database.GetDbConnection();
         await using var command = connection.CreateCommand();
         var transaction = context.Database.CurrentTransaction;
