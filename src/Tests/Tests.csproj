@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="26.0.0" PrivateAssets="all" />
     <ProjectReference Include="..\Delta\Delta.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.106" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.107" PrivateAssets="all" />
     <ProjectReference Include="..\WebApplication\WebApplication.csproj" />
     <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
     <Using Include="NUnit.Framework.Assert" Static="True" />
