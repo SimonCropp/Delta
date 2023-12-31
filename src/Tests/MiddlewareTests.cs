@@ -64,10 +64,10 @@ public class MiddlewareTests :
     }
 
     static bool[] bools =
-    {
+    [
         true,
         false
-    };
+    ];
 
     public static IEnumerable<object[]> Cases()
     {
@@ -81,8 +81,8 @@ public class MiddlewareTests :
         foreach (var useShouldExecuteFunc in bools)
         foreach (var useTrueShouldExecuteFunc in bools)
         {
-            yield return new object[]
-            {
+            yield return
+            [
                 useSuffixFunc,
                 useNullSuffixFunc,
                 isGet,
@@ -92,7 +92,7 @@ public class MiddlewareTests :
                 useShouldExecuteFunc,
                 useTrueShouldExecuteFunc,
                 hasImmutableCache
-            };
+            ];
         }
     }
 }
