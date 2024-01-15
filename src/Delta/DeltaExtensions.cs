@@ -220,9 +220,9 @@ declare @changeTracking bigint = change_tracking_current_version();
 declare @timeStamp bigint = convert(bigint, @@dbts);
 
 if (@changeTracking is null)
-  select cast(@timeStamp as varchar)
+  select cast(@timeStamp as varchar) as nocount
 else
-  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar) as nocount
 -- end-snippet
 ";
         return (string) (await command.ExecuteScalarAsync(cancel))!;

@@ -75,9 +75,9 @@ declare @changeTracking bigint = change_tracking_current_version();
 declare @timeStamp bigint = convert(bigint, @@dbts);
 
 if (@changeTracking is null)
-  select cast(@timeStamp as varchar)
+  select cast(@timeStamp as varchar) as nocount
 else
-  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar) as nocount
 ```
 <sup><a href='/src/Delta/DeltaExtensions.cs#L218-L226' title='Snippet source file'>snippet source</a> | <a href='#snippet-sqltimestamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
