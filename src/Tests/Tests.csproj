@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EfLocalDb" Version="16.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="NUnit" Version="4.0.1" />
     <PackageReference Include="Verify.NUnit" Version="23.1.0" />
     <PackageReference Include="Verify.SqlServer" Version="8.0.1" />
