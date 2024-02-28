@@ -6,7 +6,7 @@
     <PackageReference Include="EfLocalDb" Version="16.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="NUnit" Version="4.1.0" />
-    <PackageReference Include="Verify.NUnit" Version="23.2.1" />
+    <PackageReference Include="Verify.NUnit" Version="23.2.2" />
     <PackageReference Include="Verify.SqlServer" Version="8.0.1" />
     <PackageReference Include="Verify.DiffPlex" Version="2.3.0" />
     <PackageReference Include="Verify.EntityFramework" Version="12.1.0" />
@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="MarkdownSnippets.MsBuild" Version="26.0.1" PrivateAssets="all" />
     <ProjectReference Include="..\Delta\Delta.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.111" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.113" PrivateAssets="all" />
     <ProjectReference Include="..\WebApplication\WebApplication.csproj" />
     <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
     <Using Include="NUnit.Framework.Assert" Static="True" />

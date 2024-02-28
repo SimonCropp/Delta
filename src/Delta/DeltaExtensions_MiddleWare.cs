@@ -101,19 +101,19 @@ public static partial class DeltaExtensions
 
         if (request.Method != "GET")
         {
-            logger.Log(level, "Delta {0}: Skipping since request is {1}", path, request.Method);
+            logger.Log(level, "Delta {path}: Skipping since request is {method}", path, request.Method);
             return false;
         }
 
         if (response.Headers.ETag.Count != 0)
         {
-            logger.Log(level, "Delta {0}: Skipping since response has an ETag", path);
+            logger.Log(level, "Delta {path}: Skipping since response has an ETag", path);
             return false;
         }
 
         if (response.IsImmutableCache())
         {
-            logger.Log(level, "Delta {0}: Skipping since response has CacheControl=immutable", path);
+            logger.Log(level, "Delta {path}: Skipping since response has CacheControl=immutable", path);
             return false;
         }
 
@@ -121,7 +121,7 @@ public static partial class DeltaExtensions
         {
             if (!shouldExecute(context))
             {
-                logger.Log(level, "Delta {0}: Skipping since shouldExecute is false", path);
+                logger.Log(level, "Delta {path}: Skipping since shouldExecute is false", path);
                 return false;
             }
         }
@@ -129,10 +129,10 @@ public static partial class DeltaExtensions
         var timeStamp = await getTimeStamp(context);
         var suffixValue = suffix?.Invoke(context);
         var etag = BuildEtag(timeStamp, suffixValue);
-        response.Headers.Add("ETag", etag);
+        response.Headers.ETag = etag;
         if (!request.Headers.TryGetValue("If-None-Match", out var ifNoneMatch))
         {
-            logger.Log(level, "Delta {0}: Skipping since request has no If-None-Match", path);
+            logger.Log(level, "Delta {path}: Skipping since request has no If-None-Match", path);
             return false;
         }
 
@@ -141,9 +141,9 @@ public static partial class DeltaExtensions
             logger.Log(
                 level,
                 """
-                Delta {0}: Skipping since If-None-Match != ETag
-                If-None-Match: {1}
-                ETag: {2}
+                Delta {path}: Skipping since If-None-Match != ETag
+                If-None-Match: {ifNoneMatch}
+                ETag: {etag}
                 """,
                 path,
                 ifNoneMatch,
@@ -151,7 +151,7 @@ public static partial class DeltaExtensions
             return false;
         }
 
-        logger.Log(level, "Delta {0}: 304", path);
+        logger.Log(level, "Delta {path}: 304", path);
         response.StatusCode = 304;
         response.NoCache();
         return true;
