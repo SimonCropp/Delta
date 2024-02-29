@@ -16,10 +16,10 @@
     Information: Delta /path: Skipping since response has CacheControl=immutable,
     State: [
       {
-        0: /path
+        path: /path
       },
       {
-        {OriginalFormat}: Delta {0}: Skipping since response has CacheControl=immutable
+        {OriginalFormat}: Delta {path}: Skipping since response has CacheControl=immutable
       }
     ]
   }

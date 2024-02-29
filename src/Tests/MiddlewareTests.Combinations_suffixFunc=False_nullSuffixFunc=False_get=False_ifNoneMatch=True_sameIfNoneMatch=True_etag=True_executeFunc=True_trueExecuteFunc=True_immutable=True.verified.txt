@@ -21,13 +21,13 @@
     Information: Delta /path: Skipping since request is POST,
     State: [
       {
-        0: /path
+        path: /path
       },
       {
-        1: POST
+        method: POST
       },
       {
-        {OriginalFormat}: Delta {0}: Skipping since request is {1}
+        {OriginalFormat}: Delta {path}: Skipping since request is {method}
       }
     ]
   }

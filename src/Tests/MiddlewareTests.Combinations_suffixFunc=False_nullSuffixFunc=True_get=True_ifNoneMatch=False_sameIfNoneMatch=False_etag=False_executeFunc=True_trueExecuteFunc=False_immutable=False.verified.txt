@@ -13,10 +13,10 @@
     Information: Delta /path: Skipping since shouldExecute is false,
     State: [
       {
-        0: /path
+        path: /path
       },
       {
-        {OriginalFormat}: Delta {0}: Skipping since shouldExecute is false
+        {OriginalFormat}: Delta {path}: Skipping since shouldExecute is false
       }
     ]
   }

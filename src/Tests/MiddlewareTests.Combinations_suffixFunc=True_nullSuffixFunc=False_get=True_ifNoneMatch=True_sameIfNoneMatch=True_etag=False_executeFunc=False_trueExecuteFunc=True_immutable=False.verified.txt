@@ -21,10 +21,10 @@
     Information: Delta /path: 304,
     State: [
       {
-        0: /path
+        path: /path
       },
       {
-        {OriginalFormat}: Delta {0}: 304
+        {OriginalFormat}: Delta {path}: 304
       }
     ]
   }

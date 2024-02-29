@@ -23,21 +23,21 @@ If-None-Match: diffEtag
 ETag: "AssemblyWriteTime-rowVersion",
     State: [
       {
-        0: /path
+        path: /path
       },
       {
-        1: [
+        ifNoneMatch: [
           diffEtag
         ]
       },
       {
-        2: "AssemblyWriteTime-rowVersion"
+        etag: "AssemblyWriteTime-rowVersion"
       },
       {
         {OriginalFormat}:
-Delta {0}: Skipping since If-None-Match != ETag
-If-None-Match: {1}
-ETag: {2}
+Delta {path}: Skipping since If-None-Match != ETag
+If-None-Match: {ifNoneMatch}
+ETag: {etag}
       }
     ]
   }

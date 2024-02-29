@@ -21,10 +21,10 @@
     Information: Delta /path: Skipping since response has an ETag,
     State: [
       {
-        0: /path
+        path: /path
       },
       {
-        {OriginalFormat}: Delta {0}: Skipping since response has an ETag
+        {OriginalFormat}: Delta {path}: Skipping since response has an ETag
       }
     ]
   }
