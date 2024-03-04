@@ -3,7 +3,7 @@
 public class Usage :
     LocalDbTestBase
 {
-    public void Suffix(WebApplicationBuilder builder)
+    public static void Suffix(WebApplicationBuilder builder)
     {
         #region Suffix
 
@@ -14,7 +14,7 @@ public class Usage :
         #endregion
     }
 
-    public void ShouldExecute(WebApplicationBuilder builder)
+    public static void ShouldExecute(WebApplicationBuilder builder)
     {
         #region ShouldExecute
 
