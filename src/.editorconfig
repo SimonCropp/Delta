@@ -11,6 +11,8 @@ indent_style = space
 indent_size = 4
 charset = utf-8
 
+# Avoid constant arrays as arguments
+dotnet_diagnostic.CA1861.severity = error
 
 # Microsoft .NET properties
 trim_trailing_whitespace = true
