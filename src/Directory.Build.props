@@ -8,5 +8,6 @@
     <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>
     <NuGetAuditMode>all</NuGetAuditMode>
     <NuGetAuditLevel>low</NuGetAuditLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 </Project>
