@@ -5,6 +5,8 @@
     <IsPackable>true</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <!--CVE Microsoft.Data.SqlClient 5.2.0 depends on Azure.Identity 1.10.3 with CVE-2024-29992 vulnerability -->
+    <PackageReference Include="Azure.Identity" Version="1.11.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageReference Include="ProjectDefaults" Version="1.0.126" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
