@@ -8,8 +8,8 @@
     <PackageVersion Include="EfLocalDb" Version="18.0.0" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="27.0.2" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="5.2.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="NUnit" Version="4.1.0" />
