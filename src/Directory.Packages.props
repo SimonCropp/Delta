@@ -19,7 +19,7 @@
     <PackageVersion Include="Verify.DiffPlex" Version="3.0.0" />
     <PackageVersion Include="Verify.EntityFramework" Version="12.1.1" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="4.0.1" />
-    <PackageVersion Include="Verify.NUnit" Version="25.0.0" />
+    <PackageVersion Include="Verify.NUnit" Version="25.0.1" />
     <PackageVersion Include="Verify.SqlServer" Version="8.0.4" />
   </ItemGroup>
 </Project>
