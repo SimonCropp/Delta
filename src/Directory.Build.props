@@ -6,8 +6,10 @@
     <LangVersion>preview</LangVersion>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>
+    <!--
     <NuGetAuditMode>all</NuGetAuditMode>
     <NuGetAuditLevel>low</NuGetAuditLevel>
+    -->
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 </Project>
