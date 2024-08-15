@@ -16,7 +16,7 @@
     <PackageVersion Include="ProjectDefaults" Version="1.0.134" />
     <PackageVersion Include="Verify.AspNetCore" Version="4.0.0" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.0" />
-    <PackageVersion Include="Verify.EntityFramework" Version="12.1.1" />
+    <PackageVersion Include="Verify.EntityFramework" Version="12.2.1" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="4.0.1" />
     <PackageVersion Include="Verify.NUnit" Version="26.2.0" />
     <PackageVersion Include="Verify.SqlServer" Version="9.0.1" />
