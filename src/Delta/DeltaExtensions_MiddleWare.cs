@@ -117,13 +117,10 @@ public static partial class DeltaExtensions
             return false;
         }
 
-        if (shouldExecute != null)
+        if (shouldExecute != null && !shouldExecute(context))
         {
-            if (!shouldExecute(context))
-            {
-                logger.Log(level, "Delta {path}: Skipping since shouldExecute is false", path);
-                return false;
-            }
+            logger.Log(level, "Delta {path}: Skipping since shouldExecute is false", path);
+            return false;
         }
 
         var timeStamp = await getTimeStamp(context);
