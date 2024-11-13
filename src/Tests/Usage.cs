@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-
-public class Usage :
+﻿public class Usage :
     LocalDbTestBase
 {
     public static void Suffix(WebApplicationBuilder builder)
