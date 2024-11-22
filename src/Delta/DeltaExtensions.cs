@@ -184,10 +184,10 @@ from sys.databases as d inner join
         // Do not dispose of this connection as it kills the context
         var connection = context.Database.GetDbConnection();
         await using var command = connection.CreateCommand();
-        var transaction = context.Database.CurrentTransaction;
+        var transaction = context.Database.CurrentTransaction?.GetDbTransaction();
         if (transaction != null)
         {
-            command.Transaction = transaction.GetDbTransaction();
+            command.Transaction = transaction;
         }
 
         if (connection.State != ConnectionState.Closed)
