@@ -70,13 +70,13 @@ public class Usage :
     }
 
     [Test]
-    public async Task GetLastTimeStampDbConnection()
+    public async Task GetLastTimeStampSqlConnection()
     {
         await using var database = await LocalDb();
 
         var sqlConnection = database.Connection;
 
-        #region GetLastTimeStampDbConnection
+        #region GetLastTimeStampSqlConnection
 
         var timeStamp = await sqlConnection.GetLastTimeStamp();
 

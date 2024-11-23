@@ -1,3 +1,4 @@
+using Microsoft.Data.SqlClient;
 using Microsoft.Net.Http.Headers;
 
 // ReSharper disable UseRawString
@@ -34,7 +35,7 @@ public static partial class DeltaExtensions
     }
 
     public static async Task SetTrackedTables(
-        this DbConnection connection,
+        this SqlConnection connection,
         IEnumerable<string> tablesToTrack,
         uint retentionDays = 1,
         Cancel cancel = default)
@@ -75,7 +76,7 @@ alter table [{table}] disable change_tracking;
     }
 
     public static async Task EnableTracking(
-        this DbConnection connection,
+        this SqlConnection connection,
         uint retentionDays = 1,
         Cancel cancel = default)
     {
@@ -117,7 +118,7 @@ where c.[object_id] is not null
         return list;
     }
 
-    public static async Task<bool> IsTrackingEnabled(this DbConnection connection, Cancel cancel = default)
+    public static async Task<bool> IsTrackingEnabled(this SqlConnection connection, Cancel cancel = default)
     {
         await using var command = connection.CreateCommand();
         command.CommandText = $@"
@@ -131,7 +132,7 @@ where d.name = '{connection.Database}'
         return await command.ExecuteScalarAsync(cancel) is 1;
     }
 
-    public static async Task DisableTracking(this DbConnection connection, Cancel cancel = default)
+    public static async Task DisableTracking(this SqlConnection connection, Cancel cancel = default)
     {
         if (!await IsTrackingEnabled(connection, cancel))
         {
