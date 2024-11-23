@@ -1,3 +1,5 @@
+using Microsoft.Data.SqlClient;
+
 var sqlInstance = new SqlInstance<SampleDbContext>(constructInstance: builder => new(builder.Options));
 
 await using var database = await sqlInstance.Build("WebApp");
@@ -7,7 +9,8 @@ await using var database = await sqlInstance.Build("WebApp");
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
 var app = builder.Build();
-app.UseDelta<SampleDbContext>();
+app.UseDelta<SampleDbContext>(
+    getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
 
 #endregion
 
@@ -16,7 +19,8 @@ app.MapGet("/", () => "Hello World!");
 #region UseDeltaMapGroup
 
 app.MapGroup("/group")
-    .UseDelta<SampleDbContext>()
+    .UseDelta<SampleDbContext>(
+        getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>())
     .MapGet("/", () => "Hello Group!");
 
 #endregion

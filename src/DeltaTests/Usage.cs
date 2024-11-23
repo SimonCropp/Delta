@@ -1,4 +1,7 @@
-﻿public class Usage :
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.DependencyInjection;
+
+public class Usage :
     LocalDbTestBase
 {
     public static void Suffix(WebApplicationBuilder builder)
@@ -7,6 +10,7 @@
 
         var app = builder.Build();
         app.UseDelta<SampleDbContext>(
+            getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>(),
             suffix: httpContext => "MySuffix");
 
         #endregion
@@ -18,6 +22,7 @@
 
         var app = builder.Build();
         app.UseDelta<SampleDbContext>(
+            getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>(),
             shouldExecute: httpContext =>
             {
                 var path = httpContext.Request.Path.ToString();
@@ -32,7 +37,6 @@
     {
         await using var database = await LocalDb();
 
-        var context = database.Context;
         var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
