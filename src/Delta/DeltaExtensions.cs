@@ -179,7 +179,7 @@ from sys.databases as d inner join
         return list;
     }
 
-    static async Task<string> GetLastTimeStamp(DbConnection connection, DbTransaction? transaction, Cancel cancel)
+    internal static async Task<string> GetLastTimeStamp(DbConnection connection, DbTransaction? transaction = null, Cancel cancel = default)
     {
         await using var command = connection.CreateCommand();
         if (transaction != null)

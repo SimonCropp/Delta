@@ -33,7 +33,7 @@
         await using var database = await LocalDb();
 
         var context = database.Context;
-        var timeStamp = await context.GetLastTimeStamp();
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
         Recording.Start();
@@ -44,7 +44,7 @@
              values ('{Guid.NewGuid()}', 'The company')
              """;
         await command.ExecuteNonQueryAsync();
-        var newTimeStamp = await context.GetLastTimeStamp();
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
     }
@@ -58,7 +58,7 @@
 
         #region GetLastTimeStampDbContext
 
-        var timeStamp = await dbContext.GetLastTimeStamp();
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
 
         #endregion
 
@@ -88,7 +88,7 @@
 
         await database.Connection.EnableTracking();
         var context = database.Context;
-        var timeStamp = await context.GetLastTimeStamp();
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
         await using var command = database.Connection.CreateCommand();
@@ -98,7 +98,7 @@
              values ('{Guid.NewGuid()}', 'The company')
              """;
         await command.ExecuteNonQueryAsync();
-        var newTimeStamp = await context.GetLastTimeStamp();
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
     }
