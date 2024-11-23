@@ -36,11 +36,14 @@
         var timeStamp = await context.GetLastTimeStamp();
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
-        var entity = new Company
-        {
-            Content = "The company"
-        };
-        await database.AddDataUntracked(entity);
+        Recording.Start();
+        await using var command = database.Connection.CreateCommand();
+        command.CommandText =
+            $"""
+             insert into [Companies] (Id, Content)
+             values ('{Guid.NewGuid()}', 'The company')
+             """;
+        await command.ExecuteNonQueryAsync();
         var newTimeStamp = await context.GetLastTimeStamp();
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
@@ -88,11 +91,13 @@
         var timeStamp = await context.GetLastTimeStamp();
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
-        var entity = new Company
-        {
-            Content = "The company"
-        };
-        await database.AddDataUntracked(entity);
+        await using var command = database.Connection.CreateCommand();
+        command.CommandText =
+            $"""
+             insert into [Companies] (Id, Content)
+             values ('{Guid.NewGuid()}', 'The company')
+             """;
+        await command.ExecuteNonQueryAsync();
         var newTimeStamp = await context.GetLastTimeStamp();
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
