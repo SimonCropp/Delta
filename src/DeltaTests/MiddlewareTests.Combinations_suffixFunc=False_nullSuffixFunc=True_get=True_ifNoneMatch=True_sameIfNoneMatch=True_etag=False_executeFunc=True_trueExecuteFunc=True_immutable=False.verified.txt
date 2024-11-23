@@ -1,0 +1,31 @@
+﻿{
+  target: {
+    notModified: true,
+    context: {
+      Request: {
+        Headers: {
+          If-None-Match: "AssemblyWriteTime-rowVersion"
+        }
+      },
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: NotModified,
+        Headers: {
+          Cache-Control: no-cache,
+          ETag: "AssemblyWriteTime-rowVersion"
+        }
+      }
+    }
+  },
+  log: {
+    Information: Delta /path: 304,
+    State: [
+      {
+        path: /path
+      },
+      {
+        {OriginalFormat}: Delta {path}: 304
+      }
+    ]
+  }
+}

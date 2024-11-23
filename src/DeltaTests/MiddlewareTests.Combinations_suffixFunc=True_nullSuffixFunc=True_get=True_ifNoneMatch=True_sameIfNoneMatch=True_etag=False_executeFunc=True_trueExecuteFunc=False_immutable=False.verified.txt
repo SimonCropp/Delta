@@ -1,0 +1,27 @@
+﻿{
+  target: {
+    notModified: false,
+    context: {
+      Request: {
+        Headers: {
+          If-None-Match: "AssemblyWriteTime-rowVersion"
+        }
+      },
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: OK
+      }
+    }
+  },
+  log: {
+    Information: Delta /path: Skipping since shouldExecute is false,
+    State: [
+      {
+        path: /path
+      },
+      {
+        {OriginalFormat}: Delta {path}: Skipping since shouldExecute is false
+      }
+    ]
+  }
+}

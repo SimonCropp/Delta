@@ -1,0 +1,31 @@
+﻿{
+  target: {
+    notModified: false,
+    context: {
+      Request: {
+        Headers: {
+          If-None-Match: diffEtag
+        }
+      },
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: OK,
+        Headers: {
+          Cache-Control: public, max-age=31536000, immutable,
+          ETag: existingEtag
+        }
+      }
+    }
+  },
+  log: {
+    Information: Delta /path: Skipping since response has an ETag,
+    State: [
+      {
+        path: /path
+      },
+      {
+        {OriginalFormat}: Delta {path}: Skipping since response has an ETag
+      }
+    ]
+  }
+}

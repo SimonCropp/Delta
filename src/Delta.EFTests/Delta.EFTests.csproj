@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="EfLocalDb" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="Verify.NUnit" />
+    <PackageReference Include="Verify.SqlServer" />
+    <PackageReference Include="Verify.DiffPlex" />
+    <PackageReference Include="Verify.EntityFramework" />
+    <PackageReference Include="Verify.MicrosoftLogging" />
+    <PackageReference Include="Verify.AspNetCore" />
+    <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="MarkdownSnippets.MsBuild" PrivateAssets="all" />
+    <ProjectReference Include="..\Delta.EF\Delta.EF.csproj" />
+    <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
+    <ProjectReference Include="..\WebApplicationEF\WebApplicationEF.csproj" />
+    <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
+    <Using Include="NUnit.Framework.Assert" Static="True" />
+  </ItemGroup>
+</Project>
