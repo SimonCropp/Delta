@@ -7,6 +7,6 @@
     <PackageReference Include="EfLocalDb" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
-    <ProjectReference Include="..\Delta\Delta.csproj" />
+    <ProjectReference Include="..\Delta.EF\Delta.EF.csproj" />
   </ItemGroup>
 </Project>
