@@ -109,7 +109,7 @@ app.UseDelta<SampleDbContext>(
 <a id='snippet-Suffix-1'></a>
 ```cs
 var app = builder.Build();
-app.UseDelta<SampleDbContext>(
+app.UseDelta(
     getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>(),
     suffix: httpContext => "MySuffix");
 ```
@@ -230,7 +230,7 @@ app.UseDelta<SampleDbContext>();
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
 var app = builder.Build();
-app.UseDelta<SampleDbContext>(
+app.UseDelta(
     getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
 ```
 <sup><a href='/src/WebApplication/Program.cs#L7-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta-1' title='Start of snippet'>anchor</a></sup>
@@ -250,7 +250,7 @@ app.MapGroup("/group")
 <a id='snippet-UseDeltaMapGroup-1'></a>
 ```cs
 app.MapGroup("/group")
-    .UseDelta<SampleDbContext>(
+    .UseDelta(
         getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>())
     .MapGet("/", () => "Hello Group!");
 ```
@@ -277,7 +277,7 @@ app.UseDelta<SampleDbContext>(
 <a id='snippet-ShouldExecute-1'></a>
 ```cs
 var app = builder.Build();
-app.UseDelta<SampleDbContext>(
+app.UseDelta(
     getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>(),
     shouldExecute: httpContext =>
     {

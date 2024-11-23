@@ -9,7 +9,7 @@ public class Usage :
         #region Suffix
 
         var app = builder.Build();
-        app.UseDelta<SampleDbContext>(
+        app.UseDelta(
             getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>(),
             suffix: httpContext => "MySuffix");
 
@@ -21,7 +21,7 @@ public class Usage :
         #region ShouldExecute
 
         var app = builder.Build();
-        app.UseDelta<SampleDbContext>(
+        app.UseDelta(
             getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>(),
             shouldExecute: httpContext =>
             {

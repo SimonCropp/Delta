@@ -9,7 +9,7 @@ await using var database = await sqlInstance.Build("WebApp");
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
 var app = builder.Build();
-app.UseDelta<SampleDbContext>(
+app.UseDelta(
     getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
 
 #endregion
@@ -19,7 +19,7 @@ app.MapGet("/", () => "Hello World!");
 #region UseDeltaMapGroup
 
 app.MapGroup("/group")
-    .UseDelta<SampleDbContext>(
+    .UseDelta(
         getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>())
     .MapGet("/", () => "Hello Group!");
 
