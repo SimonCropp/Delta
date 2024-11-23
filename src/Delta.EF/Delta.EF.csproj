@@ -10,4 +10,12 @@
     <PackageReference Include="Microsoft.Data.SqlClient" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Delta\DeltaExtensions.cs">
+      <Link>DeltaExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Delta\DeltaExtensions_MiddleWare.cs">
+      <Link>DeltaExtensions_MiddleWare.cs</Link>
+    </Compile>
+  </ItemGroup>
 </Project>
