@@ -1,6 +1,6 @@
 var sqlInstance = new SqlInstance<SampleDbContext>(constructInstance: builder => new(builder.Options));
 
-await using var database = await sqlInstance.Build("WebApp");
+await using var database = await sqlInstance.Build("WebAppEF");
 
 #region UseDelta
 

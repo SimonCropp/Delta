@@ -3,16 +3,14 @@ public abstract class LocalDbTestBase
 {
     static SqlInstance<SampleDbContext> sqlInstance;
 
-    static LocalDbTestBase()
-    {
-        LocalDbLogging.EnableVerbose();
+    static LocalDbTestBase() =>
         sqlInstance = new(
             constructInstance: builder =>
             {
                 builder.EnableRecording();
                 return new(builder.Options);
-            });
-    }
+            },
+            storage: Storage.FromSuffix<SampleDbContext>("ef"));
 
     public Task<SqlDatabase<SampleDbContext>> LocalDb(string? testSuffix = null)
         => sqlInstance.Build(testFile, null, GetName(testSuffix));
