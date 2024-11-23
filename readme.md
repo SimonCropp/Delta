@@ -80,6 +80,17 @@ else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
 <sup><a href='/src/Delta/DeltaExtensions.cs#L215-L223' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlTimestamp' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-SqlTimestamp-1'></a>
+```txt
+declare @changeTracking bigint = change_tracking_current_version();
+declare @timeStamp bigint = convert(bigint, @@dbts);
+
+if (@changeTracking is null)
+  select cast(@timeStamp as varchar)
+else
+  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+```
+<sup><a href='/src/DeltaTests/Usage.LastTimeStampRowVersion.received.txt#L23-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlTimestamp-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -148,6 +159,7 @@ public class SampleDbContext(DbContextOptions options) :
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var company = modelBuilder.Entity<Company>();
+        company.HasKey(_ => _.Id);
         company
             .HasMany(_ => _.Employees)
             .WithOne(_ => _.Company)
@@ -158,6 +170,7 @@ public class SampleDbContext(DbContextOptions options) :
             .HasConversion<byte[]>();
 
         var employee = modelBuilder.Entity<Employee>();
+        employee.HasKey(_ => _.Id);
         employee
             .Property(_ => _.RowVersion)
             .IsRowVersion()
@@ -165,7 +178,7 @@ public class SampleDbContext(DbContextOptions options) :
     }
 }
 ```
-<sup><a href='/src/WebApplication/DataContext/SampleDbContext.cs#L1-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplication/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
 <a id='snippet-SampleDbContext.cs-1'></a>
 ```cs
 public class SampleDbContext(DbContextOptions options) :
@@ -174,9 +187,10 @@ public class SampleDbContext(DbContextOptions options) :
     public DbSet<Employee> Employees { get; set; } = null!;
     public DbSet<Company> Companies { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        var company = modelBuilder.Entity<Company>();
+        var company = builder.Entity<Company>();
+        company.HasKey(_ => _.Id);
         company
             .HasMany(_ => _.Employees)
             .WithOne(_ => _.Company)
@@ -186,7 +200,8 @@ public class SampleDbContext(DbContextOptions options) :
             .IsRowVersion()
             .HasConversion<byte[]>();
 
-        var employee = modelBuilder.Entity<Employee>();
+        var employee = builder.Entity<Employee>();
+        employee.HasKey(_ => _.Id);
         employee
             .Property(_ => _.RowVersion)
             .IsRowVersion()
@@ -194,7 +209,7 @@ public class SampleDbContext(DbContextOptions options) :
     }
 }
 ```
-<sup><a href='/src/WebApplicationEF/DataContext/SampleDbContext.cs#L1-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
