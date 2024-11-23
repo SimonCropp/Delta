@@ -80,17 +80,6 @@ else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
 <sup><a href='/src/Delta/DeltaExtensions.cs#L215-L223' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlTimestamp' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-SqlTimestamp-1'></a>
-```txt
-declare @changeTracking bigint = change_tracking_current_version();
-declare @timeStamp bigint = convert(bigint, @@dbts);
-
-if (@changeTracking is null)
-  select cast(@timeStamp as varchar)
-else
-  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
-```
-<sup><a href='/src/DeltaTests/Usage.LastTimeStampRowVersion.received.txt#L9-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlTimestamp-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -303,7 +292,7 @@ var timeStamp = await dbContext.GetLastTimeStamp();
 ```cs
 var timeStamp = await dbContext.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L60-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampDbContext-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L59-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampDbContext-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -319,7 +308,7 @@ var timeStamp = await sqlConnection.GetLastTimeStamp();
 ```cs
 var timeStamp = await sqlConnection.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L76-L80' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampDbConnection-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L75-L79' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampDbConnection-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -345,7 +334,7 @@ foreach (var db in trackedDatabases)
     Trace.WriteLine(db);
 }
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L114-L122' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetDatabasesWithTracking-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L113-L121' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetDatabasesWithTracking-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -384,7 +373,7 @@ foreach (var db in trackedTables)
     Trace.WriteLine(db);
 }
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L140-L148' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTables-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L139-L147' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTables-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -415,7 +404,7 @@ var isTrackingEnabled = await sqlConnection.IsTrackingEnabled();
 ```cs
 var isTrackingEnabled = await sqlConnection.IsTrackingEnabled();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L198-L202' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabled-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L197-L201' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabled-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -447,7 +436,7 @@ await sqlConnection.EnableTracking();
 ```cs
 await sqlConnection.EnableTracking();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L192-L196' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTracking-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L191-L195' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTracking-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -480,7 +469,7 @@ await sqlConnection.DisableTracking();
 ```cs
 await sqlConnection.DisableTracking();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L177-L181' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTracking-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L176-L180' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTracking-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -513,7 +502,7 @@ await sqlConnection.SetTrackedTables(["Companies"]);
 ```cs
 await sqlConnection.SetTrackedTables(["Companies"]);
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L134-L138' title='Snippet source file'>snippet source</a> | <a href='#snippet-SetTrackedTables-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L133-L137' title='Snippet source file'>snippet source</a> | <a href='#snippet-SetTrackedTables-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
