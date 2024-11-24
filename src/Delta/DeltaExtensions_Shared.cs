@@ -1,4 +1,3 @@
-using Microsoft.Data.SqlClient;
 using Microsoft.Net.Http.Headers;
 
 namespace Delta;

@@ -1,8 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-
-namespace Delta;
-
-public delegate Connection GetConnection(HttpContext content);
+﻿namespace Delta;
 
 public record struct Connection(SqlConnection SqlConnection, DbTransaction? DbTransaction = null)
 {
