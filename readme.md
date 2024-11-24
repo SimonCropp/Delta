@@ -80,17 +80,6 @@ else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
 <sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L214-L222' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlTimestamp' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-SqlTimestamp-1'></a>
-```txt
-declare @changeTracking bigint = change_tracking_current_version();
-declare @timeStamp bigint = convert(bigint, @@dbts);
-
-if (@changeTracking is null)
-  select cast(@timeStamp as varchar)
-else
-  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
-```
-<sup><a href='/src/DeltaTests/Usage.LastTimeStampRowVersion.received.txt#L5-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlTimestamp-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
