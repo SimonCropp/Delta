@@ -11,7 +11,27 @@ app.UseDelta<SampleDbContext>();
 
 #endregion
 
-app.MapGet("/", () => "Hello World!");
+var context = database.Context;
+context.Add(
+    new Company
+    {
+        Content = "The company"
+    });
+await context.SaveChangesAsync();
+
+app.MapGet("/", async _ =>
+{
+    var builder = new StringBuilder("Results: ");
+    builder.AppendLine();
+    var dbContext = _.RequestServices.GetRequiredService<SampleDbContext>();
+    foreach (var company in await dbContext.Companies.ToListAsync())
+    {
+        builder.AppendLine($"Id: {company.Id}");
+        builder.AppendLine($"RowVersion: {company.RowVersion}");
+        builder.AppendLine($"Content: {company.Content}");
+    }
+    await _.Response.WriteAsync(builder.ToString());
+});
 
 #region UseDeltaMapGroupEF
 
