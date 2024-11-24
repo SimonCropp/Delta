@@ -4,9 +4,8 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EfLocalDb" />
+    <PackageReference Include="LocalDb" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
     <ProjectReference Include="..\Delta\Delta.csproj" />
   </ItemGroup>
 </Project>

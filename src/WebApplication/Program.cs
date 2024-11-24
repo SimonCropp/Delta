@@ -1,13 +1,14 @@
-using Microsoft.Data.SqlClient;
-
-var sqlInstance = new SqlInstance<SampleDbContext>(constructInstance: builder => new(builder.Options));
-
+SqlInstance sqlInstance = new(
+    name: "DeltaWebApplication",
+    buildTemplate: DbBuilder.Create);
 await using var database = await sqlInstance.Build("WebApp");
+
+var connectionString = database.ConnectionString;
 
 #region UseDelta
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
+builder.Services.AddScoped<SqlConnection>(_ => new(connectionString));
 var app = builder.Build();
 app.UseDelta(
     getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
