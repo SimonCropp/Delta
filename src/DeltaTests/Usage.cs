@@ -206,4 +206,17 @@ public class Usage :
 
         IsTrue(isTrackingEnabled);
     }
+
+    static void UseDeltaHttpContext(string connectionString)
+    {
+        #region UseDeltaHttpContext
+
+        var builder = WebApplication.CreateBuilder();
+        builder.Services.AddScoped(_ => new SqlConnection(connectionString));
+        var webApplication = builder.Build();
+        webApplication.UseDelta(
+            getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
+
+        #endregion
+    }
 }

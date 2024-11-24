@@ -9,7 +9,7 @@ var connectionString = database.ConnectionString;
 
 #region UseDelta
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder();
 builder.Services.AddScoped(_ => new SqlConnection(connectionString));
 var app = builder.Build();
 app.UseDelta(

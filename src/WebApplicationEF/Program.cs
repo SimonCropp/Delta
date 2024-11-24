@@ -2,9 +2,9 @@ var sqlInstance = new SqlInstance<SampleDbContext>(constructInstance: builder =>
 
 await using var database = await sqlInstance.Build("WebAppEF");
 
-#region UseDelta
+#region UseDeltaEF
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder();
 builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
@@ -13,7 +13,7 @@ app.UseDelta<SampleDbContext>();
 
 app.MapGet("/", () => "Hello World!");
 
-#region UseDeltaMapGroup
+#region UseDeltaMapGroupEF
 
 app.MapGroup("/group")
     .UseDelta<SampleDbContext>()

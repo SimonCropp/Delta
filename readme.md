@@ -139,37 +139,6 @@ public class SampleDbContext(DbContextOptions options) :
     public DbSet<Employee> Employees { get; set; } = null!;
     public DbSet<Company> Companies { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        var company = modelBuilder.Entity<Company>();
-        company.HasKey(_ => _.Id);
-        company
-            .HasMany(_ => _.Employees)
-            .WithOne(_ => _.Company)
-            .IsRequired();
-        company
-            .Property(_ => _.RowVersion)
-            .IsRowVersion()
-            .HasConversion<byte[]>();
-
-        var employee = modelBuilder.Entity<Employee>();
-        employee.HasKey(_ => _.Id);
-        employee
-            .Property(_ => _.RowVersion)
-            .IsRowVersion()
-            .HasConversion<byte[]>();
-    }
-}
-```
-<sup><a href='/src/WebApplication/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-SampleDbContext.cs-1'></a>
-```cs
-public class SampleDbContext(DbContextOptions options) :
-    DbContext(options)
-{
-    public DbSet<Employee> Employees { get; set; } = null!;
-    public DbSet<Company> Companies { get; set; } = null!;
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         var company = builder.Entity<Company>();
@@ -192,7 +161,7 @@ public class SampleDbContext(DbContextOptions options) :
     }
 }
 ```
-<sup><a href='/src/WebApplicationEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -201,21 +170,13 @@ public class SampleDbContext(DbContextOptions options) :
 <!-- snippet: UseDelta -->
 <a id='snippet-UseDelta'></a>
 ```cs
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
-var app = builder.Build();
-app.UseDelta<SampleDbContext>();
-```
-<sup><a href='/src/WebApplicationEF/Program.cs#L5-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-UseDelta-1'></a>
-```cs
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
+var builder = WebApplication.CreateBuilder();
+builder.Services.AddScoped(_ => new SqlConnection(connectionString));
 var app = builder.Build();
 app.UseDelta(
     getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
 ```
-<sup><a href='/src/WebApplication/Program.cs#L7-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplication/Program.cs#L10-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -225,18 +186,11 @@ app.UseDelta(
 <a id='snippet-UseDeltaMapGroup'></a>
 ```cs
 app.MapGroup("/group")
-    .UseDelta<SampleDbContext>()
-    .MapGet("/", () => "Hello Group!");
-```
-<sup><a href='/src/WebApplicationEF/Program.cs#L16-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-UseDeltaMapGroup-1'></a>
-```cs
-app.MapGroup("/group")
     .UseDelta(
         getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>())
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplication/Program.cs#L19-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplication/Program.cs#L59-L66' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
