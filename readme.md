@@ -271,7 +271,7 @@ app.UseDelta(
 <!-- snippet: GetLastTimeStampDbContext -->
 <a id='snippet-GetLastTimeStampDbContext'></a>
 ```cs
-var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
+var timeStamp = await DeltaExtensions.GetLastTimeStamp(sqlConnection, null);
 ```
 <sup><a href='/src/DeltaTests/Usage.cs#L63-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampDbContext' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

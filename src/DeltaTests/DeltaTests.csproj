@@ -3,13 +3,11 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EfLocalDb" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="LocalDb" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="Verify.NUnit" />
     <PackageReference Include="Verify.SqlServer" />
     <PackageReference Include="Verify.DiffPlex" />
-    <PackageReference Include="Verify.EntityFramework" />
     <PackageReference Include="Verify.MicrosoftLogging" />
     <PackageReference Include="Verify.AspNetCore" />
     <PackageReference Include="NUnit3TestAdapter" />

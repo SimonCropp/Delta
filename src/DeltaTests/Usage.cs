@@ -58,11 +58,11 @@ public class Usage :
     {
         await using var database = await LocalDb();
 
-        var dbContext = database.Context;
+        var sqlConnection = database.Connection;
 
         #region GetLastTimeStampDbContext
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(sqlConnection, null);
 
         #endregion
 
@@ -90,19 +90,19 @@ public class Usage :
     {
         await using var database = await LocalDb();
 
-        await database.Connection.EnableTracking();
-        var context = database.Context;
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
+        var connection = database.Connection;
+        await connection.EnableTracking();
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
-        await using var command = database.Connection.CreateCommand();
+        await using var command = connection.CreateCommand();
         command.CommandText =
             $"""
              insert into [Companies] (Id, Content)
              values ('{Guid.NewGuid()}', 'The company')
              """;
         await command.ExecuteNonQueryAsync();
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
     }

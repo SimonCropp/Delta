@@ -1,21 +1,49 @@
-﻿[TestFixture]
+﻿using Microsoft.Data.SqlClient;
+
+[TestFixture]
 public abstract class LocalDbTestBase
 {
-    static SqlInstance<SampleDbContext> sqlInstance;
+    static SqlInstance sqlInstance = new(
+        name: "DeltaTests",
+        buildTemplate: CreateTable);
 
-    static LocalDbTestBase() =>
-        sqlInstance = new(
-            constructInstance: builder =>
-            {
-                builder.EnableRecording();
-                return new(builder.Options);
-            });
+    static async Task CreateTable(SqlConnection connection)
+    {
+        await using var command = connection.CreateCommand();
+        command.CommandText =
+            """
+            CREATE TABLE [dbo].[Companies](
+            	[Id] [uniqueidentifier] NOT NULL,
+            	[RowVersion] [timestamp] NOT NULL,
+            	[Content] [nvarchar](max) NULL,
+             CONSTRAINT [PK_Companies] PRIMARY KEY CLUSTERED
+            (
+            	[Id] ASC
+            ) ON [PRIMARY]
+            ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-    public Task<SqlDatabase<SampleDbContext>> LocalDb(string? testSuffix = null)
+            CREATE TABLE [dbo].[Employees](
+            	[Id] [uniqueidentifier] NOT NULL,
+            	[RowVersion] [timestamp] NOT NULL,
+            	[CompanyId] [uniqueidentifier] NOT NULL,
+            	[Content] [nvarchar](max) NULL,
+            	[Age] [int] NOT NULL,
+             CONSTRAINT [PK_Employees] PRIMARY KEY CLUSTERED
+            (
+            	[Id] ASC
+            ) ON [PRIMARY]
+            ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+            CREATE NONCLUSTERED INDEX [IX_Employees_CompanyId] ON [dbo].[Employees]
+            (
+            	[CompanyId] ASC
+            ) ON [PRIMARY]
+            """;
+        await command.ExecuteNonQueryAsync();
+    }
+
+    public Task<SqlDatabase> LocalDb(string? testSuffix = null)
         => sqlInstance.Build(testFile, null, GetName(testSuffix));
-
-    public Task<SampleDbContext> LocalDbContext(string? testSuffix = null)
-        => sqlInstance.BuildContext(testFile, null, GetName(testSuffix));
 
     static string GetName(string? testSuffix)
     {
