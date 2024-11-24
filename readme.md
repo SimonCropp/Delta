@@ -91,18 +91,11 @@ An optional string suffix that is dynamically caculated at runtime based on the 
 <a id='snippet-Suffix'></a>
 ```cs
 var app = builder.Build();
-app.UseDelta<SampleDbContext>(
-    suffix: httpContext => "MySuffix");
-```
-<sup><a href='/src/Delta.EFTests/Usage.cs#L6-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-Suffix' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-Suffix-1'></a>
-```cs
-var app = builder.Build();
 app.UseDelta(
     getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>(),
     suffix: httpContext => "MySuffix");
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L9-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-Suffix-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L9-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-Suffix' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -255,17 +248,6 @@ Optional control what requests Delta is executed on.
 <a id='snippet-ShouldExecute'></a>
 ```cs
 var app = builder.Build();
-app.UseDelta<SampleDbContext>(
-    shouldExecute: httpContext =>
-    {
-        var path = httpContext.Request.Path.ToString();
-        return path.Contains("match");
-    });
-```
-<sup><a href='/src/Delta.EFTests/Usage.cs#L17-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-ShouldExecute-1'></a>
-```cs
-var app = builder.Build();
 app.UseDelta(
     getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>(),
     shouldExecute: httpContext =>
@@ -274,7 +256,7 @@ app.UseDelta(
         return path.Contains("match");
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L21-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L21-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -289,14 +271,9 @@ app.UseDelta(
 <!-- snippet: GetLastTimeStampDbContext -->
 <a id='snippet-GetLastTimeStampDbContext'></a>
 ```cs
-var timeStamp = await dbContext.GetLastTimeStamp();
-```
-<sup><a href='/src/Delta.EFTests/Usage.cs#L56-L60' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampDbContext' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-GetLastTimeStampDbContext-1'></a>
-```cs
 var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L63-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampDbContext-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L63-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampDbContext' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

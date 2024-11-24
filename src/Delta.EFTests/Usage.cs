@@ -3,7 +3,7 @@
 {
     public static void Suffix(WebApplicationBuilder builder)
     {
-        #region Suffix
+        #region SuffixEF
 
         var app = builder.Build();
         app.UseDelta<SampleDbContext>(
@@ -14,7 +14,7 @@
 
     public static void ShouldExecute(WebApplicationBuilder builder)
     {
-        #region ShouldExecute
+        #region ShouldExecuteEF
 
         var app = builder.Build();
         app.UseDelta<SampleDbContext>(
@@ -53,7 +53,7 @@
 
         var dbContext = database.Context;
 
-        #region GetLastTimeStampDbContext
+        #region GetLastTimeStampDbContextEF
 
         var timeStamp = await dbContext.GetLastTimeStamp();
 
