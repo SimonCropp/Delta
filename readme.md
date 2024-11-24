@@ -20,8 +20,7 @@ Assumes the following combination of technologies are being used:
 
  * Frequency of updates to data is relatively low compared to reads
  * [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/)
- * [Entity Framework Core](https://learn.microsoft.com/en-us/ef/)
- * [Microsoft SQL Server EF Core Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/)
+ * [Microsoft SQL Server](https://www.microsoft.com/en-au/sql-server)
  * Either [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
 
 
