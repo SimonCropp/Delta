@@ -46,13 +46,13 @@
     }
 
     [Test]
-    public async Task GetLastTimeStampDbContext()
+    public async Task GetLastTimeStamp()
     {
         await using var database = await LocalDb();
 
         var dbContext = database.Context;
 
-        #region GetLastTimeStampDbContextEF
+        #region GetLastTimeStampEF
 
         var timeStamp = await dbContext.GetLastTimeStamp();
 

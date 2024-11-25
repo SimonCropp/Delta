@@ -103,7 +103,7 @@ snippet: UseDeltaMapGroup
 
 ### ShouldExecute
 
-Optional control what requests Delta is executed on.
+Optionally control what requests Delta is executed on.
 
 snippet: ShouldExecute
 
@@ -147,25 +147,27 @@ snippet: UseDeltaMapGroupEF
 
 ### ShouldExecute
 
-Optional control what requests Delta is executed on.
+Optionally control what requests Delta is executed on.
 
 snippet: ShouldExecuteEF
 
 
-## EF/SQL helpers
+## Helpers
+
+Utility methods for working with databases using the Delta conventions.
 
 
 ### GetLastTimeStamp
 
 
-#### For a `DbContext`:
-
-snippet: GetLastTimeStampDbContext
-
-
 #### For a `SqlConnection`:
 
 snippet: GetLastTimeStampSqlConnection
+
+
+#### For a `DbContext`:
+
+snippet: GetLastTimeStampEF
 
 
 ### GetDatabasesWithTracking

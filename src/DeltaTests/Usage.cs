@@ -52,23 +52,7 @@ public class Usage :
     }
 
     [Test]
-    public async Task GetLastTimeStampDbContext()
-    {
-        await using var database = await LocalDb();
-
-        var sqlConnection = database.Connection;
-
-        #region GetLastTimeStampDbContext
-
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(sqlConnection, null);
-
-        #endregion
-
-        IsNotNull(timeStamp);
-    }
-
-    [Test]
-    public async Task GetLastTimeStampSqlConnection()
+    public async Task GetLastTimeStamp()
     {
         await using var database = await LocalDb();
 
