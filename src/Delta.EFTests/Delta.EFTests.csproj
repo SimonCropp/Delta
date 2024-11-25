@@ -14,10 +14,9 @@
     <PackageReference Include="Verify.AspNetCore" />
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="MarkdownSnippets.MsBuild" PrivateAssets="all" />
-    <ProjectReference Include="..\Delta\Delta.csproj" />
+    <ProjectReference Include="..\Delta.EF\Delta.EF.csproj" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
-    <ProjectReference Include="..\WebApplication\WebApplication.csproj" />
+    <ProjectReference Include="..\WebApplicationEF\WebApplicationEF.csproj" />
     <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
     <Using Include="NUnit.Framework.Assert" Static="True" />
   </ItemGroup>

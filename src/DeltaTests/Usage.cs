@@ -1,4 +1,7 @@
-﻿public class Usage :
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.DependencyInjection;
+
+public class Usage :
     LocalDbTestBase
 {
     public static void Suffix(WebApplicationBuilder builder)
@@ -6,8 +9,7 @@
         #region Suffix
 
         var app = builder.Build();
-        app.UseDelta<SampleDbContext>(
-            suffix: httpContext => "MySuffix");
+        app.UseDelta(suffix: httpContext => "MySuffix");
 
         #endregion
     }
@@ -17,7 +19,8 @@
         #region ShouldExecute
 
         var app = builder.Build();
-        app.UseDelta<SampleDbContext>(
+        app.UseDelta(
+            getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>(),
             shouldExecute: httpContext =>
             {
                 var path = httpContext.Request.Path.ToString();
@@ -32,44 +35,30 @@
     {
         await using var database = await LocalDb();
 
-        var context = database.Context;
-        var timeStamp = await context.GetLastTimeStamp();
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
-        var entity = new Company
-        {
-            Content = "The company"
-        };
-        await database.AddDataUntracked(entity);
-        var newTimeStamp = await context.GetLastTimeStamp();
+        Recording.Start();
+        await using var command = database.Connection.CreateCommand();
+        command.CommandText =
+            $"""
+             insert into [Companies] (Id, Content)
+             values ('{Guid.NewGuid()}', 'The company')
+             """;
+        await command.ExecuteNonQueryAsync();
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
     }
 
     [Test]
-    public async Task GetLastTimeStampDbContext()
-    {
-        await using var database = await LocalDb();
-
-        var dbContext = database.Context;
-
-        #region GetLastTimeStampDbContext
-
-        var timeStamp = await dbContext.GetLastTimeStamp();
-
-        #endregion
-
-        IsNotNull(timeStamp);
-    }
-
-    [Test]
-    public async Task GetLastTimeStampDbConnection()
+    public async Task GetLastTimeStamp()
     {
         await using var database = await LocalDb();
 
         var sqlConnection = database.Connection;
 
-        #region GetLastTimeStampDbConnection
+        #region GetLastTimeStampSqlConnection
 
         var timeStamp = await sqlConnection.GetLastTimeStamp();
 
@@ -83,17 +72,19 @@
     {
         await using var database = await LocalDb();
 
-        await database.Connection.EnableTracking();
-        var context = database.Context;
-        var timeStamp = await context.GetLastTimeStamp();
+        var connection = database.Connection;
+        await connection.EnableTracking();
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
-        var entity = new Company
-        {
-            Content = "The company"
-        };
-        await database.AddDataUntracked(entity);
-        var newTimeStamp = await context.GetLastTimeStamp();
+        await using var command = connection.CreateCommand();
+        command.CommandText =
+            $"""
+             insert into [Companies] (Id, Content)
+             values ('{Guid.NewGuid()}', 'The company')
+             """;
+        await command.ExecuteNonQueryAsync();
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
     }
@@ -162,6 +153,13 @@
     }
 
     [Test]
+    public async Task Schema()
+    {
+        await using var database = await LocalDb();
+        await Verify(database.Connection).SchemaAsSql();
+    }
+
+    [Test]
     public async Task DisableTracking()
     {
         await using var database = await LocalDb();
@@ -196,5 +194,33 @@
         #endregion
 
         IsTrue(isTrackingEnabled);
+    }
+
+    static void CustomDiscoveryConnection(WebApplicationBuilder webApplicationBuilder)
+    {
+        #region CustomDiscoveryConnection
+
+        var application = webApplicationBuilder.Build();
+        application.UseDelta(
+            getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
+
+        #endregion
+    }
+
+    static void CustomDiscoveryConnectionAndTransaction(WebApplicationBuilder webApplicationBuilder)
+    {
+        #region CustomDiscoveryConnectionAndTransaction
+
+        var webApplication = webApplicationBuilder.Build();
+        webApplication.UseDelta(
+            getConnection: httpContext =>
+            {
+                var provider = httpContext.RequestServices;
+                var sqlConnection = provider.GetRequiredService<SqlConnection>();
+                var sqlTransaction = provider.GetService<SqlTransaction>();
+                return new(sqlConnection, sqlTransaction);
+            });
+
+        #endregion
     }
 }

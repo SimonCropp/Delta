@@ -4,9 +4,10 @@
     public DbSet<Employee> Employees { get; set; } = null!;
     public DbSet<Company> Companies { get; set; } = null!;
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        var company = modelBuilder.Entity<Company>();
+        var company = builder.Entity<Company>();
+        company.HasKey(_ => _.Id);
         company
             .HasMany(_ => _.Employees)
             .WithOne(_ => _.Company)
@@ -16,7 +17,8 @@
             .IsRowVersion()
             .HasConversion<byte[]>();
 
-        var employee = modelBuilder.Entity<Employee>();
+        var employee = builder.Entity<Employee>();
+        employee.HasKey(_ => _.Id);
         employee
             .Property(_ => _.RowVersion)
             .IsRowVersion()
