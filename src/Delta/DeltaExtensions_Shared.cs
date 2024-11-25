@@ -1,4 +1,3 @@
-using Microsoft.Net.Http.Headers;
 // ReSharper disable UseRawString
 
 namespace Delta;
