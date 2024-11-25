@@ -9,9 +9,7 @@ public class Usage :
         #region Suffix
 
         var app = builder.Build();
-        app.UseDelta(
-            getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>(),
-            suffix: httpContext => "MySuffix");
+        app.UseDelta(suffix: httpContext => "MySuffix");
 
         #endregion
     }

@@ -6,8 +6,7 @@
         #region SuffixEF
 
         var app = builder.Build();
-        app.UseDelta<SampleDbContext>(
-            suffix: httpContext => "MySuffix");
+        app.UseDelta<SampleDbContext>(suffix: httpContext => "MySuffix");
 
         #endregion
     }
