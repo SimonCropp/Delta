@@ -20,7 +20,6 @@ public class Usage :
 
         var app = builder.Build();
         app.UseDelta(
-            getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>(),
             shouldExecute: httpContext =>
             {
                 var path = httpContext.Request.Path.ToString();
