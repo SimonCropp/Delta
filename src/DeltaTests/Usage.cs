@@ -213,8 +213,8 @@ public class Usage :
 
         var builder = WebApplication.CreateBuilder();
         builder.Services.AddScoped(_ => new SqlConnection(connectionString));
-        var webApplication = builder.Build();
-        webApplication.UseDelta(
+        var application = builder.Build();
+        application.UseDelta(
             getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
 
         #endregion

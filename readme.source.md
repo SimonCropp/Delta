@@ -1,0 +1,218 @@
+# <img src="/src/icon.png" height="30px"> Delta
+
+[![Build status](https://ci.appveyor.com/api/projects/status/20t96gnsmysklh09/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Delta)
+[![NuGet Status](https://img.shields.io/nuget/v/Delta.svg)](https://www.nuget.org/packages/Delta/)
+
+Delta is an opinionated approach to implementing a [304 Not Modified](https://www.keycdn.com/support/304-not-modified)
+
+The approach uses a last updated timestamp from the database to generate an [ETag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag). All dynamic requests then have that ETag checked/applied.
+
+This approach works well when the frequency of updates is relatively low. In this scenario, the majority of requests will leverage the result in a 304 Not Modified being returned and the browser loading the content its cache.
+
+Effectively consumers will always receive the most current data, while the load on the server remains very low.
+
+**See [Milestones](../../milestones?state=closed) for release notes.**
+
+
+## Assumptions
+
+Assumes the following combination of technologies are being used:
+
+ * Frequency of updates to data is relatively low compared to reads
+ * [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/)
+ * [Microsoft SQL Server](https://www.microsoft.com/en-au/sql-server)
+ * Either [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
+
+
+## 304 Not Modified Flow
+
+```mermaid
+graph TD
+    Request
+    CalculateEtag[Calculate current ETag<br/>based on timestamp<br/>from web assembly and SQL]
+    IfNoneMatch{Has<br/>If-None-Match<br/>header?}
+    EtagMatch{Current<br/>Etag matches<br/>If-None-Match?}
+    AddETag[Add current ETag<br/>to Response headers]
+    304[Respond with<br/>304 Not-Modified]
+    Request --> CalculateEtag
+    CalculateEtag --> IfNoneMatch
+    IfNoneMatch -->|Yes| EtagMatch
+    IfNoneMatch -->|No| AddETag
+    EtagMatch -->|No| AddETag
+    EtagMatch -->|Yes| 304
+```
+
+
+## ETag calculation logic
+
+The ETag is calculated from a combination several parts
+
+
+#### AssemblyWriteTime
+
+The last write time of the web entry point assembly
+
+snippet: AssemblyWriteTime
+
+
+#### SQL timestamp
+
+A combination of [change_tracking_current_version](https://learn.microsoft.com/en-us/sql/relational-databases/system-functions/change-tracking-current-version-transact-sql) (if tracking is enabled) and [@@DBTS (row version timestamp)](https://learn.microsoft.com/en-us/sql/t-sql/functions/dbts-transact-sql)
+
+
+snippet: SqlTimestamp
+
+
+#### Suffix
+
+An optional string suffix that is dynamically calculated at runtime based on the current `HttpContext`.
+
+snippet: Suffix
+
+
+### Combining the above
+
+snippet: BuildEtag
+
+
+## NuGet
+
+https://nuget.org/packages/Delta/
+
+
+## Usage
+
+
+### Add to Builder
+
+snippet: UseDelta
+
+
+### Add to a group
+
+snippet: UseDeltaMapGroup
+
+
+### ShouldExecute
+
+Optional control what requests Delta is executed on.
+
+snippet: ShouldExecute
+
+
+## EF Usage
+
+
+### DbContext using RowVersion
+
+Enable row versioning in Entity Framework
+
+snippet: SampleDbContext.cs
+
+
+### Add to Builder
+
+snippet: UseDeltaEF
+
+
+### Add to a group
+
+snippet: UseDeltaMapGroupEF
+
+
+### ShouldExecute
+
+Optional control what requests Delta is executed on.
+
+snippet: ShouldExecuteEF
+
+
+## EF/SQL helpers
+
+
+### GetLastTimeStamp
+
+
+#### For a `DbContext`:
+
+snippet: GetLastTimeStampDbContext
+
+
+#### For a `SqlConnection`:
+
+snippet: GetLastTimeStampSqlConnection
+
+
+### GetDatabasesWithTracking
+
+Get a list of all databases with change tracking enabled.
+
+snippet: GetDatabasesWithTracking
+
+Uses the following SQL:
+
+snippet: GetTrackedDatabasesSql
+
+
+### GetTrackedTables
+
+Get a list of all tracked tables in database.
+
+snippet: GetTrackedTables
+
+Uses the following SQL:
+
+snippet: GetTrackedTablesSql
+
+
+### IsTrackingEnabled
+
+Determine if change tracking is enabled for a database.
+
+snippet: IsTrackingEnabled
+
+Uses the following SQL:
+
+snippet: IsTrackingEnabledSql
+
+
+### EnableTracking
+
+Enable change tracking for a database.
+
+snippet: EnableTracking
+
+Uses the following SQL:
+
+snippet: EnableTrackingSql
+
+
+### DisableTracking
+
+Disable change tracking for a database and all tables within that database.
+
+snippet: DisableTracking
+
+Uses the following SQL:
+
+snippet: DisableTrackingSql
+
+
+### SetTrackedTables
+
+Enables change tracking for all tables listed, and disables change tracking for all tables not listed.
+
+snippet: SetTrackedTables
+
+Uses the following SQL:
+
+snippet: EnableTrackingSql
+
+snippet: EnableTrackingTableSql
+
+snippet: DisableTrackingTableSql
+
+
+## Icon
+
+[Estuary](https://thenounproject.com/term/estuary/1847616/) designed by [Daan](https://thenounproject.com/Asphaleia/) from [The Noun Project](https://thenounproject.com).
