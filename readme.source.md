@@ -78,8 +78,12 @@ snippet: BuildEtag
 
 ## NuGet
 
- * https://nuget.org/packages/Delta/
- * https://nuget.org/packages/Delta.EF/
+Delta is shipped as two nugets:
+
+ * [Delta](https://nuget.org/packages/Delta/): Uses SqlConnection and SqlTransaction.
+ * [Delta.EF](https://nuget.org/packages/Delta.EF/): Uses the [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli).
+
+Only one of the above should be used.
 
 
 ## Usage
