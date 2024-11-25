@@ -296,6 +296,12 @@ else
         return true;
     }
 
+    static ILogger GetLogger(this IServiceProvider provider)
+    {
+        var factory = provider.GetRequiredService<ILoggerFactory>();
+        return factory.CreateLogger("Delta");
+    }
+
     #region BuildEtag
 
     internal static string BuildEtag(string timeStamp, string? suffix)

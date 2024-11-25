@@ -58,8 +58,7 @@ app.MapGet("/", async _ =>
 #region UseDeltaMapGroup
 
 app.MapGroup("/group")
-    .UseDelta(
-        getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>())
+    .UseDelta()
     .MapGet("/", () => "Hello Group!");
 
 #endregion

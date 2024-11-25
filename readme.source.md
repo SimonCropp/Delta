@@ -80,8 +80,8 @@ snippet: BuildEtag
 
 Delta is shipped as two nugets:
 
- * [Delta](https://nuget.org/packages/Delta/): Uses SqlConnection and SqlTransaction.
- * [Delta.EF](https://nuget.org/packages/Delta.EF/): Uses the [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli).
+ * [Delta](https://nuget.org/packages/Delta/): Delivers functionality using SqlConnection and SqlTransaction.
+ * [Delta.EF](https://nuget.org/packages/Delta.EF/): Delivers functionality using [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli).
 
 Only one of the above should be used.
 
@@ -89,12 +89,14 @@ Only one of the above should be used.
 ## Usage
 
 
-### Add to Builder
+### Add to WebApplicationBuilder
 
 snippet: UseDelta
 
 
-### Add to a group
+### Add to a Route Group
+
+To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
 
 snippet: UseDeltaMapGroup
 
@@ -131,12 +133,14 @@ Enable row versioning in Entity Framework
 snippet: SampleDbContext.cs
 
 
-### Add to Builder
+### Add to WebApplicationBuilder
 
 snippet: UseDeltaEF
 
 
-### Add to a group
+### Add to a Route Group
+
+To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
 
 snippet: UseDeltaMapGroupEF
 

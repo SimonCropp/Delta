@@ -119,7 +119,7 @@ internal static string BuildEtag(string timeStamp, string? suffix)
     return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L299-L311' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L305-L317' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -127,8 +127,8 @@ internal static string BuildEtag(string timeStamp, string? suffix)
 
 Delta is shipped as two nugets:
 
- * [Delta](https://nuget.org/packages/Delta/): Uses SqlConnection and SqlTransaction.
- * [Delta.EF](https://nuget.org/packages/Delta.EF/): Uses the [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli).
+ * [Delta](https://nuget.org/packages/Delta/): Delivers functionality using SqlConnection and SqlTransaction.
+ * [Delta.EF](https://nuget.org/packages/Delta.EF/): Delivers functionality using [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli).
 
 Only one of the above should be used.
 
@@ -136,7 +136,7 @@ Only one of the above should be used.
 ## Usage
 
 
-### Add to Builder
+### Add to WebApplicationBuilder
 
 <!-- snippet: UseDelta -->
 <a id='snippet-UseDelta'></a>
@@ -150,17 +150,18 @@ app.UseDelta();
 <!-- endSnippet -->
 
 
-### Add to a group
+### Add to a Route Group
+
+To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
 
 <!-- snippet: UseDeltaMapGroup -->
 <a id='snippet-UseDeltaMapGroup'></a>
 ```cs
 app.MapGroup("/group")
-    .UseDelta(
-        getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>())
+    .UseDelta()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplication/Program.cs#L58-L65' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplication/Program.cs#L58-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -199,7 +200,7 @@ static Connection DiscoverConnection(HttpContext httpContext)
     return new(connection, transaction);
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L67-L77' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L65-L75' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection discovery:
@@ -275,7 +276,7 @@ public class SampleDbContext(DbContextOptions options) :
 <!-- endSnippet -->
 
 
-### Add to Builder
+### Add to WebApplicationBuilder
 
 <!-- snippet: UseDeltaEF -->
 <a id='snippet-UseDeltaEF'></a>
@@ -289,7 +290,9 @@ app.UseDelta<SampleDbContext>();
 <!-- endSnippet -->
 
 
-### Add to a group
+### Add to a Route Group
+
+To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
 
 <!-- snippet: UseDeltaMapGroupEF -->
 <a id='snippet-UseDeltaMapGroupEF'></a>

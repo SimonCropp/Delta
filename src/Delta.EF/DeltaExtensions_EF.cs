@@ -46,8 +46,7 @@ public static partial class DeltaExtensions
     public static IApplicationBuilder UseDelta<TDbContext>(this IApplicationBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TDbContext : DbContext
     {
-        var loggerFactory = builder.ApplicationServices.GetRequiredService<ILoggerFactory>();
-        var logger = loggerFactory.CreateLogger("Delta");
+        var logger = builder.ApplicationServices.GetLogger();
         return builder.Use(
             async (context, next) =>
             {
@@ -65,8 +64,7 @@ public static partial class DeltaExtensions
         where TDbContext : DbContext =>
         builder.AddEndpointFilterFactory((filterContext, next) =>
         {
-            var loggerFactory = filterContext.ApplicationServices.GetRequiredService<ILoggerFactory>();
-            var logger = loggerFactory.CreateLogger("Delta");
+            var logger = filterContext.ApplicationServices.GetLogger();
             return async invocationContext =>
             {
                 if (await HandleRequest<TDbContext>(invocationContext.HttpContext, logger, suffix, shouldExecute, logLevel))
@@ -77,6 +75,7 @@ public static partial class DeltaExtensions
                 return await next(invocationContext);
             };
         });
+
 
     internal static Task<bool> HandleRequest<T>(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, bool>? shouldExecute, LogLevel logLevel)
         where T : DbContext =>

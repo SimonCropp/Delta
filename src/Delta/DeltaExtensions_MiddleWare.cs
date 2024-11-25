@@ -29,8 +29,7 @@ public static partial class DeltaExtensions
     public static IApplicationBuilder UseDelta(this IApplicationBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
     {
         getConnection ??= DiscoverConnection;
-        var loggerFactory = builder.ApplicationServices.GetRequiredService<ILoggerFactory>();
-        var logger = loggerFactory.CreateLogger("Delta");
+        var logger = builder.ApplicationServices.GetLogger();
         return builder.Use(
             async (context, next) =>
             {
@@ -50,8 +49,7 @@ public static partial class DeltaExtensions
 
         return builder.AddEndpointFilterFactory((filterContext, next) =>
         {
-            var loggerFactory = filterContext.ApplicationServices.GetRequiredService<ILoggerFactory>();
-            var logger = loggerFactory.CreateLogger("Delta");
+            var logger = filterContext.ApplicationServices.GetLogger();
             return async invocationContext =>
             {
                 if (await HandleRequest(invocationContext.HttpContext, getConnection, logger, suffix, shouldExecute, logLevel))
