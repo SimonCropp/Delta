@@ -207,15 +207,30 @@ public class Usage :
         IsTrue(isTrackingEnabled);
     }
 
-    static void UseDeltaHttpContext(string connectionString)
+    static void CustomDiscoveryConnection(WebApplicationBuilder webApplicationBuilder)
     {
-        #region UseDeltaHttpContext
+        #region CustomDiscoveryConnection
 
-        var builder = WebApplication.CreateBuilder();
-        builder.Services.AddScoped(_ => new SqlConnection(connectionString));
-        var application = builder.Build();
+        var application = webApplicationBuilder.Build();
         application.UseDelta(
             getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
+
+        #endregion
+    }
+
+    static void CustomDiscoveryConnectionAndTransaction(WebApplicationBuilder webApplicationBuilder)
+    {
+        #region CustomDiscoveryConnectionAndTransaction
+
+        var webApplication = webApplicationBuilder.Build();
+        webApplication.UseDelta(
+            getConnection: httpContext =>
+            {
+                var provider = httpContext.RequestServices;
+                var sqlConnection = provider.GetRequiredService<SqlConnection>();
+                var sqlTransaction = provider.GetService<SqlTransaction>();
+                return new(sqlConnection, sqlTransaction);
+            });
 
         #endregion
     }

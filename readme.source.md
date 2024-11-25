@@ -2,6 +2,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/20t96gnsmysklh09/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Delta)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.svg)](https://www.nuget.org/packages/Delta/)
+[![NuGet Status](https://img.shields.io/nuget/v/Delta.EF.svg)](https://www.nuget.org/packages/Delta.EF/)
 
 Delta is an opinionated approach to implementing a [304 Not Modified](https://www.keycdn.com/support/304-not-modified)
 
@@ -77,7 +78,8 @@ snippet: BuildEtag
 
 ## NuGet
 
-https://nuget.org/packages/Delta/
+ * https://nuget.org/packages/Delta/
+ * https://nuget.org/packages/Delta.EF/
 
 
 ## Usage
@@ -98,6 +100,21 @@ snippet: UseDeltaMapGroup
 Optional control what requests Delta is executed on.
 
 snippet: ShouldExecute
+
+
+### Custom Connection discovery
+
+By default, Delta uses `HttpContext.RequestServices` to discover the SqlConnection and SqlTransaction:
+
+snippet: DiscoverConnection
+
+To use custom connection discovery:
+
+snippet: CustomDiscoveryConnection
+
+To use custom connection and transaction discovery:
+
+snippet: CustomDiscoveryConnectionAndTransaction
 
 
 ## EF Usage

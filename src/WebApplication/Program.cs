@@ -12,8 +12,7 @@ var connectionString = database.ConnectionString;
 var builder = WebApplication.CreateBuilder();
 builder.Services.AddScoped(_ => new SqlConnection(connectionString));
 var app = builder.Build();
-app.UseDelta(
-    getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
+app.UseDelta();
 
 #endregion
 

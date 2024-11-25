@@ -1,4 +1,5 @@
 using Microsoft.Net.Http.Headers;
+// ReSharper disable UseRawString
 
 namespace Delta;
 
@@ -95,7 +96,7 @@ set change_tracking = on
         await command.ExecuteNonQueryAsync(cancel);
     }
 
-    public static async Task<IReadOnlyList<string>> GetTrackedTables(this DbConnection connection, Cancel cancel = default)
+    public static async Task<IReadOnlyList<string>> GetTrackedTables(this SqlConnection connection, Cancel cancel = default)
     {
         await using var command = connection.CreateCommand();
         command.CommandText = @"
@@ -156,7 +157,7 @@ alter database [{connection.Database}] set change_tracking = off;
     }
 
     public static async Task<IReadOnlyList<string>> GetTrackedDatabases(
-        this DbConnection connection,
+        this SqlConnection connection,
         Cancel cancel = default)
     {
         await using var command = connection.CreateCommand();
@@ -177,7 +178,7 @@ from sys.databases as d inner join
         return list;
     }
 
-    internal static async Task<string> GetLastTimeStamp(DbConnection connection, DbTransaction? transaction = null, Cancel cancel = default)
+    internal static async Task<string> GetLastTimeStamp(SqlConnection connection, SqlTransaction? transaction = null, Cancel cancel = default)
     {
         await using var command = connection.CreateCommand();
         if (transaction != null)
@@ -201,13 +202,13 @@ from sys.databases as d inner join
         }
     }
 
-    public static async Task<string> GetLastTimeStamp(this DbConnection connection, Cancel cancel = default)
+    public static async Task<string> GetLastTimeStamp(this SqlConnection connection, Cancel cancel = default)
     {
         await using var command = connection.CreateCommand();
         return await ExecuteTimestampQuery(command, cancel);
     }
 
-    static async Task<string> ExecuteTimestampQuery(DbCommand command, Cancel cancel = default)
+    static async Task<string> ExecuteTimestampQuery(SqlCommand command, Cancel cancel = default)
     {
         command.CommandText = @"
 -- begin-snippet: SqlTimestamp

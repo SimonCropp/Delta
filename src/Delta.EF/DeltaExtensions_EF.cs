@@ -6,11 +6,12 @@ public static partial class DeltaExtensions
     {
         // Do not dispose of this connection as it kills the context
         var database = context.Database;
-        var connection = database.GetDbConnection();
-        var transaction = database.CurrentTransaction?.GetDbTransaction();
+        var connection = (SqlConnection) database.GetDbConnection();
+        var transaction = (SqlTransaction?) database.CurrentTransaction?.GetDbTransaction();
         return GetLastTimeStamp(connection, transaction, cancel);
     }
-      public static ComponentEndpointConventionBuilder UseDelta<TDbContext>(this ComponentEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
+
+    public static ComponentEndpointConventionBuilder UseDelta<TDbContext>(this ComponentEndpointConventionBuilder builder, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TDbContext : DbContext =>
         builder.UseDelta<ComponentEndpointConventionBuilder, TDbContext>(suffix, shouldExecute, logLevel);
 
