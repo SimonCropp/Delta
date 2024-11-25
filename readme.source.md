@@ -233,15 +233,18 @@ snippet: SetTrackedTables
 
 Uses the following SQL:
 
-For enabling tracking on a database:
+
+#### For enabling tracking on a database:
 
 snippet: EnableTrackingSql
 
-For enabling tracking on tables:
+
+#### For enabling tracking on tables:
 
 snippet: EnableTrackingTableSql
 
-For disabling tracking on tables:
+
+#### For disabling tracking on tables:
 
 snippet: DisableTrackingTableSql
 

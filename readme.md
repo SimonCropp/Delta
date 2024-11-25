@@ -511,7 +511,8 @@ await sqlConnection.SetTrackedTables(["Companies"]);
 
 Uses the following SQL:
 
-For enabling tracking on a database:
+
+#### For enabling tracking on a database:
 
 <!-- snippet: EnableTrackingSql -->
 <a id='snippet-EnableTrackingSql'></a>
@@ -526,7 +527,8 @@ set change_tracking = on
 <sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L88-L95' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-For enabling tracking on tables:
+
+#### For enabling tracking on tables:
 
 <!-- snippet: EnableTrackingTableSql -->
 <a id='snippet-EnableTrackingTableSql'></a>
@@ -536,7 +538,8 @@ alter table [{table}] enable change_tracking
 <sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L52-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingTableSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-For disabling tracking on tables:
+
+#### For disabling tracking on tables:
 
 <!-- snippet: DisableTrackingTableSql -->
 <a id='snippet-DisableTrackingTableSql'></a>
