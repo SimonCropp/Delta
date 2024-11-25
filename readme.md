@@ -8,8 +8,8 @@ To change this file edit the source file and then run MarkdownSnippets.
 # <img src="/src/icon.png" height="30px"> Delta
 
 [![Build status](https://ci.appveyor.com/api/projects/status/20t96gnsmysklh09/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Delta)
-[![NuGet Status](https://img.shields.io/nuget/v/Delta.svg)](https://www.nuget.org/packages/Delta/)
-[![NuGet Status](https://img.shields.io/nuget/v/Delta.EF.svg)](https://www.nuget.org/packages/Delta.EF/)
+[![NuGet Status](https://img.shields.io/nuget/v/Delta.svg?label=Delta)](https://www.nuget.org/packages/Delta/)
+[![NuGet Status](https://img.shields.io/nuget/v/Delta.EF.svg?label=Delta.EF)](https://www.nuget.org/packages/Delta.EF/)
 
 Delta is an opinionated approach to implementing a [304 Not Modified](https://www.keycdn.com/support/304-not-modified)
 
