@@ -153,6 +153,13 @@ public class Usage :
     }
 
     [Test]
+    public async Task Schema()
+    {
+        await using var database = await LocalDb();
+        await Verify(database.Connection).SchemaAsSql();
+    }
+
+    [Test]
     public async Task DisableTracking()
     {
         await using var database = await LocalDb();
