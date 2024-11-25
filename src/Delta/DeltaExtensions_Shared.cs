@@ -84,9 +84,10 @@ alter table [{table}] disable change_tracking;
         }
 
         await using var command = connection.CreateCommand();
+        var database = connection.Database;
         command.CommandText = $@"
 -- begin-snippet: EnableTrackingSql
-alter database {connection.Database}
+alter database {database}
 set change_tracking = on
 (
   change_retention = {retentionDays} days,
@@ -119,13 +120,14 @@ where c.[object_id] is not null
     public static async Task<bool> IsTrackingEnabled(this SqlConnection connection, Cancel cancel = default)
     {
         await using var command = connection.CreateCommand();
+        var database = connection.Database;
         command.CommandText = $@"
 -- begin-snippet: IsTrackingEnabledSql
 select count(d.name)
 from sys.databases as d inner join
   sys.change_tracking_databases as t on
   t.database_id = d.database_id
-where d.name = '{connection.Database}'
+where d.name = '{database}'
 -- end-snippet";
         return await command.ExecuteScalarAsync(cancel) is 1;
     }
@@ -147,9 +149,10 @@ alter table [{table}] disable change_tracking;
 ");
         }
 
+        var database = connection.Database;
         builder.AppendLine($@"
 -- begin-snippet: DisableTrackingSqlDB
-alter database [{connection.Database}] set change_tracking = off;
+alter database [{database}] set change_tracking = off;
 -- end-snippet");
         await using var command = connection.CreateCommand();
         command.CommandText = builder.ToString();
@@ -223,6 +226,7 @@ else
 ";
         return (string) (await command.ExecuteScalarAsync(cancel))!;
     }
+
     internal static string AssemblyWriteTime;
 
     static DeltaExtensions()
