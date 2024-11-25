@@ -84,7 +84,7 @@ else
 
 #### Suffix
 
-An optional string suffix that is dynamically caculated at runtime based on the current `HttpContext`.
+An optional string suffix that is dynamically calculated at runtime based on the current `HttpContext`.
 
 <!-- snippet: Suffix -->
 <a id='snippet-Suffix'></a>
