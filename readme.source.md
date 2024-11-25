@@ -222,7 +222,15 @@ snippet: DisableTracking
 
 Uses the following SQL:
 
-snippet: DisableTrackingSql
+
+#### For disabling tracking on a database:
+
+snippet: DisableTrackingSqlDB
+
+
+#### For disabling tracking on tables:
+
+snippet: DisableTrackingSqlTable
 
 
 ### SetTrackedTables

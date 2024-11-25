@@ -141,14 +141,14 @@ where d.name = '{connection.Database}'
         foreach (var table in await connection.GetTrackedTables(cancel))
         {
             builder.AppendLine($@"
--- begin-snippet: DisableTrackingSql
+-- begin-snippet: DisableTrackingSqlTable
 alter table [{table}] disable change_tracking;
 -- end-snippet
 ");
         }
 
         builder.AppendLine($@"
--- begin-snippet: DisableTrackingSql
+-- begin-snippet: DisableTrackingSqlDB
 alter database [{connection.Database}] set change_tracking = off;
 -- end-snippet");
         await using var command = connection.CreateCommand();

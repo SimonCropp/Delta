@@ -483,17 +483,26 @@ await sqlConnection.DisableTracking();
 
 Uses the following SQL:
 
-<!-- snippet: DisableTrackingSql -->
-<a id='snippet-DisableTrackingSql'></a>
-```cs
-alter table [{table}] disable change_tracking;
-```
-<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L144-L146' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSql' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-DisableTrackingSql-1'></a>
+
+#### For disabling tracking on a database:
+
+<!-- snippet: DisableTrackingSqlDB -->
+<a id='snippet-DisableTrackingSqlDB'></a>
 ```cs
 alter database [{connection.Database}] set change_tracking = off;
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L151-L153' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSql-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L151-L153' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSqlDB' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+#### For disabling tracking on tables:
+
+<!-- snippet: DisableTrackingSqlTable -->
+<a id='snippet-DisableTrackingSqlTable'></a>
+```cs
+alter table [{table}] disable change_tracking;
+```
+<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L144-L146' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSqlTable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
