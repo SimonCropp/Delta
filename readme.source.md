@@ -85,6 +85,15 @@ Only one of the above should be used.
 ## Usage
 
 
+### DB Schema
+
+Ensure [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql) is enabled for all relevant tables.
+
+Example SQL schema:
+
+snippet: Usage.Schema.verified.sql
+
+
 ### Add to WebApplicationBuilder
 
 snippet: UseDelta

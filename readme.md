@@ -132,6 +132,48 @@ Only one of the above should be used.
 ## Usage
 
 
+### DB Schema
+
+Ensure [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql) is enabled for all relevant tables.
+
+Example SQL schema:
+
+<!-- snippet: Usage.Schema.verified.sql -->
+<a id='snippet-Usage.Schema.verified.sql'></a>
+```sql
+-- Tables
+
+CREATE TABLE [dbo].[Companies](
+	[Id] [uniqueidentifier] NOT NULL,
+	[RowVersion] [timestamp] NOT NULL,
+	[Content] [nvarchar](max) NULL,
+ CONSTRAINT [PK_Companies] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+CREATE TABLE [dbo].[Employees](
+	[Id] [uniqueidentifier] NOT NULL,
+	[RowVersion] [timestamp] NOT NULL,
+	[CompanyId] [uniqueidentifier] NOT NULL,
+	[Content] [nvarchar](max) NULL,
+	[Age] [int] NOT NULL,
+ CONSTRAINT [PK_Employees] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+CREATE NONCLUSTERED INDEX [IX_Employees_CompanyId] ON [dbo].[Employees]
+(
+	[CompanyId] ASC
+) ON [PRIMARY]
+```
+<sup><a href='/src/DeltaTests/Usage.Schema.verified.sql#L1-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-Usage.Schema.verified.sql' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
 ### Add to WebApplicationBuilder
 
 <!-- snippet: UseDelta -->
