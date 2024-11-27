@@ -237,7 +237,7 @@ static Connection DiscoverConnection(HttpContext httpContext)
     return new(connection, transaction);
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L65-L75' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_MiddleWare.cs#L41-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection discovery:

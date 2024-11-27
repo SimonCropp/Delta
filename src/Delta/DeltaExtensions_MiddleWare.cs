@@ -2,30 +2,6 @@ namespace Delta;
 
 public static partial class DeltaExtensions
 {
-    public static ComponentEndpointConventionBuilder UseDelta(this ComponentEndpointConventionBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug) =>
-        builder.UseDelta<ComponentEndpointConventionBuilder>(getConnection, suffix, shouldExecute, logLevel);
-
-    public static ConnectionEndpointRouteBuilder UseDelta(ConnectionEndpointRouteBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug) =>
-        builder.UseDelta<ConnectionEndpointRouteBuilder>(getConnection, suffix, shouldExecute, logLevel);
-
-    public static ControllerActionEndpointConventionBuilder UseDelta(this ControllerActionEndpointConventionBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug) =>
-        builder.UseDelta<ControllerActionEndpointConventionBuilder>(getConnection, suffix, shouldExecute, logLevel);
-
-    public static HubEndpointConventionBuilder UseDelta(this HubEndpointConventionBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug) =>
-        builder.UseDelta<HubEndpointConventionBuilder>(getConnection, suffix, shouldExecute, logLevel);
-
-    public static IHubEndpointConventionBuilder UseDelta(this IHubEndpointConventionBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug) =>
-        builder.UseDelta<IHubEndpointConventionBuilder>(getConnection, suffix, shouldExecute, logLevel);
-
-    public static PageActionEndpointConventionBuilder UseDelta(this PageActionEndpointConventionBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug) =>
-        builder.UseDelta<PageActionEndpointConventionBuilder>(getConnection, suffix, shouldExecute, logLevel);
-
-    public static RouteGroupBuilder UseDelta(this RouteGroupBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug) =>
-        builder.UseDelta<RouteGroupBuilder>(getConnection, suffix, shouldExecute, logLevel);
-
-    public static RouteHandlerBuilder UseDelta(this RouteHandlerBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug) =>
-        builder.UseDelta<RouteHandlerBuilder>(getConnection, suffix, shouldExecute, logLevel);
-
     public static IApplicationBuilder UseDelta(this IApplicationBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
     {
         getConnection ??= DiscoverConnection;
@@ -42,7 +18,7 @@ public static partial class DeltaExtensions
             });
     }
 
-    public static TBuilder UseDelta<TBuilder>(this TBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
+    static TBuilder UseDelta<TBuilder>(this TBuilder builder, GetConnection? getConnection = null, Func<HttpContext, string?>? suffix = null, Func<HttpContext, bool>? shouldExecute = null, LogLevel logLevel = LogLevel.Debug)
         where TBuilder : IEndpointConventionBuilder
     {
         getConnection ??= DiscoverConnection;
@@ -74,7 +50,7 @@ public static partial class DeltaExtensions
 
     #endregion
 
-    internal static Task<bool> HandleRequest(
+    static Task<bool> HandleRequest(
         HttpContext context,
         GetConnection getConnection,
         ILogger logger,
@@ -92,4 +68,69 @@ public static partial class DeltaExtensions
             },
             shouldExecute,
             logLevel);
+
+    public static ComponentEndpointConventionBuilder UseDelta(
+        this ComponentEndpointConventionBuilder builder,
+        GetConnection? getConnection = null,
+        Func<HttpContext, string?>? suffix = null,
+        Func<HttpContext, bool>? shouldExecute = null,
+        LogLevel logLevel = LogLevel.Debug) =>
+        builder.UseDelta<ComponentEndpointConventionBuilder>(getConnection, suffix, shouldExecute, logLevel);
+
+    public static ConnectionEndpointRouteBuilder UseDelta(
+        this ConnectionEndpointRouteBuilder builder,
+        GetConnection? getConnection = null,
+        Func<HttpContext, string?>? suffix = null,
+        Func<HttpContext, bool>? shouldExecute = null,
+        LogLevel logLevel = LogLevel.Debug) =>
+        builder.UseDelta<ConnectionEndpointRouteBuilder>(getConnection, suffix, shouldExecute, logLevel);
+
+    public static ControllerActionEndpointConventionBuilder UseDelta(
+        this ControllerActionEndpointConventionBuilder builder,
+        GetConnection? getConnection = null,
+        Func<HttpContext, string?>? suffix = null,
+        Func<HttpContext, bool>? shouldExecute = null,
+        LogLevel logLevel = LogLevel.Debug) =>
+        builder.UseDelta<ControllerActionEndpointConventionBuilder>(getConnection, suffix, shouldExecute, logLevel);
+
+    public static HubEndpointConventionBuilder UseDelta(
+        this HubEndpointConventionBuilder builder,
+        GetConnection? getConnection = null,
+        Func<HttpContext, string?>? suffix = null,
+        Func<HttpContext, bool>? shouldExecute = null,
+        LogLevel logLevel = LogLevel.Debug) =>
+        builder.UseDelta<HubEndpointConventionBuilder>(getConnection, suffix, shouldExecute, logLevel);
+
+    public static IHubEndpointConventionBuilder UseDelta(
+        this IHubEndpointConventionBuilder builder,
+        GetConnection? getConnection = null,
+        Func<HttpContext, string?>? suffix = null,
+        Func<HttpContext, bool>? shouldExecute = null,
+        LogLevel logLevel = LogLevel.Debug) =>
+        builder.UseDelta<IHubEndpointConventionBuilder>(getConnection, suffix, shouldExecute, logLevel);
+
+    public static PageActionEndpointConventionBuilder UseDelta(
+        this PageActionEndpointConventionBuilder builder,
+        GetConnection? getConnection = null,
+        Func<HttpContext, string?>? suffix = null,
+        Func<HttpContext, bool>? shouldExecute = null,
+        LogLevel logLevel = LogLevel.Debug) =>
+        builder.UseDelta<PageActionEndpointConventionBuilder>(getConnection, suffix, shouldExecute, logLevel);
+
+    public static RouteGroupBuilder UseDelta(
+        this RouteGroupBuilder builder,
+        GetConnection? getConnection = null,
+        Func<HttpContext, string?>? suffix = null,
+        Func<HttpContext, bool>? shouldExecute = null,
+        LogLevel logLevel = LogLevel.Debug) =>
+        builder.UseDelta<RouteGroupBuilder>(getConnection, suffix, shouldExecute, logLevel);
+
+    public static RouteHandlerBuilder UseDelta(
+        this RouteHandlerBuilder builder,
+        GetConnection? getConnection = null,
+        Func<HttpContext, string?>? suffix = null,
+        Func<HttpContext, bool>? shouldExecute = null,
+        LogLevel logLevel = LogLevel.Debug) =>
+        builder.UseDelta<RouteHandlerBuilder>(getConnection, suffix, shouldExecute, logLevel);
+
 }
