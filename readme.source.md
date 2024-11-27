@@ -169,7 +169,7 @@ Response diagnostics headers are prefixed with `Delta-`.
 
 Example Response header when the Request has not `If-None-Match` header.
 
-Delta-No304.png
+<img src="/src/Delta-No304.png" height="30px">
 
 
 ## Helpers
