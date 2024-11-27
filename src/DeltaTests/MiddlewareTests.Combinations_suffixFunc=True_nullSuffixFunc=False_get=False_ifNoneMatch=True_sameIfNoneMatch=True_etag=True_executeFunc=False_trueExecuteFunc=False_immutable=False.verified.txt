@@ -11,13 +11,14 @@
       Response: {
         StatusCode: OK,
         Headers: {
+          Delta-No304: Request Method=POST,
           ETag: existingEtag
         }
       }
     }
   },
   log: {
-    Information: Delta /path: Skipping since request is POST,
+    Information: Delta /path: No 304. Request Method=POST,
     State: [
       {
         path: /path
@@ -26,7 +27,7 @@
         method: POST
       },
       {
-        {OriginalFormat}: Delta {path}: Skipping since request is {method}
+        {OriginalFormat}: Delta {path}: No 304. Request Method={method}
       }
     ]
   }

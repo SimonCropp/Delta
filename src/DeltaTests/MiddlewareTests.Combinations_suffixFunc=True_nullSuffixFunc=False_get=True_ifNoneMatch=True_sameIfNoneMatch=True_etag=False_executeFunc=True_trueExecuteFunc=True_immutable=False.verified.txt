@@ -17,15 +17,31 @@
       }
     }
   },
-  log: {
-    Information: Delta /path: 304,
-    State: [
-      {
-        path: /path
-      },
-      {
-        {OriginalFormat}: Delta {path}: 304
-      }
-    ]
-  }
+  log: [
+    {
+      Information: Delta /path: ETag "AssemblyWriteTime-rowVersion-suffix",
+      State: [
+        {
+          path: /path
+        },
+        {
+          etag: "AssemblyWriteTime-rowVersion-suffix"
+        },
+        {
+          {OriginalFormat}: Delta {path}: ETag {etag}
+        }
+      ]
+    },
+    {
+      Information: Delta /path: 304,
+      State: [
+        {
+          path: /path
+        },
+        {
+          {OriginalFormat}: Delta {path}: 304
+        }
+      ]
+    }
+  ]
 }

@@ -7,19 +7,20 @@
       Response: {
         StatusCode: OK,
         Headers: {
-          Cache-Control: public, max-age=31536000, immutable
+          Cache-Control: public, max-age=31536000, immutable,
+          Delta-No304: Response already has Cache-Control=immutable
         }
       }
     }
   },
   log: {
-    Information: Delta /path: Skipping since response has CacheControl=immutable,
+    Information: Delta /path: No 304. Response already has Cache-Control=immutable,
     State: [
       {
         path: /path
       },
       {
-        {OriginalFormat}: Delta {path}: Skipping since response has CacheControl=immutable
+        {OriginalFormat}: Delta {path}: No 304. Response already has Cache-Control=immutable
       }
     ]
   }

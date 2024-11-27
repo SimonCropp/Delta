@@ -11,19 +11,20 @@
       Response: {
         StatusCode: OK,
         Headers: {
+          Delta-No304: Response already has ETag,
           ETag: existingEtag
         }
       }
     }
   },
   log: {
-    Information: Delta /path: Skipping since response has an ETag,
+    Information: Delta /path: No 304. Response already has ETag,
     State: [
       {
         path: /path
       },
       {
-        {OriginalFormat}: Delta {path}: Skipping since response has an ETag
+        {OriginalFormat}: Delta {path}: No 304. Response already has ETag
       }
     ]
   }

@@ -7,20 +7,37 @@
       Response: {
         StatusCode: OK,
         Headers: {
+          Delta-No304: Request has no If-None-Match,
           ETag: "AssemblyWriteTime-rowVersion-suffix"
         }
       }
     }
   },
-  log: {
-    Information: Delta /path: Skipping since request has no If-None-Match,
-    State: [
-      {
-        path: /path
-      },
-      {
-        {OriginalFormat}: Delta {path}: Skipping since request has no If-None-Match
-      }
-    ]
-  }
+  log: [
+    {
+      Information: Delta /path: ETag "AssemblyWriteTime-rowVersion-suffix",
+      State: [
+        {
+          path: /path
+        },
+        {
+          etag: "AssemblyWriteTime-rowVersion-suffix"
+        },
+        {
+          {OriginalFormat}: Delta {path}: ETag {etag}
+        }
+      ]
+    },
+    {
+      Information: Delta /path: No 304. Request has no If-None-Match,
+      State: [
+        {
+          path: /path
+        },
+        {
+          {OriginalFormat}: Delta {path}: No 304. Request has no If-None-Match
+        }
+      ]
+    }
+  ]
 }
