@@ -3,7 +3,7 @@
     [ModuleInitializer]
     public static void Init()
     {
-        DeltaExtensions.IncludeNo304ReasonInResponse = true;
+        DeltaExtensions.UseResponseDiagnostics = true;
         VerifierSettings.InitializePlugins();
     }
 }

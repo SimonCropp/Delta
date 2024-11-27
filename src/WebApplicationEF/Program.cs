@@ -1,4 +1,4 @@
-DeltaExtensions.IncludeNo304ReasonInResponse = true;
+DeltaExtensions.UseResponseDiagnostics = true;
 
 var sqlInstance = new SqlInstance<SampleDbContext>(constructInstance: builder => new(builder.Options));
 
