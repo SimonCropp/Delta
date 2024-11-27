@@ -1,6 +1,6 @@
-using System.Data;
+DeltaExtensions.IncludeNo304ReasonInResponse = true;
 
-SqlInstance sqlInstance = new(
+var sqlInstance = new SqlInstance(
     name: "DeltaWebApplication",
     buildTemplate: DbBuilder.Create);
 await using var database = await sqlInstance.Build("WebApp");

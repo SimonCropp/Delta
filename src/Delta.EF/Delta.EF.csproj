@@ -9,6 +9,9 @@
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Data.SqlClient" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <Compile Include="..\Delta\DeltaExtensions_Sql.cs">
+      <Link>DeltaExtensions_Sql.cs</Link>
+    </Compile>
     <Compile Include="..\Delta\DeltaExtensions_Shared.cs">
       <Link>DeltaExtensions_Shared.cs</Link>
     </Compile>

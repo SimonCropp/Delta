@@ -1,3 +1,5 @@
+DeltaExtensions.IncludeNo304ReasonInResponse = true;
+
 var sqlInstance = new SqlInstance<SampleDbContext>(constructInstance: builder => new(builder.Options));
 
 await using var database = await sqlInstance.Build("WebAppEF");
