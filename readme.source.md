@@ -157,6 +157,21 @@ Optionally control what requests Delta is executed on.
 snippet: ShouldExecuteEF
 
 
+## UseResponseDiagnostics
+
+Response diagnostics is an opt-in feature that includes extra log information in the response headers.
+
+Enable by setting UseResponseDiagnostics to true at startup:
+
+snippet: UseResponseDiagnostics
+
+Response diagnostics headers are prefixed with `Delta-`.
+
+Example Response header when the Request has not `If-None-Match` header.
+
+Delta-No304.png
+
+
 ## Helpers
 
 Utility methods for working with databases using the Delta conventions.

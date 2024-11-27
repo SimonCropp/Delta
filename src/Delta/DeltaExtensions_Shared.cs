@@ -2,7 +2,7 @@ namespace Delta;
 
 public static partial class DeltaExtensions
 {
-    public static bool IncludeNo304ReasonInResponse { get; set; }
+    public static bool UseResponseDiagnostics { get; set; }
 
     public static void NoStore(this HttpResponse response) =>
         response.Headers.Append(HeaderNames.CacheControl, "no-store, max-age=0");
@@ -115,7 +115,7 @@ public static partial class DeltaExtensions
 
     static void WriteNo304Header(this HttpResponse response, string header)
     {
-        if (IncludeNo304ReasonInResponse)
+        if (UseResponseDiagnostics)
         {
             response.Headers["Delta-No304"] = header;
         }

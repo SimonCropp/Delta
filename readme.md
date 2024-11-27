@@ -361,6 +361,27 @@ app.UseDelta<SampleDbContext>(
 <!-- endSnippet -->
 
 
+## UseResponseDiagnostics
+
+Response diagnostics is an opt-in feature that includes extra log information in the response headers.
+
+Enable by setting UseResponseDiagnostics to true at startup:
+
+<!-- snippet: UseResponseDiagnostics -->
+<a id='snippet-UseResponseDiagnostics'></a>
+```cs
+DeltaExtensions.UseResponseDiagnostics = true;
+```
+<sup><a href='/src/DeltaTests/ModuleInitializer.cs#L6-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseResponseDiagnostics' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Response diagnostics headers are prefixed with `Delta-`.
+
+Example Response header when the Request has not `If-None-Match` header.
+
+Delta-No304.png
+
+
 ## Helpers
 
 Utility methods for working with databases using the Delta conventions.
