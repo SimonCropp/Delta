@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
+    <TargetFrameworks>net9.0;</TargetFrameworks>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LocalDb" />
@@ -18,5 +20,6 @@
     <ProjectReference Include="..\WebApplication\WebApplication.csproj" />
     <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
     <Using Include="NUnit.Framework.Assert" Static="True" />
+    <Using Include="VerifyNUnit.Verifier" Static="True" />
   </ItemGroup>
 </Project>

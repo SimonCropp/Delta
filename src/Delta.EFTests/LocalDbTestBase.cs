@@ -1,4 +1,6 @@
-﻿[TestFixture]
+﻿using EfLocalDb;
+
+[TestFixture]
 public abstract class LocalDbTestBase
 {
     static SqlInstance<SampleDbContext> sqlInstance;

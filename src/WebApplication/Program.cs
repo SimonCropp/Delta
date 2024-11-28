@@ -1,3 +1,5 @@
+using LocalDb;
+
 DeltaExtensions.UseResponseDiagnostics  = true;
 
 var sqlInstance = new SqlInstance(

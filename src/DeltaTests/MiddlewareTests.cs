@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using NUnit.Framework;
+using VerifyTests;
 using VerifyTests.MicrosoftLogging;
 
 public class MiddlewareTests :

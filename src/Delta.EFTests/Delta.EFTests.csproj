@@ -1,6 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
+    <TargetFrameworks>net9.0;</TargetFrameworks>
+    <LangVersion>preview</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EfLocalDb" />
@@ -19,5 +22,7 @@
     <ProjectReference Include="..\WebApplicationEF\WebApplicationEF.csproj" />
     <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
     <Using Include="NUnit.Framework.Assert" Static="True" />
+    <Using Include="NUnit.Framework" />
+    <Using Include="VerifyTests" />
   </ItemGroup>
 </Project>

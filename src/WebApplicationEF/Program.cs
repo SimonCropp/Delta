@@ -1,3 +1,5 @@
+using EfLocalDb;
+
 DeltaExtensions.UseResponseDiagnostics = true;
 
 var sqlInstance = new SqlInstance<SampleDbContext>(constructInstance: builder => new(builder.Options));

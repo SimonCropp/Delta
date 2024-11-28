@@ -1,4 +1,7 @@
-﻿[TestFixture]
+﻿using LocalDb;
+using NUnit.Framework;
+
+[TestFixture]
 public abstract class LocalDbTestBase
 {
     static SqlInstance sqlInstance = new(

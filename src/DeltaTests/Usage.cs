@@ -1,5 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
+using VerifyTests;
 
 public class Usage :
     LocalDbTestBase
