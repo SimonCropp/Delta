@@ -617,6 +617,18 @@ alter table [{table}] disable change_tracking;
 <!-- endSnippet -->
 
 
+## Programmatic client usage
+
+Delta is primarily designed to support web browsers as a client. All web browsers have the necessary 304 and caching functionally required.
+
+In the scenario where web apis (that support using 304) are being consumed, consider using one of the below extensions to cache responses.
+
+ * [Replicant](https://github.com/SimonCropp/Replicant)
+ * [Tavis.HttpCache](https://github.com/tavis-software/Tavis.HttpCache)
+ * [CacheCow](https://github.com/aliostad/CacheCow)
+ * [Monkey Cache](https://github.com/jamesmontemagno/monkey-cache)
+
+
 ## Icon
 
 [Estuary](https://thenounproject.com/term/estuary/1847616/) designed by [Daan](https://thenounproject.com/Asphaleia/) from [The Noun Project](https://thenounproject.com).
