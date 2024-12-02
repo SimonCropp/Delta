@@ -1,8 +1,6 @@
-﻿using System.Data.Common;
+﻿namespace Delta;
 
-namespace Delta;
-
-public record struct Connection(DbConnection SqlConnection, DbConnection? DbTransaction = null)
+public record struct Connection(DbConnection SqlConnection, DbTransaction? DbTransaction = null)
 {
     public static implicit operator Connection(DbConnection connection) => new(connection);
 }

@@ -41,6 +41,10 @@ public static partial class DeltaExtensions
         AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 
         #endregion
+
+#if Delta
+        FindTypes();
+#endif
     }
 
     internal static async Task<bool> HandleRequest(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, Task<string>> getTimeStamp, Func<HttpContext, bool>? shouldExecute, LogLevel level)

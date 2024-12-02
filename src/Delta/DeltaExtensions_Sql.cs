@@ -1,6 +1,5 @@
 // ReSharper disable UseRawString
 
-
 namespace Delta;
 
 public static partial class DeltaExtensions

@@ -82,7 +82,7 @@ if (@changeTracking is null)
 else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L40-L48' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlTimestamp' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L41-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlTimestamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -115,7 +115,7 @@ internal static string BuildEtag(string timeStamp, string? suffix)
     return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L130-L142' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L134-L146' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -229,15 +229,22 @@ By default, Delta uses `HttpContext.RequestServices` to discover the SqlConnecti
 <!-- snippet: DiscoverConnection -->
 <a id='snippet-DiscoverConnection'></a>
 ```cs
+static Type? transactionType;
+static Type? connectionType;
+static void FindTypes()
+{
+    connectionType = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
+    transactionType = Type.GetType("Microsoft.Data.SqlClient.SqlTransaction, Microsoft.Data.SqlClient");
+}
 static Connection DiscoverConnection(HttpContext httpContext)
 {
     var provider = httpContext.RequestServices;
-    var connection = provider.GetRequiredService<SqlConnection>();
-    var transaction = provider.GetService<SqlTransaction>();
+    var connection = (DbConnection) provider.GetRequiredService(connectionType!);
+    var transaction = (DbTransaction?) provider.GetService(transactionType!);
     return new(connection, transaction);
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Middleware.cs#L41-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_ConnectionDiscovery.cs#L6-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection discovery:

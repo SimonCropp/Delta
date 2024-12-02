@@ -38,19 +38,6 @@ public static partial class DeltaExtensions
         });
     }
 
-    #region DiscoverConnection
-
-    static Connection DiscoverConnection(HttpContext httpContext)
-    {
-        Type.GetType()
-        var provider = httpContext.RequestServices;
-        var connection = provider.GetRequiredService<SqlConnection>();
-        var transaction = provider.GetService<SqlTransaction>();
-        return new(connection, transaction);
-    }
-
-    #endregion
-
     static Task<bool> HandleRequest(
         HttpContext context,
         GetConnection getConnection,
@@ -133,5 +120,4 @@ public static partial class DeltaExtensions
         Func<HttpContext, bool>? shouldExecute = null,
         LogLevel logLevel = LogLevel.Debug) =>
         builder.UseDelta<RouteHandlerBuilder>(getConnection, suffix, shouldExecute, logLevel);
-
 }

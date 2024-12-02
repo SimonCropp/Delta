@@ -3,6 +3,8 @@
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
+
+    <DefineConstants>$(DefineConstants);Delta</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
