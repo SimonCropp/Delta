@@ -42,6 +42,7 @@ public static partial class DeltaExtensions
 
     static Connection DiscoverConnection(HttpContext httpContext)
     {
+        Type.GetType()
         var provider = httpContext.RequestServices;
         var connection = provider.GetRequiredService<SqlConnection>();
         var transaction = provider.GetService<SqlTransaction>();

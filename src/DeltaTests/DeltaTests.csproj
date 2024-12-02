@@ -15,6 +15,7 @@
     <PackageReference Include="MarkdownSnippets.MsBuild" PrivateAssets="all" />
     <ProjectReference Include="..\Delta.SqlServer\Delta.SqlServer.csproj" />
     <ProjectReference Include="..\Delta\Delta.csproj" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <ProjectReference Include="..\WebApplication\WebApplication.csproj" />
     <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />

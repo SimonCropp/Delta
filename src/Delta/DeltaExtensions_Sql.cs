@@ -1,10 +1,11 @@
 // ReSharper disable UseRawString
 
+
 namespace Delta;
 
 public static partial class DeltaExtensions
 {
-    internal static async Task<string> GetLastTimeStamp(SqlConnection connection, SqlTransaction? transaction = null, Cancel cancel = default)
+    internal static async Task<string> GetLastTimeStamp(DbConnection connection, DbTransaction? transaction = null, Cancel cancel = default)
     {
         await using var command = connection.CreateCommand();
         if (transaction != null)
@@ -28,13 +29,13 @@ public static partial class DeltaExtensions
         }
     }
 
-    public static async Task<string> GetLastTimeStamp(this SqlConnection connection, Cancel cancel = default)
+    public static async Task<string> GetLastTimeStamp(this DbConnection connection, Cancel cancel = default)
     {
         await using var command = connection.CreateCommand();
         return await ExecuteTimestampQuery(command, cancel);
     }
 
-    static async Task<string> ExecuteTimestampQuery(SqlCommand command, Cancel cancel = default)
+    static async Task<string> ExecuteTimestampQuery(DbCommand command, Cancel cancel = default)
     {
         command.CommandText = @"
 -- begin-snippet: SqlTimestamp
