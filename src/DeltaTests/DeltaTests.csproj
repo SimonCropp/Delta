@@ -13,6 +13,7 @@
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="MarkdownSnippets.MsBuild" PrivateAssets="all" />
+    <ProjectReference Include="..\Delta.SqlServer\Delta.SqlServer.csproj" />
     <ProjectReference Include="..\Delta\Delta.csproj" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <ProjectReference Include="..\WebApplication\WebApplication.csproj" />
