@@ -5,6 +5,7 @@
   <ItemGroup>
     <PackageReference Include="EfLocalDb" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="Verify.NUnit" />
     <PackageReference Include="Verify.SqlServer" />
