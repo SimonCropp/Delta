@@ -18,7 +18,7 @@
     <ProjectReference Include="..\Delta.EF\Delta.EF.csproj" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <ProjectReference Include="..\Delta.SqlServer\Delta.SqlServer.csproj" />
-    <ProjectReference Include="..\WebApplicationEF\WebApplicationEF.csproj" />
+    <ProjectReference Include="..\WebApplicationSqlServerEF\WebApplicationSqlServerEF.csproj" />
     <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
     <Using Include="NUnit.Framework.Assert" Static="True" />
   </ItemGroup>

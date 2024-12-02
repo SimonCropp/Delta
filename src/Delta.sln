@@ -14,13 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionItems", ".Solution
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Delta", "Delta\Delta.csproj", "{92E64F4E-6A8E-43C2-9C8D-694E0327BEF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "WebApplication\WebApplication.csproj", "{D167BFA5-BBA5-4BB3-B73E-75C9681AB850}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationSqlServer", "WebApplicationSqlServer\WebApplicationSqlServer.csproj", "{D167BFA5-BBA5-4BB3-B73E-75C9681AB850}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.EF", "Delta.EF\Delta.EF.csproj", "{0EF99A1B-8415-4DF2-A33C-9B3CF75B33A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.EFTests", "Delta.EFTests\Delta.EFTests.csproj", "{1807D81B-20C3-48F4-9BE1-BC145823CE1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationEF", "WebApplicationEF\WebApplicationEF.csproj", "{B0B0FD57-8621-4A0D-9401-D2FC0A144263}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationSqlServerEF", "WebApplicationSqlServerEF\WebApplicationSqlServerEF.csproj", "{B0B0FD57-8621-4A0D-9401-D2FC0A144263}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeltaTests", "DeltaTests\DeltaTests.csproj", "{9695F532-6B30-4F50-877D-37321B36E775}"
 EndProject

@@ -184,7 +184,7 @@ builder.Services.AddScoped(_ => new SqlConnection(connectionString));
 var app = builder.Build();
 app.UseDelta();
 ```
-<sup><a href='/src/WebApplication/Program.cs#L10-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServer/Program.cs#L10-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -199,7 +199,7 @@ app.MapGroup("/group")
     .UseDelta()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplication/Program.cs#L58-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServer/Program.cs#L58-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -327,7 +327,7 @@ public class SampleDbContext(DbContextOptions options) :
     }
 }
 ```
-<sup><a href='/src/WebApplicationEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServerEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -341,7 +341,7 @@ builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 ```
-<sup><a href='/src/WebApplicationEF/Program.cs#L7-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L7-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -356,7 +356,7 @@ app.MapGroup("/group")
     .UseDelta<SampleDbContext>()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationEF/Program.cs#L38-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L38-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
