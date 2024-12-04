@@ -1,7 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.DependencyInjection;
-
-public class Usage :
+﻿public class Usage :
     LocalDbTestBase
 {
     public static void Suffix(WebApplicationBuilder builder)
