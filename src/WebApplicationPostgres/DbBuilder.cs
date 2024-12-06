@@ -18,10 +18,10 @@
             
             create table IF NOT EXISTS public."Employees"
             (
-                "Id" uuid    not null
+                "Id" uuid not null
                     constraint "PK_Employees"
                         primary key,
-                "CompanyId" uuid    not null
+                "CompanyId" uuid not null
                     constraint "FK_Employees_Companies_CompanyId"
                         references public."Companies"
                         on delete cascade,
@@ -34,7 +34,6 @@
             
             create index IF NOT EXISTS "IX_Employees_CompanyId"
                 on public."Employees" ("CompanyId");
-            
             """;
         await command.ExecuteNonQueryAsync();
     }
