@@ -71,8 +71,8 @@ AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 A combination of [change_tracking_current_version](https://learn.microsoft.com/en-us/sql/relational-databases/system-functions/change-tracking-current-version-transact-sql) (if tracking is enabled) and [@@DBTS (row version timestamp)](https://learn.microsoft.com/en-us/sql/t-sql/functions/dbts-transact-sql)
 
 
-<!-- snippet: SqlTimestamp -->
-<a id='snippet-SqlTimestamp'></a>
+<!-- snippet: SqlServerTimestamp -->
+<a id='snippet-SqlServerTimestamp'></a>
 ```cs
 declare @changeTracking bigint = change_tracking_current_version();
 declare @timeStamp bigint = convert(bigint, @@dbts);
@@ -82,7 +82,7 @@ if (@changeTracking is null)
 else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L40-L48' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlTimestamp' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L43-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimestamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -199,7 +199,7 @@ app.MapGroup("/group")
     .UseDelta()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationSqlServer/Program.cs#L58-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServer/Program.cs#L63-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -304,7 +304,6 @@ public class SampleDbContext(DbContextOptions options) :
 {
     public DbSet<Employee> Employees { get; set; } = null!;
     public DbSet<Company> Companies { get; set; } = null!;
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         var company = builder.Entity<Company>();
@@ -313,21 +312,13 @@ public class SampleDbContext(DbContextOptions options) :
             .HasMany(_ => _.Employees)
             .WithOne(_ => _.Company)
             .IsRequired();
-        company
-            .Property(_ => _.RowVersion)
-            .IsRowVersion()
-            .HasConversion<byte[]>();
 
         var employee = builder.Entity<Employee>();
         employee.HasKey(_ => _.Id);
-        employee
-            .Property(_ => _.RowVersion)
-            .IsRowVersion()
-            .HasConversion<byte[]>();
     }
 }
 ```
-<sup><a href='/src/WebApplicationPostgresEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/DataContext/SampleDbContext.cs#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
 <a id='snippet-SampleDbContext.cs-1'></a>
 ```cs
 public class SampleDbContext(DbContextOptions options) :
@@ -368,11 +359,12 @@ public class SampleDbContext(DbContextOptions options) :
 <a id='snippet-UseDeltaEF'></a>
 ```cs
 var builder = WebApplication.CreateBuilder();
-builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
+builder.Services.AddDbContext<SampleDbContext>(_ =>
+    _.UseNpgsql("User ID=postgres;Password=password;Host=localhost;Port=5432;Database=delta"));
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 ```
-<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L7-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L3-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF' title='Start of snippet'>anchor</a></sup>
 <a id='snippet-UseDeltaEF-1'></a>
 ```cs
 var builder = WebApplication.CreateBuilder();
@@ -395,14 +387,14 @@ app.MapGroup("/group")
     .UseDelta<SampleDbContext>()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L38-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L44-L50' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
 <a id='snippet-UseDeltaMapGroupEF-1'></a>
 ```cs
 app.MapGroup("/group")
     .UseDelta<SampleDbContext>()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L38-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L43-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
