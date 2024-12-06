@@ -180,11 +180,19 @@ CREATE NONCLUSTERED INDEX [IX_Employees_CompanyId] ON [dbo].[Employees]
 <a id='snippet-UseDelta'></a>
 ```cs
 var builder = WebApplication.CreateBuilder();
+builder.Services.AddScoped(_ => new NpgsqlConnection(connectionString));
+var app = builder.Build();
+app.UseDelta();
+```
+<sup><a href='/src/WebApplicationPostgres/Program.cs#L5-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-UseDelta-1'></a>
+```cs
+var builder = WebApplication.CreateBuilder();
 builder.Services.AddScoped(_ => new SqlConnection(connectionString));
 var app = builder.Build();
 app.UseDelta();
 ```
-<sup><a href='/src/WebApplicationSqlServer/Program.cs#L10-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServer/Program.cs#L10-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -199,7 +207,14 @@ app.MapGroup("/group")
     .UseDelta()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationSqlServer/Program.cs#L63-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgres/Program.cs#L65-L71' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-UseDeltaMapGroup-1'></a>
+```cs
+app.MapGroup("/group")
+    .UseDelta()
+    .MapGet("/", () => "Hello Group!");
+```
+<sup><a href='/src/WebApplicationSqlServer/Program.cs#L63-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -244,6 +259,14 @@ static void FindTypes()
         return;
     }
 
+    var npgsqlConnection = Type.GetType("Npgsql.NpgsqlConnection, Npgsql");
+    if (npgsqlConnection != null)
+    {
+        connectionType = npgsqlConnection;
+        transactionType = Type.GetType("Npgsql.NpgsqlTransaction, Npgsql")!;
+        return;
+    }
+
     throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection");
 }
 
@@ -255,7 +278,7 @@ static Connection DiscoverConnection(HttpContext httpContext)
     return new(connection, transaction);
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_ConnectionDiscovery.cs#L8-L36' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_ConnectionDiscovery.cs#L8-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection discovery:
@@ -359,12 +382,12 @@ public class SampleDbContext(DbContextOptions options) :
 <a id='snippet-UseDeltaEF'></a>
 ```cs
 var builder = WebApplication.CreateBuilder();
-builder.Services.AddDbContext<SampleDbContext>(_ =>
-    _.UseNpgsql("User ID=postgres;Password=password;Host=localhost;Port=5432;Database=delta"));
+builder.Services.AddDbContext<SampleDbContext>(
+    _ => _.UseNpgsql(connectionString));
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 ```
-<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L3-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L5-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF' title='Start of snippet'>anchor</a></sup>
 <a id='snippet-UseDeltaEF-1'></a>
 ```cs
 var builder = WebApplication.CreateBuilder();
@@ -387,7 +410,7 @@ app.MapGroup("/group")
     .UseDelta<SampleDbContext>()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L44-L50' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L46-L52' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
 <a id='snippet-UseDeltaMapGroupEF-1'></a>
 ```cs
 app.MapGroup("/group")
