@@ -4,9 +4,9 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Npgsql" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
-    <ProjectReference Include="..\Delta.EF\Delta.EF.csproj" />
+    <ProjectReference Include="..\Delta\Delta.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\DeltaTests\PostgresConnection.cs">

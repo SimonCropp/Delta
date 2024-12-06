@@ -22,6 +22,14 @@ public static partial class DeltaExtensions
             return;
         }
 
+        var npgsqlConnection = Type.GetType("Npgsql.NpgsqlConnection, Npgsql");
+        if (npgsqlConnection != null)
+        {
+            connectionType = npgsqlConnection;
+            transactionType = Type.GetType("Npgsql.NpgsqlTransaction, Npgsql")!;
+            return;
+        }
+
         throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection");
     }
 

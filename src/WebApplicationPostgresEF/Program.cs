@@ -1,10 +1,12 @@
 DeltaExtensions.UseResponseDiagnostics = true;
 
+var connectionString = PostgresConnection.ConnectionString;
+
 #region UseDeltaEF
 
 var builder = WebApplication.CreateBuilder();
-builder.Services.AddDbContext<SampleDbContext>(_ =>
-    _.UseNpgsql("User ID=postgres;Password=password;Host=localhost;Port=5432;Database=delta"));
+builder.Services.AddDbContext<SampleDbContext>(
+    _ => _.UseNpgsql(connectionString));
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 
