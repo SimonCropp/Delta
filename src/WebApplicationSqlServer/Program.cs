@@ -24,36 +24,41 @@ command.CommandText =
      """;
 await command.ExecuteNonQueryAsync();
 
-app.MapGet("/", async _ =>
-{
-    var connection = _.RequestServices.GetRequiredService<SqlConnection>();
-
-    if (connection.State == ConnectionState.Closed)
+app.MapGet(
+    "/",
+    async _ =>
     {
-        await connection.OpenAsync();
-    }
+        var connection = _.RequestServices.GetRequiredService<SqlConnection>();
 
-    await using var command = connection.CreateCommand();
-    command.CommandText = "select * from Companies";
-    await using var reader = await command.ExecuteReaderAsync();
-    var builder = new StringBuilder("Results: ");
-    builder.AppendLine();
-    while (await reader.ReadAsync())
-    {
-        for (var i = 0; i < reader.FieldCount; i++)
+        if (connection.State == ConnectionState.Closed)
         {
-            var value = reader.GetValue(i);
-            if (value is byte[] bytes)
-            {
-                value = BitConverter.ToString(bytes);
-            }
-
-            builder.AppendLine($"{reader.GetName(i)}: {value}");
+            await connection.OpenAsync();
         }
-    }
 
-    await _.Response.WriteAsync(builder.ToString());
-});
+        var lastTimeStamp = await connection.GetLastTimeStamp();
+        await using var command = connection.CreateCommand();
+        command.CommandText = "select * from Companies";
+        await using var reader = await command.ExecuteReaderAsync();
+        var builder = new StringBuilder("Results: ");
+        builder.AppendLine();
+        builder.AppendLine($"LastTimeStamp: {lastTimeStamp}");
+        builder.AppendLine();
+        while (await reader.ReadAsync())
+        {
+            for (var i = 0; i < reader.FieldCount; i++)
+            {
+                var value = reader.GetValue(i);
+                if (value is byte[] bytes)
+                {
+                    value = BitConverter.ToString(bytes);
+                }
+
+                builder.AppendLine($"{reader.GetName(i)}: {value}");
+            }
+        }
+
+        await _.Response.WriteAsync(builder.ToString());
+    });
 
 #region UseDeltaMapGroup
 

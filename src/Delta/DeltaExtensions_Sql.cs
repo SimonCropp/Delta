@@ -36,8 +36,11 @@ public static partial class DeltaExtensions
 
     static async Task<string> ExecuteTimestampQuery(DbCommand command, Cancel cancel = default)
     {
-        command.CommandText = @"
--- begin-snippet: SqlTimestamp
+        var name = command.GetType().Name;
+        if (name == "SqlCommand")
+        {
+            command.CommandText = @"
+-- begin-snippet: SqlServerTimestamp
 declare @changeTracking bigint = change_tracking_current_version();
 declare @timeStamp bigint = convert(bigint, @@dbts);
 
@@ -47,6 +50,21 @@ else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 -- end-snippet
 ";
-        return (string) (await command.ExecuteScalarAsync(cancel))!;
+            return (string) (await command.ExecuteScalarAsync(cancel))!;
+        }
+
+        if (name == "NpgsqlCommand")
+        {
+            command.CommandText = @"
+-- begin-snippet: PostgresTimestamp
+select pg_last_committed_xact();
+-- end-snippet
+";
+            var result = (object[]) (await command.ExecuteScalarAsync(cancel))!;
+            var xid = (uint) result[0];
+            return xid.ToString();
+        }
+
+        throw new("Unsupported type " + name);
     }
 }

@@ -327,7 +327,38 @@ public class SampleDbContext(DbContextOptions options) :
     }
 }
 ```
-<sup><a href='/src/WebApplicationSqlServerEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-SampleDbContext.cs-1'></a>
+```cs
+public class SampleDbContext(DbContextOptions options) :
+    DbContext(options)
+{
+    public DbSet<Employee> Employees { get; set; } = null!;
+    public DbSet<Company> Companies { get; set; } = null!;
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        var company = builder.Entity<Company>();
+        company.HasKey(_ => _.Id);
+        company
+            .HasMany(_ => _.Employees)
+            .WithOne(_ => _.Company)
+            .IsRequired();
+        company
+            .Property(_ => _.RowVersion)
+            .IsRowVersion()
+            .HasConversion<byte[]>();
+
+        var employee = builder.Entity<Employee>();
+        employee.HasKey(_ => _.Id);
+        employee
+            .Property(_ => _.RowVersion)
+            .IsRowVersion()
+            .HasConversion<byte[]>();
+    }
+}
+```
+<sup><a href='/src/WebApplicationSqlServerEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -341,7 +372,15 @@ builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 ```
-<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L7-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L7-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-UseDeltaEF-1'></a>
+```cs
+var builder = WebApplication.CreateBuilder();
+builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
+var app = builder.Build();
+app.UseDelta<SampleDbContext>();
+```
+<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L7-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -356,7 +395,14 @@ app.MapGroup("/group")
     .UseDelta<SampleDbContext>()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L38-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L38-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-UseDeltaMapGroupEF-1'></a>
+```cs
+app.MapGroup("/group")
+    .UseDelta<SampleDbContext>()
+    .MapGet("/", () => "Hello Group!");
+```
+<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L38-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

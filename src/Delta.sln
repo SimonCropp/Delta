@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Raw", "Raw", "{B84437AD-ECA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delta.SqlServer", "Delta.SqlServer\Delta.SqlServer.csproj", "{DB4D0B8B-9259-410D-84BF-53E72CE7B5EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationPostgresEF", "WebApplicationPostgresEF\WebApplicationPostgresEF.csproj", "{4D6C1415-036D-4A85-9BD2-1EA396B5EE0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +66,10 @@ Global
 		{DB4D0B8B-9259-410D-84BF-53E72CE7B5EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB4D0B8B-9259-410D-84BF-53E72CE7B5EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB4D0B8B-9259-410D-84BF-53E72CE7B5EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D6C1415-036D-4A85-9BD2-1EA396B5EE0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D6C1415-036D-4A85-9BD2-1EA396B5EE0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D6C1415-036D-4A85-9BD2-1EA396B5EE0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D6C1415-036D-4A85-9BD2-1EA396B5EE0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,5 +84,6 @@ Global
 		{92E64F4E-6A8E-43C2-9C8D-694E0327BEF0} = {B84437AD-ECAE-457D-B6D4-228AD7F2E52E}
 		{9695F532-6B30-4F50-877D-37321B36E775} = {B84437AD-ECAE-457D-B6D4-228AD7F2E52E}
 		{D167BFA5-BBA5-4BB3-B73E-75C9681AB850} = {B84437AD-ECAE-457D-B6D4-228AD7F2E52E}
+		{4D6C1415-036D-4A85-9BD2-1EA396B5EE0E} = {220EFFC5-0A70-4C18-9948-3C344DC0E09D}
 	EndGlobalSection
 EndGlobal

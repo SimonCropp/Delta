@@ -1,25 +1,27 @@
 DeltaExtensions.UseResponseDiagnostics = true;
 
-var sqlInstance = new SqlInstance<SampleDbContext>(constructInstance: builder => new(builder.Options));
-
-await using var database = await sqlInstance.Build("WebAppEF");
-
 #region UseDeltaEF
 
 var builder = WebApplication.CreateBuilder();
-builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
+builder.Services.AddDbContext<SampleDbContext>(_ =>
+    _.UseNpgsql("User ID=postgres;Password=password;Host=localhost;Port=5432;Database=delta"));
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 
 #endregion
 
-var context = database.Context;
-context.Add(
-    new Company
-    {
-        Content = "The company"
-    });
-await context.SaveChangesAsync();
+using (var scope = app.Services.CreateScope())
+{
+    await using var context = scope.ServiceProvider.GetRequiredService<SampleDbContext>()!;
+    await context.Database.EnsureDeletedAsync();
+    await context.Database.EnsureCreatedAsync();
+    context.Add(
+        new Company
+        {
+            Content = "The company"
+        });
+    await context.SaveChangesAsync();
+}
 
 app.MapGet(
     "/",
@@ -33,7 +35,6 @@ app.MapGet(
         foreach (var company in await dbContext.Companies.ToListAsync())
         {
             builder.AppendLine($"Id: {company.Id}");
-            builder.AppendLine($"RowVersion: {company.RowVersion}");
             builder.AppendLine($"Content: {company.Content}");
         }
 
