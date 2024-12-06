@@ -1,4 +1,6 @@
-﻿public class Usage :
+﻿using Npgsql;
+
+public class Usage :
     LocalDbTestBase
 {
     public static void Suffix(WebApplicationBuilder builder)
@@ -48,7 +50,7 @@
     }
 
     [Test]
-    public async Task GetLastTimeStamp()
+    public async Task GetLastTimeStampSqlServer()
     {
         await using var database = await LocalDb();
 
@@ -59,6 +61,16 @@
         var timeStamp = await sqlConnection.GetLastTimeStamp();
 
         #endregion
+
+        IsNotNull(timeStamp);
+    }
+
+    [Test]
+    public async Task GetLastTimeStampPostgres()
+    {
+        await using var connection = new NpgsqlConnection(PostgresConnection.ConnectionString);
+        await connection.OpenAsync();
+        var timeStamp = await connection.GetLastTimeStamp();
 
         IsNotNull(timeStamp);
     }
