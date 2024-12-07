@@ -6,6 +6,7 @@ environment:
 
 build_script:
 - cmd: >-
+    set pgpassword=Password12!
     "C:\Program Files\PostgreSQL\13\bin\psql.exe" -h localhost -U postgres -c "ALTER SYSTEM SET track_commit_timestamp to 'on'"
 - pwsh: |
     Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
