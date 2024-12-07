@@ -292,3 +292,10 @@ In the scenario where web apis (that support using 304) are being consumed using
 ## Icon
 
 [Estuary](https://thenounproject.com/term/estuary/1847616/) designed by [Daan](https://thenounproject.com/Asphaleia/) from [The Noun Project](https://thenounproject.com).
+
+
+postgres
+
+ALTER SYSTEM SET track_commit_timestamp to "on";
+
+https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP
