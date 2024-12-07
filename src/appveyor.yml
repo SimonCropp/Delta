@@ -5,8 +5,9 @@ environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 build_script:
+- cmd: >-
+    "C:\Program Files\PostgreSQL\9.3\bin\psql.exe" -h localhost -U postgres -c "ALTER SYSTEM SET track_commit_timestamp to 'on'"
 - pwsh: |
-    "C:\Program Files\PostgreSQL\9.3\bin\psql.exe"  -h localhost -U postgres -c "ALTER SYSTEM SET track_commit_timestamp to 'on'";
     Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
     ./dotnet-install.ps1 -JSonFile src/global.json -Architecture x64 -InstallDir 'C:\Program Files\dotnet'
 - dotnet build src --configuration Release
