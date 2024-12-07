@@ -3,7 +3,8 @@ environment:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-
+services:
+  - postgresql13
 build_script:
 - cmd: >-
     set pgpassword=Password12!
