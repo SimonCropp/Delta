@@ -70,7 +70,7 @@ public class Usage :
     {
         await using var connection = new NpgsqlConnection(PostgresConnection.ConnectionString);
         await connection.OpenAsync();
-
+        await PostgresDbBuilder.Create(connection);
         await using var command = connection.CreateCommand();
         command.CommandText =
             $"""

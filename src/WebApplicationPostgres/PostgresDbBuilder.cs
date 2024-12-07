@@ -1,4 +1,4 @@
-﻿public static class DbBuilder
+﻿public static class PostgresDbBuilder
 {
     public static async Task Create(NpgsqlConnection connection)
     {

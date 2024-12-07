@@ -1,33 +1,23 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Delta;
 
 public static partial class DeltaExtensions
 {
-
     #region DiscoverConnection
 
-    static Type transactionType;
-    static Type connectionType;
-
-    [MemberNotNull(nameof(transactionType))]
-    [MemberNotNull(nameof(connectionType))]
-    static void FindTypes()
+    static (Type sqlConnection, Type transaction) FindConnectionType()
     {
-        var sqlConnectionType = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
-        if (sqlConnectionType != null)
+        var sqlConnection = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
+        if (sqlConnection != null)
         {
-            connectionType = sqlConnectionType;
-            transactionType = Type.GetType("Microsoft.Data.SqlClient.SqlTransaction, Microsoft.Data.SqlClient")!;
-            return;
+            var transaction = sqlConnection.Assembly.GetType("Microsoft.Data.SqlClient.SqlTransaction")!;
+            return (sqlConnection, transaction);
         }
 
         var npgsqlConnection = Type.GetType("Npgsql.NpgsqlConnection, Npgsql");
         if (npgsqlConnection != null)
         {
-            connectionType = npgsqlConnection;
-            transactionType = Type.GetType("Npgsql.NpgsqlTransaction, Npgsql")!;
-            return;
+            var transaction = npgsqlConnection.Assembly.GetType("Npgsql.NpgsqlTransaction")!;
+            return (npgsqlConnection, transaction);
         }
 
         throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection");
@@ -35,6 +25,7 @@ public static partial class DeltaExtensions
 
     static Connection DiscoverConnection(HttpContext httpContext)
     {
+        var (connectionType, transactionType) = FindConnectionType();
         var provider = httpContext.RequestServices;
         var connection = (DbConnection) provider.GetRequiredService(connectionType);
         var transaction = (DbTransaction?) provider.GetService(transactionType);

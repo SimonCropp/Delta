@@ -14,7 +14,7 @@ app.UseDelta();
 await using (var connection = new NpgsqlConnection(connectionString))
 {
     await connection.OpenAsync();
-    await DbBuilder.Create(connection);
+    await PostgresDbBuilder.Create(connection);
     await using var command = connection.CreateCommand();
     command.CommandText =
         $"""
