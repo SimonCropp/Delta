@@ -1,4 +1,4 @@
-﻿public static class PostgresConnection
+﻿static class PostgresConnection
 {
     public static string ConnectionString;
 
