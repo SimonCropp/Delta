@@ -16,6 +16,10 @@ build_script:
     psql.exe -h localhost -U postgres -c "ALTER SYSTEM SET track_commit_timestamp to 'on'"
 
     createdb delta
+
+    net stop postgresql-x64-13
+
+    net start postgresql-x64-13
 - pwsh: |
     Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
     ./dotnet-install.ps1 -JSonFile src/global.json -Architecture x64 -InstallDir 'C:\Program Files\dotnet'
