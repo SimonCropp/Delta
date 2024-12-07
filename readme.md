@@ -115,7 +115,7 @@ internal static string BuildEtag(string timeStamp, string? suffix)
     return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L134-L146' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L130-L142' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -244,27 +244,20 @@ By default, Delta uses `HttpContext.RequestServices` to discover the SqlConnecti
 <!-- snippet: DiscoverConnection -->
 <a id='snippet-DiscoverConnection'></a>
 ```cs
-static Type transactionType;
-static Type connectionType;
-
-[MemberNotNull(nameof(transactionType))]
-[MemberNotNull(nameof(connectionType))]
-static void FindTypes()
+static (Type sqlConnection, Type transaction) FindConnectionType()
 {
-    var sqlConnectionType = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
-    if (sqlConnectionType != null)
+    var sqlConnection = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
+    if (sqlConnection != null)
     {
-        connectionType = sqlConnectionType;
-        transactionType = Type.GetType("Microsoft.Data.SqlClient.SqlTransaction, Microsoft.Data.SqlClient")!;
-        return;
+        var transaction = sqlConnection.Assembly.GetType("Microsoft.Data.SqlClient.SqlTransaction")!;
+        return (sqlConnection, transaction);
     }
 
     var npgsqlConnection = Type.GetType("Npgsql.NpgsqlConnection, Npgsql");
     if (npgsqlConnection != null)
     {
-        connectionType = npgsqlConnection;
-        transactionType = Type.GetType("Npgsql.NpgsqlTransaction, Npgsql")!;
-        return;
+        var transaction = npgsqlConnection.Assembly.GetType("Npgsql.NpgsqlTransaction")!;
+        return (npgsqlConnection, transaction);
     }
 
     throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection");
@@ -272,13 +265,14 @@ static void FindTypes()
 
 static Connection DiscoverConnection(HttpContext httpContext)
 {
+    var (connectionType, transactionType) = FindConnectionType();
     var provider = httpContext.RequestServices;
     var connection = (DbConnection) provider.GetRequiredService(connectionType);
     var transaction = (DbTransaction?) provider.GetService(transactionType);
     return new(connection, transaction);
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_ConnectionDiscovery.cs#L8-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_ConnectionDiscovery.cs#L5-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection discovery:
