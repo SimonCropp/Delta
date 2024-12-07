@@ -8,9 +8,13 @@ services:
 build_script:
 - cmd: >-
     SET PGUSER=postgres
+
     set pgpassword=Password12!
+
     PATH=C:\Program Files\PostgreSQL\13\bin\;%PATH%
+
     psql.exe -h localhost -U postgres -c "ALTER SYSTEM SET track_commit_timestamp to 'on'"
+
     createdb delta
 - pwsh: |
     Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
