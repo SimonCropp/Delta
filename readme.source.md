@@ -148,7 +148,7 @@ Enable row versioning in Entity Framework
 snippet: SampleSqlServerDbContext
 
 
-### Postgres DbContext using RowVersion
+### Postgres DbContext
 
 Enable row versioning in Entity Framework
 
