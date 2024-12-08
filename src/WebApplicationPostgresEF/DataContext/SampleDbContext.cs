@@ -1,4 +1,6 @@
-﻿public class SampleDbContext(DbContextOptions options) :
+﻿#region SamplePostgresDbContext
+
+public class SampleDbContext(DbContextOptions options) :
     DbContext(options)
 {
     public DbSet<Employee> Employees { get; set; } = null!;
@@ -16,3 +18,5 @@
         employee.HasKey(_ => _.Id);
     }
 }
+
+#endregion

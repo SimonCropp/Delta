@@ -135,7 +135,7 @@ Only one of the above should be used.
 ## Usage
 
 
-### DB Schema
+### SQL Server DB Schema
 
 Ensure [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql) is enabled for all relevant tables.
 
@@ -174,6 +174,47 @@ CREATE NONCLUSTERED INDEX [IX_Employees_CompanyId] ON [dbo].[Employees]
 ) ON [PRIMARY]
 ```
 <sup><a href='/src/DeltaTests/Usage.Schema.verified.sql#L1-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-Usage.Schema.verified.sql' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### Postgres DB Schema
+
+Example SQL schema:
+
+<!-- snippet: PostgresSchema -->
+<a id='snippet-PostgresSchema'></a>
+```cs
+create table IF NOT EXISTS public.""Companies""
+(
+    ""Id"" uuid not null
+        constraint ""PK_Companies""
+            primary key,
+    ""Content"" text
+);
+
+alter table public.""Companies""
+    owner to postgres;
+
+create table IF NOT EXISTS public.""Employees""
+(
+    ""Id"" uuid not null
+        constraint ""PK_Employees""
+            primary key,
+    ""CompanyId"" uuid not null
+        constraint ""FK_Employees_Companies_CompanyId""
+            references public.""Companies""
+            on delete cascade,
+    ""Content""   text,
+    ""Age""       integer not null
+);
+
+alter table public.""Employees""
+    owner to postgres;
+
+create index IF NOT EXISTS ""IX_Employees_CompanyId""
+    on public.""Employees"" (""CompanyId"");
+```
+<sup><a href='/src/WebApplicationPostgres/PostgresDbBuilder.cs#L8-L38' title='Snippet source file'>snippet source</a> | <a href='#snippet-PostgresSchema' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -312,34 +353,12 @@ webApplication.UseDelta(
 ## EF Usage
 
 
-### DbContext using RowVersion
+### SqlServer DbContext using RowVersion
 
 Enable row versioning in Entity Framework
 
-<!-- snippet: SampleDbContext.cs -->
-<a id='snippet-SampleDbContext.cs'></a>
-```cs
-public class SampleDbContext(DbContextOptions options) :
-    DbContext(options)
-{
-    public DbSet<Employee> Employees { get; set; } = null!;
-    public DbSet<Company> Companies { get; set; } = null!;
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        var company = builder.Entity<Company>();
-        company.HasKey(_ => _.Id);
-        company
-            .HasMany(_ => _.Employees)
-            .WithOne(_ => _.Company)
-            .IsRequired();
-
-        var employee = builder.Entity<Employee>();
-        employee.HasKey(_ => _.Id);
-    }
-}
-```
-<sup><a href='/src/WebApplicationPostgresEF/DataContext/SampleDbContext.cs#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-SampleDbContext.cs-1'></a>
+<!-- snippet: SampleSqlServerDbContext -->
+<a id='snippet-SampleSqlServerDbContext'></a>
 ```cs
 public class SampleDbContext(DbContextOptions options) :
     DbContext(options)
@@ -369,7 +388,37 @@ public class SampleDbContext(DbContextOptions options) :
     }
 }
 ```
-<sup><a href='/src/WebApplicationSqlServerEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServerEF/DataContext/SampleDbContext.cs#L1-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleSqlServerDbContext' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### Postgres DbContext using RowVersion
+
+Enable row versioning in Entity Framework
+
+<!-- snippet: SamplePostgresDbContext -->
+<a id='snippet-SamplePostgresDbContext'></a>
+```cs
+public class SampleDbContext(DbContextOptions options) :
+    DbContext(options)
+{
+    public DbSet<Employee> Employees { get; set; } = null!;
+    public DbSet<Company> Companies { get; set; } = null!;
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        var company = builder.Entity<Company>();
+        company.HasKey(_ => _.Id);
+        company
+            .HasMany(_ => _.Employees)
+            .WithOne(_ => _.Company)
+            .IsRequired();
+
+        var employee = builder.Entity<Employee>();
+        employee.HasKey(_ => _.Id);
+    }
+}
+```
+<sup><a href='/src/WebApplicationPostgresEF/DataContext/SampleDbContext.cs#L1-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-SamplePostgresDbContext' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
