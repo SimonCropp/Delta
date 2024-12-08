@@ -3,6 +3,7 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Npgsql" />
     <PackageReference Include="LocalDb" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="Verify.NUnit" />
@@ -13,9 +14,12 @@
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="MarkdownSnippets.MsBuild" PrivateAssets="all" />
+    <ProjectReference Include="..\Delta.SqlServer\Delta.SqlServer.csproj" />
     <ProjectReference Include="..\Delta\Delta.csproj" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
-    <ProjectReference Include="..\WebApplication\WebApplication.csproj" />
+    <ProjectReference Include="..\WebApplicationPostgres\WebApplicationPostgres.csproj" />
+    <ProjectReference Include="..\WebApplicationSqlServer\WebApplicationSqlServer.csproj" />
     <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
     <Using Include="NUnit.Framework.Assert" Static="True" />
   </ItemGroup>

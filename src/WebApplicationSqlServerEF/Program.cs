@@ -21,19 +21,24 @@ context.Add(
     });
 await context.SaveChangesAsync();
 
-app.MapGet("/", async _ =>
-{
-    var builder = new StringBuilder("Results: ");
-    builder.AppendLine();
-    var dbContext = _.RequestServices.GetRequiredService<SampleDbContext>();
-    foreach (var company in await dbContext.Companies.ToListAsync())
+app.MapGet(
+    "/",
+    async _ =>
     {
-        builder.AppendLine($"Id: {company.Id}");
-        builder.AppendLine($"RowVersion: {company.RowVersion}");
-        builder.AppendLine($"Content: {company.Content}");
-    }
-    await _.Response.WriteAsync(builder.ToString());
-});
+        var builder = new StringBuilder("Results: ");
+        builder.AppendLine();
+        var dbContext = _.RequestServices.GetRequiredService<SampleDbContext>();
+        builder.AppendLine($"LastTimeStamp: {await dbContext.GetLastTimeStamp()}");
+        builder.AppendLine();
+        foreach (var company in await dbContext.Companies.ToListAsync())
+        {
+            builder.AppendLine($"Id: {company.Id}");
+            builder.AppendLine($"RowVersion: {company.RowVersion}");
+            builder.AppendLine($"Content: {company.Content}");
+        }
+
+        await _.Response.WriteAsync(builder.ToString());
+    });
 
 #region UseDeltaMapGroupEF
 

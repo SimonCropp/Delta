@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using VerifyTests.MicrosoftLogging;
-
-public class MiddlewareTests :
+﻿public class MiddlewareTests :
     LocalDbTestBase
 {
     [TestCaseSource(nameof(Cases))]

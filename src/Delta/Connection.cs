@@ -1,6 +1,6 @@
 ﻿namespace Delta;
 
-public record struct Connection(SqlConnection SqlConnection, SqlTransaction? DbTransaction = null)
+public record struct Connection(DbConnection SqlConnection, DbTransaction? DbTransaction = null)
 {
-    public static implicit operator Connection(SqlConnection connection) => new(connection);
+    public static implicit operator Connection(DbConnection connection) => new(connection);
 }

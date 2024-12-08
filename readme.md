@@ -10,6 +10,7 @@ To change this file edit the source file and then run MarkdownSnippets.
 [![Build status](https://ci.appveyor.com/api/projects/status/20t96gnsmysklh09/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Delta)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.svg?label=Delta)](https://www.nuget.org/packages/Delta/)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.EF.svg?label=Delta.EF)](https://www.nuget.org/packages/Delta.EF/)
+[![NuGet Status](https://img.shields.io/nuget/v/Delta.SqlServer.svg?label=Delta.SqlServer)](https://www.nuget.org/packages/Delta.SqlServer/)
 
 Delta is an approach to implementing a [304 Not Modified](https://www.keycdn.com/support/304-not-modified) leveraging SqlServer change tracking
 
@@ -25,7 +26,9 @@ Effectively consumers will always receive the most current data, while the load 
 ## Assumptions
 
  * Frequency of updates to data is relatively low compared to reads
- * Using either [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
+ * Using SQL Server or Postgres timestamp features
+    * SQL Server: Using either [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
+    * Postgres: [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) is enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service
 
 
 ## 304 Not Modified Flow
@@ -71,8 +74,8 @@ AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 A combination of [change_tracking_current_version](https://learn.microsoft.com/en-us/sql/relational-databases/system-functions/change-tracking-current-version-transact-sql) (if tracking is enabled) and [@@DBTS (row version timestamp)](https://learn.microsoft.com/en-us/sql/t-sql/functions/dbts-transact-sql)
 
 
-<!-- snippet: SqlTimestamp -->
-<a id='snippet-SqlTimestamp'></a>
+<!-- snippet: SqlServerTimestamp -->
+<a id='snippet-SqlServerTimestamp'></a>
 ```cs
 declare @changeTracking bigint = change_tracking_current_version();
 declare @timeStamp bigint = convert(bigint, @@dbts);
@@ -82,7 +85,7 @@ if (@changeTracking is null)
 else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L189-L197' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlTimestamp' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L43-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimestamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -96,7 +99,7 @@ An optional string suffix that is dynamically calculated at runtime based on the
 var app = builder.Build();
 app.UseDelta(suffix: httpContext => "MySuffix");
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L9-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-Suffix' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L8-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-Suffix' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -180,11 +183,19 @@ CREATE NONCLUSTERED INDEX [IX_Employees_CompanyId] ON [dbo].[Employees]
 <a id='snippet-UseDelta'></a>
 ```cs
 var builder = WebApplication.CreateBuilder();
+builder.Services.AddScoped(_ => new NpgsqlConnection(connectionString));
+var app = builder.Build();
+app.UseDelta();
+```
+<sup><a href='/src/WebApplicationPostgres/Program.cs#L5-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-UseDelta-1'></a>
+```cs
+var builder = WebApplication.CreateBuilder();
 builder.Services.AddScoped(_ => new SqlConnection(connectionString));
 var app = builder.Build();
 app.UseDelta();
 ```
-<sup><a href='/src/WebApplication/Program.cs#L10-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServer/Program.cs#L10-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -199,7 +210,14 @@ app.MapGroup("/group")
     .UseDelta()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplication/Program.cs#L58-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgres/Program.cs#L65-L71' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-UseDeltaMapGroup-1'></a>
+```cs
+app.MapGroup("/group")
+    .UseDelta()
+    .MapGet("/", () => "Hello Group!");
+```
+<sup><a href='/src/WebApplicationSqlServer/Program.cs#L63-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -218,7 +236,7 @@ app.UseDelta(
         return path.Contains("match");
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L19-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L18-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -229,15 +247,35 @@ By default, Delta uses `HttpContext.RequestServices` to discover the SqlConnecti
 <!-- snippet: DiscoverConnection -->
 <a id='snippet-DiscoverConnection'></a>
 ```cs
+static (Type sqlConnection, Type transaction) FindConnectionType()
+{
+    var sqlConnection = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
+    if (sqlConnection != null)
+    {
+        var transaction = sqlConnection.Assembly.GetType("Microsoft.Data.SqlClient.SqlTransaction")!;
+        return (sqlConnection, transaction);
+    }
+
+    var npgsqlConnection = Type.GetType("Npgsql.NpgsqlConnection, Npgsql");
+    if (npgsqlConnection != null)
+    {
+        var transaction = npgsqlConnection.Assembly.GetType("Npgsql.NpgsqlTransaction")!;
+        return (npgsqlConnection, transaction);
+    }
+
+    throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection");
+}
+
 static Connection DiscoverConnection(HttpContext httpContext)
 {
+    var (connectionType, transactionType) = FindConnectionType();
     var provider = httpContext.RequestServices;
-    var connection = provider.GetRequiredService<SqlConnection>();
-    var transaction = provider.GetService<SqlTransaction>();
+    var connection = (DbConnection) provider.GetRequiredService(connectionType);
+    var transaction = (DbTransaction?) provider.GetService(transactionType);
     return new(connection, transaction);
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Middleware.cs#L41-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_ConnectionDiscovery.cs#L5-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection discovery:
@@ -249,7 +287,7 @@ var application = webApplicationBuilder.Build();
 application.UseDelta(
     getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L200-L206' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L219-L225' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection and transaction discovery:
@@ -267,7 +305,7 @@ webApplication.UseDelta(
         return new(sqlConnection, sqlTransaction);
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L211-L223' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransaction' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L230-L242' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransaction' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -280,6 +318,28 @@ Enable row versioning in Entity Framework
 
 <!-- snippet: SampleDbContext.cs -->
 <a id='snippet-SampleDbContext.cs'></a>
+```cs
+public class SampleDbContext(DbContextOptions options) :
+    DbContext(options)
+{
+    public DbSet<Employee> Employees { get; set; } = null!;
+    public DbSet<Company> Companies { get; set; } = null!;
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        var company = builder.Entity<Company>();
+        company.HasKey(_ => _.Id);
+        company
+            .HasMany(_ => _.Employees)
+            .WithOne(_ => _.Company)
+            .IsRequired();
+
+        var employee = builder.Entity<Employee>();
+        employee.HasKey(_ => _.Id);
+    }
+}
+```
+<sup><a href='/src/WebApplicationPostgresEF/DataContext/SampleDbContext.cs#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-SampleDbContext.cs-1'></a>
 ```cs
 public class SampleDbContext(DbContextOptions options) :
     DbContext(options)
@@ -309,7 +369,7 @@ public class SampleDbContext(DbContextOptions options) :
     }
 }
 ```
-<sup><a href='/src/WebApplicationEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServerEF/DataContext/SampleDbContext.cs#L1-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-SampleDbContext.cs-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -319,11 +379,20 @@ public class SampleDbContext(DbContextOptions options) :
 <a id='snippet-UseDeltaEF'></a>
 ```cs
 var builder = WebApplication.CreateBuilder();
+builder.Services.AddDbContext<SampleDbContext>(
+    _ => _.UseNpgsql(connectionString));
+var app = builder.Build();
+app.UseDelta<SampleDbContext>();
+```
+<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L5-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-UseDeltaEF-1'></a>
+```cs
+var builder = WebApplication.CreateBuilder();
 builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 ```
-<sup><a href='/src/WebApplicationEF/Program.cs#L7-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L7-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -338,7 +407,14 @@ app.MapGroup("/group")
     .UseDelta<SampleDbContext>()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationEF/Program.cs#L38-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L46-L52' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
+<a id='snippet-UseDeltaMapGroupEF-1'></a>
+```cs
+app.MapGroup("/group")
+    .UseDelta<SampleDbContext>()
+    .MapGet("/", () => "Hello Group!");
+```
+<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L43-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -382,9 +458,11 @@ Example Response header when the Request has not `If-None-Match` header.
 <img src="/src/Delta-No304.png">
 
 
-## Helpers
+## Delta.SqlServer
 
-Utility methods for working with databases using the Delta conventions.
+A set of helper methods for working with [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
+
+Nuget: [Delta.SqlServer](https://www.nuget.org/packages/Delta.SqlServer)
 
 
 ### GetLastTimeStamp
@@ -397,7 +475,7 @@ Utility methods for working with databases using the Delta conventions.
 ```cs
 var timeStamp = await sqlConnection.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L60-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampSqlConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L59-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampSqlConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -425,7 +503,7 @@ foreach (var db in trackedDatabases)
     Trace.WriteLine(db);
 }
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L98-L106' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetDatabasesWithTracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L117-L125' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetDatabasesWithTracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -438,7 +516,7 @@ from sys.databases as d inner join
   sys.change_tracking_databases as t on
   t.database_id = d.database_id
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L140-L145' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedDatabasesSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L140-L145' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedDatabasesSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -455,7 +533,7 @@ foreach (var db in trackedTables)
     Trace.WriteLine(db);
 }
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L124-L132' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTables' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L143-L151' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTables' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -468,7 +546,7 @@ from sys.tables as t left join
   sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
 where c.[object_id] is not null
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L76-L81' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTablesSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L76-L81' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTablesSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -481,7 +559,7 @@ Determine if change tracking is enabled for a database.
 ```cs
 var isTrackingEnabled = await sqlConnection.IsTrackingEnabled();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L189-L193' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabled' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L208-L212' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabled' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -495,7 +573,7 @@ from sys.databases as d inner join
   t.database_id = d.database_id
 where d.name = '{database}'
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L97-L103' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabledSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L97-L103' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabledSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -508,7 +586,7 @@ Enable change tracking for a database.
 ```cs
 await sqlConnection.EnableTracking();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L183-L187' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L202-L206' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -523,7 +601,7 @@ set change_tracking = on
   auto_cleanup = on
 )
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L61-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L61-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -536,7 +614,7 @@ Disable change tracking for a database and all tables within that database.
 ```cs
 await sqlConnection.DisableTracking();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L168-L172' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L187-L191' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -549,7 +627,7 @@ Uses the following SQL:
 ```cs
 alter database [{database}] set change_tracking = off;
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L126-L128' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSqlDB' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L126-L128' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSqlDB' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -560,7 +638,7 @@ alter database [{database}] set change_tracking = off;
 ```cs
 alter table [{table}] disable change_tracking;
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L118-L120' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSqlTable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L118-L120' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSqlTable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -573,7 +651,7 @@ Enables change tracking for all tables listed, and disables change tracking for 
 ```cs
 await sqlConnection.SetTrackedTables(["Companies"]);
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L118-L122' title='Snippet source file'>snippet source</a> | <a href='#snippet-SetTrackedTables' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L137-L141' title='Snippet source file'>snippet source</a> | <a href='#snippet-SetTrackedTables' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -591,7 +669,7 @@ set change_tracking = on
   auto_cleanup = on
 )
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L61-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L61-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -602,7 +680,7 @@ set change_tracking = on
 ```cs
 alter table [{table}] enable change_tracking
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L24-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingTableSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L24-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingTableSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -613,7 +691,7 @@ alter table [{table}] enable change_tracking
 ```cs
 alter table [{table}] disable change_tracking;
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L33-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingTableSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L33-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingTableSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -632,3 +710,4 @@ In the scenario where web apis (that support using 304) are being consumed using
 ## Icon
 
 [Estuary](https://thenounproject.com/term/estuary/1847616/) designed by [Daan](https://thenounproject.com/Asphaleia/) from [The Noun Project](https://thenounproject.com).
+
