@@ -392,7 +392,7 @@ public class SampleDbContext(DbContextOptions options) :
 <!-- endSnippet -->
 
 
-### Postgres DbContext using RowVersion
+### Postgres DbContext
 
 Enable row versioning in Entity Framework
 
