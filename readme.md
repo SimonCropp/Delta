@@ -424,8 +424,25 @@ public class SampleDbContext(DbContextOptions options) :
 
 ### Add to WebApplicationBuilder
 
-<!-- snippet: UseDeltaEF -->
-<a id='snippet-UseDeltaEF'></a>
+
+#### SQL Server
+
+<!-- snippet: UseDeltaSQLServerEF -->
+<a id='snippet-UseDeltaSQLServerEF'></a>
+```cs
+var builder = WebApplication.CreateBuilder();
+builder.Services.AddSqlServer<SampleDbContext>(connectionString);
+var app = builder.Build();
+app.UseDelta<SampleDbContext>();
+```
+<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L9-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaSQLServerEF' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+#### Postgres
+
+<!-- snippet: UseDeltaPostgresEF -->
+<a id='snippet-UseDeltaPostgresEF'></a>
 ```cs
 var builder = WebApplication.CreateBuilder();
 builder.Services.AddDbContext<SampleDbContext>(
@@ -433,15 +450,7 @@ builder.Services.AddDbContext<SampleDbContext>(
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 ```
-<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L5-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-UseDeltaEF-1'></a>
-```cs
-var builder = WebApplication.CreateBuilder();
-builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
-var app = builder.Build();
-app.UseDelta<SampleDbContext>();
-```
-<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L7-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaEF-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L5-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaPostgresEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -463,7 +472,7 @@ app.MapGroup("/group")
     .UseDelta<SampleDbContext>()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L43-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L45-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

@@ -4,10 +4,12 @@ var sqlInstance = new SqlInstance<SampleDbContext>(constructInstance: builder =>
 
 await using var database = await sqlInstance.Build("WebAppEF");
 
-#region UseDeltaEF
+var connectionString = database.ConnectionString;
+
+#region UseDeltaSQLServerEF
 
 var builder = WebApplication.CreateBuilder();
-builder.Services.AddSqlServer<SampleDbContext>(database.ConnectionString);
+builder.Services.AddSqlServer<SampleDbContext>(connectionString);
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 

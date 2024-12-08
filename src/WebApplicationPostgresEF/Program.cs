@@ -2,7 +2,7 @@ DeltaExtensions.UseResponseDiagnostics = true;
 
 var connectionString = PostgresConnection.ConnectionString;
 
-#region UseDeltaEF
+#region UseDeltaPostgresEF
 
 var builder = WebApplication.CreateBuilder();
 builder.Services.AddDbContext<SampleDbContext>(

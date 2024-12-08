@@ -157,7 +157,15 @@ snippet: SamplePostgresDbContext
 
 ### Add to WebApplicationBuilder
 
-snippet: UseDeltaEF
+
+#### SQL Server
+
+snippet: UseDeltaSQLServerEF
+
+
+#### Postgres
+
+snippet: UseDeltaPostgresEF
 
 
 ### Add to a Route Group
