@@ -10,6 +10,7 @@ To change this file edit the source file and then run MarkdownSnippets.
 [![Build status](https://ci.appveyor.com/api/projects/status/20t96gnsmysklh09/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Delta)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.svg?label=Delta)](https://www.nuget.org/packages/Delta/)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.EF.svg?label=Delta.EF)](https://www.nuget.org/packages/Delta.EF/)
+[![NuGet Status](https://img.shields.io/nuget/v/Delta.SqlServer.svg?label=Delta.SqlServer)](https://www.nuget.org/packages/Delta.SqlServer/)
 
 Delta is an approach to implementing a [304 Not Modified](https://www.keycdn.com/support/304-not-modified) leveraging SqlServer change tracking
 
@@ -25,7 +26,9 @@ Effectively consumers will always receive the most current data, while the load 
 ## Assumptions
 
  * Frequency of updates to data is relatively low compared to reads
- * Using either [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
+ * Using SQL Server or Postgres timestamp features
+    * SQL Server: Using either [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
+    * Postgres: [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) is enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service
 
 
 ## 304 Not Modified Flow
@@ -455,9 +458,11 @@ Example Response header when the Request has not `If-None-Match` header.
 <img src="/src/Delta-No304.png">
 
 
-## Helpers
+## Delta.SqlServer
 
-Utility methods for working with databases using the Delta conventions.
+A set of helper methods for working with [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
+
+Nuget: [Delta.SqlServer](https://www.nuget.org/packages/Delta.SqlServer)
 
 
 ### GetLastTimeStamp
@@ -706,9 +711,3 @@ In the scenario where web apis (that support using 304) are being consumed using
 
 [Estuary](https://thenounproject.com/term/estuary/1847616/) designed by [Daan](https://thenounproject.com/Asphaleia/) from [The Noun Project](https://thenounproject.com).
 
-
-postgres
-
-ALTER SYSTEM SET track_commit_timestamp to "on";
-
-https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP
