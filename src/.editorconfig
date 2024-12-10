@@ -1,11 +1,7 @@
 root = true
-# EditorConfig: http://EditorConfig.org
-
-# top-most EditorConfig file
 
 [*]
 indent_style = space
-
 
 [*.cs]
 indent_size = 4
@@ -18,10 +14,12 @@ resharper_redundant_accessor_body_highlighting = error
 resharper_replace_with_field_keyword_highlighting = error
 
 # Declare types in namespaces
-dotnet_diagnostic.CA1050.severity = None
+dotnet_diagnostic.CA1050.severity = none
 
 # Use Literals Where Appropriate
 dotnet_diagnostic.CA1802.severity = error
+
+resharper_all_underscore_local_parameter_name_highlighting = none
 
 # Do not initialize unnecessarily
 dotnet_diagnostic.CA1805.severity = error
@@ -151,7 +149,6 @@ dotnet_diagnostic.CA1869.severity = error
 
 # Use a cached 'SearchValues' instance
 dotnet_diagnostic.CA1870.severity = error
-
 
 # Microsoft .NET properties
 trim_trailing_whitespace = true
