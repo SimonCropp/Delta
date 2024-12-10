@@ -4,7 +4,10 @@ namespace Delta;
 
 public static partial class DeltaExtensions
 {
-    internal static async Task<string> GetLastTimeStamp(DbConnection connection, DbTransaction? transaction = null, Cancel cancel = default)
+    internal static Task<string> GetLastTimeStamp(DbConnection connection, DbTransaction? transaction = null, Cancel cancel = default) =>
+        ExecuteCommand(connection, transaction, ExecuteTimestampQuery, cancel);
+
+    static async Task<string> ExecuteCommand(DbConnection connection, DbTransaction? transaction, Func<DbCommand, Cancel, Task<string>> execute, Cancel cancel)
     {
         await using var command = connection.CreateCommand();
         if (transaction != null)
@@ -14,13 +17,13 @@ public static partial class DeltaExtensions
 
         if (connection.State != ConnectionState.Closed)
         {
-            return await ExecuteTimestampQuery(command, cancel);
+            return await execute(command, cancel);
         }
 
         await connection.OpenAsync(cancel);
         try
         {
-            return await ExecuteTimestampQuery(command, cancel);
+            return await execute(command, cancel);
         }
         finally
         {
