@@ -600,9 +600,8 @@ Uses the following SQL:
 <a id='snippet-GetTrackedTablesSql'></a>
 ```cs
 select t.Name
-from sys.tables as t left join
+from sys.tables as t inner join
   sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
-where c.[object_id] is not null
 ```
 <sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L76-L81' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTablesSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
