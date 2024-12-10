@@ -29,18 +29,18 @@ app.MapGet(
     "/",
     async _ =>
     {
-        var builder = new StringBuilder("Results: ");
-        builder.AppendLine();
+        var result = new StringBuilder("Results: ");
+        result.AppendLine();
         var dbContext = _.RequestServices.GetRequiredService<SampleDbContext>();
-        builder.AppendLine($"LastTimeStamp: {await dbContext.GetLastTimeStamp()}");
-        builder.AppendLine();
+        result.AppendLine($"LastTimeStamp: {await dbContext.GetLastTimeStamp()}");
+        result.AppendLine();
         foreach (var company in await dbContext.Companies.ToListAsync())
         {
-            builder.AppendLine($"Id: {company.Id}");
-            builder.AppendLine($"Content: {company.Content}");
+            result.AppendLine($"Id: {company.Id}");
+            result.AppendLine($"Content: {company.Content}");
         }
 
-        await _.Response.WriteAsync(builder.ToString());
+        await _.Response.WriteAsync(result.ToString());
     });
 
 #region UseDeltaMapGroupEF
