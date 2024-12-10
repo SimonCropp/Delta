@@ -5,6 +5,7 @@
   <ItemGroup>
     <PackageReference Include="EfLocalDb" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="Verify.NUnit" />
     <PackageReference Include="Verify.SqlServer" />
@@ -16,7 +17,8 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <ProjectReference Include="..\Delta.EF\Delta.EF.csproj" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
-    <ProjectReference Include="..\WebApplicationEF\WebApplicationEF.csproj" />
+    <ProjectReference Include="..\Delta.SqlServer\Delta.SqlServer.csproj" />
+    <ProjectReference Include="..\WebApplicationSqlServerEF\WebApplicationSqlServerEF.csproj" />
     <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
     <Using Include="NUnit.Framework.Assert" Static="True" />
   </ItemGroup>

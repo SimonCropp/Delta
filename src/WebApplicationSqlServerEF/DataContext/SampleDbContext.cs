@@ -1,4 +1,6 @@
-﻿public class SampleDbContext(DbContextOptions options) :
+﻿#region SampleSqlServerDbContext
+
+public class SampleDbContext(DbContextOptions options) :
     DbContext(options)
 {
     public DbSet<Employee> Employees { get; set; } = null!;
@@ -25,3 +27,5 @@
             .HasConversion<byte[]>();
     }
 }
+
+#endregion

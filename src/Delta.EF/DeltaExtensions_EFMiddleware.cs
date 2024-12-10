@@ -50,8 +50,8 @@ public static partial class DeltaExtensions
     public static Task<string> GetLastTimeStamp(this DbContext context, Cancel cancel = default)
     {
         var database = context.Database;
-        var connection = (SqlConnection) database.GetDbConnection();
-        var transaction = (SqlTransaction?) database.CurrentTransaction?.GetDbTransaction();
+        var connection = database.GetDbConnection();
+        var transaction = database.CurrentTransaction?.GetDbTransaction();
         return GetLastTimeStamp(connection, transaction, cancel);
     }
 
