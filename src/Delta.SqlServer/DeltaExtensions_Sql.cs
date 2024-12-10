@@ -75,9 +75,8 @@ set change_tracking = on
         command.CommandText = @"
 -- begin-snippet: GetTrackedTablesSql
 select t.Name
-from sys.tables as t left join
+from sys.tables as t inner join
   sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
-where c.[object_id] is not null
 -- end-snippet";
         await using var reader = await command.ExecuteReaderAsync(cancel);
         var list = new List<string>();
