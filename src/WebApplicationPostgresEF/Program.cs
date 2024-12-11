@@ -14,7 +14,7 @@ app.UseDelta<SampleDbContext>();
 
 using (var scope = app.Services.CreateScope())
 {
-    await using var context = scope.ServiceProvider.GetRequiredService<SampleDbContext>()!;
+    await using var context = scope.ServiceProvider.GetRequiredService<SampleDbContext>();
     await context.Database.EnsureDeletedAsync();
     await context.Database.EnsureCreatedAsync();
     context.Add(
