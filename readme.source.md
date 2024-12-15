@@ -106,7 +106,15 @@ snippet: PostgresSchema
 
 ### Add to WebApplicationBuilder
 
-snippet: UseDelta
+
+#### SQL Server
+
+snippet: UseDeltaSqlServer
+
+
+#### PostgreSQL
+
+snippet: UseDeltaPostgres
 
 
 ### Add to a Route Group

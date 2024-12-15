@@ -7,7 +7,7 @@ await using var database = await sqlInstance.Build("WebApp");
 
 var connectionString = database.ConnectionString;
 
-#region UseDelta
+#region UseDeltaSqlServer
 
 var builder = WebApplication.CreateBuilder();
 builder.Services.AddScoped(_ => new SqlConnection(connectionString));

@@ -220,23 +220,32 @@ create index IF NOT EXISTS ""IX_Employees_CompanyId""
 
 ### Add to WebApplicationBuilder
 
-<!-- snippet: UseDelta -->
-<a id='snippet-UseDelta'></a>
-```cs
-var builder = WebApplication.CreateBuilder();
-builder.Services.AddScoped(_ => new NpgsqlConnection(connectionString));
-var app = builder.Build();
-app.UseDelta();
-```
-<sup><a href='/src/WebApplicationPostgres/Program.cs#L5-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-UseDelta-1'></a>
+
+#### SQL Server
+
+<!-- snippet: UseDeltaSqlServer -->
+<a id='snippet-UseDeltaSqlServer'></a>
 ```cs
 var builder = WebApplication.CreateBuilder();
 builder.Services.AddScoped(_ => new SqlConnection(connectionString));
 var app = builder.Build();
 app.UseDelta();
 ```
-<sup><a href='/src/WebApplicationSqlServer/Program.cs#L10-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDelta-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServer/Program.cs#L10-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaSqlServer' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+#### PostgreSQL
+
+<!-- snippet: UseDeltaPostgres -->
+<a id='snippet-UseDeltaPostgres'></a>
+```cs
+var builder = WebApplication.CreateBuilder();
+builder.Services.AddScoped(_ => new NpgsqlConnection(connectionString));
+var app = builder.Build();
+app.UseDelta();
+```
+<sup><a href='/src/WebApplicationPostgres/Program.cs#L5-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

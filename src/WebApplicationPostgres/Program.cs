@@ -2,7 +2,7 @@ DeltaExtensions.UseResponseDiagnostics  = true;
 
 var connectionString = PostgresConnection.ConnectionString;
 
-#region UseDelta
+#region UseDeltaPostgres
 
 var builder = WebApplication.CreateBuilder();
 builder.Services.AddScoped(_ => new NpgsqlConnection(connectionString));
