@@ -62,12 +62,8 @@ app.MapGet(
         await _.Response.WriteAsync(builder.ToString());
     });
 
-#region UseDeltaMapGroup
-
 app.MapGroup("/group")
     .UseDelta()
     .MapGet("/", () => "Hello Group!");
-
-#endregion
 
 app.Run();

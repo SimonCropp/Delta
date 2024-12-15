@@ -260,14 +260,7 @@ app.MapGroup("/group")
     .UseDelta()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationPostgres/Program.cs#L65-L71' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-UseDeltaMapGroup-1'></a>
-```cs
-app.MapGroup("/group")
-    .UseDelta()
-    .MapGet("/", () => "Hello Group!");
-```
-<sup><a href='/src/WebApplicationSqlServer/Program.cs#L63-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServer/Program.cs#L63-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
