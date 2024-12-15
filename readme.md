@@ -306,7 +306,7 @@ static (Type sqlConnection, Type transaction) FindConnectionType()
         return (npgsqlConnection, transaction);
     }
 
-    throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection");
+    throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection and Npgsql.NpgsqlTransaction");
 }
 
 static Connection DiscoverConnection(HttpContext httpContext)
