@@ -57,17 +57,17 @@
             Content = "The company"
         };
         await database.AddData(entity);
-        var newTimeStamp = await context.GetLastTimeStamp();
-        IsNotEmpty(newTimeStamp);
-        IsNotNull(newTimeStamp);
-        AreNotEqual(newTimeStamp, emptyTimeStamp);
+        var addTimeStamp = await context.GetLastTimeStamp();
+        IsNotEmpty(addTimeStamp);
+        IsNotNull(addTimeStamp);
+        AreNotEqual(addTimeStamp, emptyTimeStamp);
 
         entity.Content = "The company2";
         await context.SaveChangesAsync();
         var updateTimeStamp = await context.GetLastTimeStamp();
         IsNotEmpty(updateTimeStamp);
         IsNotNull(updateTimeStamp);
-        AreNotEqual(updateTimeStamp, newTimeStamp);
+        AreNotEqual(updateTimeStamp, addTimeStamp);
         AreNotEqual(updateTimeStamp, emptyTimeStamp);
     }
 
