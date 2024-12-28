@@ -27,25 +27,6 @@
     }
 
     [Test]
-    public async Task LastTimeStampRowVersion()
-    {
-        await using var database = await LocalDb();
-
-        var context = database.Context;
-        var timeStamp = await context.GetLastTimeStamp();
-        IsNotEmpty(timeStamp);
-        IsNotNull(timeStamp);
-        var entity = new Company
-        {
-            Content = "The company"
-        };
-        await database.AddDataUntracked(entity);
-        var newTimeStamp = await context.GetLastTimeStamp();
-        IsNotEmpty(newTimeStamp);
-        IsNotNull(newTimeStamp);
-    }
-
-    [Test]
     public async Task GetLastTimeStamp()
     {
         await using var database = await LocalDb();
@@ -62,22 +43,61 @@
     }
 
     [Test]
+    public async Task LastTimeStampRowVersion()
+    {
+        await using var database = await LocalDb();
+
+        var context = database.Context;
+        var emptyTimeStamp = await context.GetLastTimeStamp();
+        IsNotEmpty(emptyTimeStamp);
+        IsNotNull(emptyTimeStamp);
+
+        var entity = new Company
+        {
+            Content = "The company"
+        };
+        await database.AddData(entity);
+        var newTimeStamp = await context.GetLastTimeStamp();
+        IsNotEmpty(newTimeStamp);
+        IsNotNull(newTimeStamp);
+        AreNotEqual(emptyTimeStamp, newTimeStamp);
+
+        entity.Content = "The company2";
+        await context.SaveChangesAsync();
+        var updateTimeStamp = await context.GetLastTimeStamp();
+        IsNotEmpty(updateTimeStamp);
+        IsNotNull(updateTimeStamp);
+        AreNotEqual(updateTimeStamp, newTimeStamp);
+        AreNotEqual(emptyTimeStamp, newTimeStamp);
+    }
+
+    [Test]
     public async Task LastTimeStampRowVersionAndTracking()
     {
         await using var database = await LocalDb();
 
         await database.Connection.EnableTracking();
         var context = database.Context;
-        var timeStamp = await context.GetLastTimeStamp();
-        IsNotEmpty(timeStamp);
-        IsNotNull(timeStamp);
+        var emptyTimeStamp = await context.GetLastTimeStamp();
+        IsNotEmpty(emptyTimeStamp);
+        IsNotNull(emptyTimeStamp);
+
         var entity = new Company
         {
             Content = "The company"
         };
-        await database.AddDataUntracked(entity);
-        var newTimeStamp = await context.GetLastTimeStamp();
-        IsNotEmpty(newTimeStamp);
-        IsNotNull(newTimeStamp);
+        await database.AddData(entity);
+        var addTimeStamp = await context.GetLastTimeStamp();
+        IsNotEmpty(addTimeStamp);
+        IsNotNull(addTimeStamp);
+        AreNotEqual(emptyTimeStamp, addTimeStamp);
+
+        entity.Content = "The company2";
+        await context.SaveChangesAsync();
+        var updateTimeStamp = await context.GetLastTimeStamp();
+        IsNotEmpty(updateTimeStamp);
+        IsNotNull(updateTimeStamp);
+        AreNotEqual(updateTimeStamp, addTimeStamp);
+        AreNotEqual(emptyTimeStamp, addTimeStamp);
     }
 }
