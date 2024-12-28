@@ -60,7 +60,7 @@
         var newTimeStamp = await context.GetLastTimeStamp();
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
-        AreNotEqual(emptyTimeStamp, newTimeStamp);
+        AreNotEqual(newTimeStamp, emptyTimeStamp);
 
         entity.Content = "The company2";
         await context.SaveChangesAsync();
@@ -68,7 +68,7 @@
         IsNotEmpty(updateTimeStamp);
         IsNotNull(updateTimeStamp);
         AreNotEqual(updateTimeStamp, newTimeStamp);
-        AreNotEqual(emptyTimeStamp, newTimeStamp);
+        AreNotEqual(updateTimeStamp, emptyTimeStamp);
     }
 
     [Test]
@@ -90,7 +90,7 @@
         var addTimeStamp = await context.GetLastTimeStamp();
         IsNotEmpty(addTimeStamp);
         IsNotNull(addTimeStamp);
-        AreNotEqual(emptyTimeStamp, addTimeStamp);
+        AreNotEqual(addTimeStamp, emptyTimeStamp);
 
         entity.Content = "The company2";
         await context.SaveChangesAsync();
@@ -98,6 +98,7 @@
         IsNotEmpty(updateTimeStamp);
         IsNotNull(updateTimeStamp);
         AreNotEqual(updateTimeStamp, addTimeStamp);
-        AreNotEqual(emptyTimeStamp, addTimeStamp);
+        AreNotEqual(updateTimeStamp, emptyTimeStamp);
+
     }
 }
