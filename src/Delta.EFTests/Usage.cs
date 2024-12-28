@@ -69,6 +69,14 @@
         IsNotNull(updateTimeStamp);
         AreNotEqual(updateTimeStamp, addTimeStamp);
         AreNotEqual(updateTimeStamp, emptyTimeStamp);
+
+        await context.Companies.ExecuteDeleteAsync();
+        var deleteTimeStamp = await context.GetLastTimeStamp();
+        IsNotEmpty(deleteTimeStamp);
+        IsNotNull(deleteTimeStamp);
+        AreNotEqual(deleteTimeStamp, addTimeStamp);
+        AreNotEqual(deleteTimeStamp, updateTimeStamp);
+        AreNotEqual(deleteTimeStamp, emptyTimeStamp);
     }
 
     [Test]
@@ -100,5 +108,12 @@
         AreNotEqual(updateTimeStamp, addTimeStamp);
         AreNotEqual(updateTimeStamp, emptyTimeStamp);
 
+        await context.Companies.ExecuteDeleteAsync();
+        var deleteTimeStamp = await context.GetLastTimeStamp();
+        IsNotEmpty(deleteTimeStamp);
+        IsNotNull(deleteTimeStamp);
+        AreNotEqual(deleteTimeStamp, addTimeStamp);
+        AreNotEqual(deleteTimeStamp, updateTimeStamp);
+        AreNotEqual(deleteTimeStamp, emptyTimeStamp);
     }
 }
