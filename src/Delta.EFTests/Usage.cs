@@ -67,16 +67,16 @@
         var updateTimeStamp = await context.GetLastTimeStamp();
         IsNotEmpty(updateTimeStamp);
         IsNotNull(updateTimeStamp);
-        AreNotEqual(updateTimeStamp, addTimeStamp);
         AreNotEqual(updateTimeStamp, emptyTimeStamp);
+        AreNotEqual(updateTimeStamp, addTimeStamp);
 
         await context.Companies.ExecuteDeleteAsync();
         var deleteTimeStamp = await context.GetLastTimeStamp();
         IsNotEmpty(deleteTimeStamp);
         IsNotNull(deleteTimeStamp);
+        AreNotEqual(deleteTimeStamp, emptyTimeStamp);
         AreNotEqual(deleteTimeStamp, addTimeStamp);
         AreNotEqual(deleteTimeStamp, updateTimeStamp);
-        AreNotEqual(deleteTimeStamp, emptyTimeStamp);
     }
 
     [Test]
@@ -105,15 +105,15 @@
         var updateTimeStamp = await context.GetLastTimeStamp();
         IsNotEmpty(updateTimeStamp);
         IsNotNull(updateTimeStamp);
-        AreNotEqual(updateTimeStamp, addTimeStamp);
         AreNotEqual(updateTimeStamp, emptyTimeStamp);
+        AreNotEqual(updateTimeStamp, addTimeStamp);
 
         await context.Companies.ExecuteDeleteAsync();
         var deleteTimeStamp = await context.GetLastTimeStamp();
         IsNotEmpty(deleteTimeStamp);
         IsNotNull(deleteTimeStamp);
+        AreNotEqual(deleteTimeStamp, emptyTimeStamp);
         AreNotEqual(deleteTimeStamp, addTimeStamp);
         AreNotEqual(deleteTimeStamp, updateTimeStamp);
-        AreNotEqual(deleteTimeStamp, emptyTimeStamp);
     }
 }
