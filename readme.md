@@ -189,37 +189,37 @@ Example SQL schema:
 <!-- snippet: PostgresSchema -->
 <a id='snippet-PostgresSchema'></a>
 ```cs
-create table IF NOT EXISTS public.""Companies""
+create table IF NOT EXISTS public."Companies"
 (
-    ""Id"" uuid not null
-        constraint ""PK_Companies""
+    "Id" uuid not null
+        constraint "PK_Companies"
             primary key,
-    ""Content"" text
+    "Content" text
 );
 
-alter table public.""Companies""
+alter table public."Companies"
     owner to postgres;
 
-create table IF NOT EXISTS public.""Employees""
+create table IF NOT EXISTS public."Employees"
 (
-    ""Id"" uuid not null
-        constraint ""PK_Employees""
+    "Id" uuid not null
+        constraint "PK_Employees"
             primary key,
-    ""CompanyId"" uuid not null
-        constraint ""FK_Employees_Companies_CompanyId""
-            references public.""Companies""
+    "CompanyId" uuid not null
+        constraint "FK_Employees_Companies_CompanyId"
+            references public."Companies"
             on delete cascade,
-    ""Content""   text,
-    ""Age""       integer not null
+    "Content"   text,
+    "Age"       integer not null
 );
 
-alter table public.""Employees""
+alter table public."Employees"
     owner to postgres;
 
-create index IF NOT EXISTS ""IX_Employees_CompanyId""
-    on public.""Employees"" (""CompanyId"");
+create index IF NOT EXISTS "IX_Employees_CompanyId"
+    on public."Employees" ("CompanyId");
 ```
-<sup><a href='/src/WebApplicationPostgres/PostgresDbBuilder.cs#L8-L38' title='Snippet source file'>snippet source</a> | <a href='#snippet-PostgresSchema' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgres/PostgresDbBuilder.cs#L9-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-PostgresSchema' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
