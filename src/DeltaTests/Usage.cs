@@ -105,6 +105,7 @@ public class Usage :
         var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
+        AreNotEqual(timeStamp, newTimeStamp);
     }
 
     [Test]
