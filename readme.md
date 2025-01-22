@@ -31,6 +31,11 @@ Effectively consumers will always receive the most current data, while the load 
     * Postgres: [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) is enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service
 
 
+## Certificates and Chromium
+
+Chromium, and hence the Chrome and Edge browsers, are very sensitive to certificate problems when determining if an item should be cached. Specifically, if a request is done dynamically (type: xhr) and the server is using a self-sign certificate, then the browser will not send the `if-none-match` header. If self-signed certificates are required during development in lower environment, the use FireFox to test the caching behavior. 
+
+
 ## 304 Not Modified Flow
 
 ```mermaid
