@@ -26,7 +26,7 @@ Effectively consumers will always receive the most current data, while the load 
 
 ## Certificates and Chromium
 
-Chromium, and hence the Chrome and Edge browsers, are very sensitive to certificate problems when determining if an item should be cached. Specifically, if a request is done dynamically (type: xhr) and the server is using a self-sign certificate, then the browser will not send the `if-none-match` header. If self-signed certificates are required during development in lower environment, then use FireFox to test the caching behavior. 
+Chromium, and hence the Chrome and Edge browsers, are very sensitive to certificate problems when determining if an item should be cached. Specifically, if a request is done dynamically (type: xhr) and the server is using a self-signed certificate, then the browser will not send the `if-none-match` header. Reference: https://issues.chromium.org/issues/40666473. If self-signed certificates are required during development in lower environment, then use FireFox to test the caching behavior. 
 
 
 ## 304 Not Modified Flow
