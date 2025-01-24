@@ -24,10 +24,6 @@ Effectively consumers will always receive the most current data, while the load 
     * Postgres: [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) is enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service
 
 
-## Certificates and Chromium
-
-Chromium, and hence the Chrome and Edge browsers, are very sensitive to certificate problems when determining if an item should be cached. Specifically, if a request is done dynamically (type: xhr) and the server is using a self-signed certificate, then the browser will not send the `if-none-match` header. [Reference]( https://issues.chromium.org/issues/40666473). If self-signed certificates are required during development in lower environment, then use FireFox to test the caching behavior. 
-
 
 ## 304 Not Modified Flow
 
@@ -315,6 +311,37 @@ snippet: EnableTrackingTableSql
 #### For disabling tracking on tables:
 
 snippet: DisableTrackingTableSql
+
+
+## Verifying behavior
+
+The behavior of Delta can be verified as follows:
+
+ * Open a page in the site
+ * Open the browser developer tools
+ * Change to the Network tab
+ * Refresh the page.
+
+Cached responses will show as 304 in the `Status`:
+
+<img src="/src/network.png">
+
+In the headers `if-none-match` will show in the request and `etag` will show in the response:
+
+<img src="/src/network-details.png">
+
+
+### Ensure cache is not disabled
+
+If disable cache is checked, the browser will not send the `if-none-match` header. This will effectively cause a cache miss server side, and the full server pipeline will execute.
+
+<img src="/src/disable-cache.png">
+
+
+### Certificates and Chromium
+
+Chromium, and hence the Chrome and Edge browsers, are very sensitive to certificate problems when determining if an item should be cached. Specifically, if a request is done dynamically (type: xhr) and the server is using a self-signed certificate, then the browser will not send the `if-none-match` header. [Reference]( https://issues.chromium.org/issues/40666473). If self-signed certificates are required during development in lower environment, then use FireFox to test the caching behavior. 
+
 
 
 ## Programmatic client usage
