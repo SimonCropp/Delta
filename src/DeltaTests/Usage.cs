@@ -47,6 +47,70 @@ public class Usage :
         var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
+        AreNotEqual(timeStamp, newTimeStamp);
+    }
+
+    [Test]
+    public async Task LastTimeStampRowVersionOnDelete()
+    {
+        await using var database = await LocalDb();
+        using var connection = database.Connection;
+        await connection.EnableTracking();
+
+        var theCompanyGuid = Guid.NewGuid();
+        await using var addDataCommand = connection.CreateCommand();
+        addDataCommand.CommandText =
+            $"""
+             insert into [Companies] (Id, Content)
+             values ('{theCompanyGuid}', 'The company')
+             """;
+        await addDataCommand.ExecuteNonQueryAsync();
+
+        await using var checkCommand = connection.CreateCommand();
+        await using (var temp = await checkCommand.ExecuteReaderAsync())
+        {
+            if (await temp.ReadAsync())
+            {
+                Console.WriteLine($"Current Change Tracking Version: {temp[0]}");
+            }
+        }
+
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+
+        await using var firstChangeCommand = connection.CreateCommand();
+        firstChangeCommand.CommandText = $"SELECT change_tracking_current_version();";
+        await using (var reader = await firstChangeCommand.ExecuteReaderAsync())
+        {
+            if (await reader.ReadAsync())
+            {
+                Console.WriteLine($"Current Change Tracking Version: {reader[0]}");
+            }
+        }
+
+        IsNotEmpty(timeStamp);
+        IsNotNull(timeStamp);
+        // Recording.Start();
+
+        await using var deleteCommand = connection.CreateCommand();
+        deleteCommand.CommandText = $"delete From Companies where Id=@deleteId";
+        deleteCommand.Parameters.AddWithValue("@deleteId", theCompanyGuid);
+        await deleteCommand.ExecuteNonQueryAsync();
+
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+        await using var secondChangeCommand = connection.CreateCommand();
+        secondChangeCommand.CommandText = $"SELECT change_tracking_current_version();";
+        await using (var reader2 = await secondChangeCommand.ExecuteReaderAsync())
+        {
+            if (await reader2.ReadAsync())
+            {
+                Console.WriteLine($"Current Change Tracking Version: {reader2[0]}");
+            }
+        }
+
+        IsNotEmpty(newTimeStamp);
+        IsNotNull(newTimeStamp);
+        //await Verify(newTimeStamp);
+       // AreNotEqual(newTimeStamp, timeStamp);
     }
 
     [Test]
