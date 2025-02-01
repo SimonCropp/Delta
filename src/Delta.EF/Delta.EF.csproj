@@ -13,5 +13,17 @@
     <Compile Include="..\Delta\DeltaExtensions_Shared.cs">
       <Link>DeltaExtensions_Shared.cs</Link>
     </Compile>
+    <Compile Include="..\Delta/TimestampQueries/NpgsqlTimestampQueryExecutor.cs">
+      <Link>TimestampQueries/NpgsqlTimestampQueryExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\Delta/TimestampQueries/SqlServerTimestampQueryExecutor.cs">
+      <Link>TimestampQueries/SqlServerTimestampQueryExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\Delta/TimestampQueries/TimestampQueryExecutorFactory.cs">
+      <Link>TimestampQueries/TimestampQueryExecutorFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Delta/TimestampQueries/ITimestampQueryExecutor.cs">
+      <Link>TimestampQueries/ITimestampQueryExecutor.cs</Link>
+    </Compile>
   </ItemGroup>
 </Project>

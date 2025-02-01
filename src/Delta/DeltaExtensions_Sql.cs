@@ -1,5 +1,3 @@
-// ReSharper disable UseRawString
-
 namespace Delta;
 
 public static partial class DeltaExtensions
@@ -39,41 +37,7 @@ public static partial class DeltaExtensions
 
     static async Task<string> ExecuteTimestampQuery(DbCommand command, Cancel cancel = default)
     {
-        var name = command.GetType().Name;
-        if (name == "SqlCommand")
-        {
-            command.CommandText = @"
--- begin-snippet: SqlServerTimestamp
-declare @changeTracking bigint = change_tracking_current_version();
-declare @timeStamp bigint = convert(bigint, @@dbts);
-
-if (@changeTracking is null)
-  select cast(@timeStamp as varchar)
-else
-  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
--- end-snippet
-";
-            return (string) (await command.ExecuteScalarAsync(cancel))!;
-        }
-
-        if (name == "NpgsqlCommand")
-        {
-            command.CommandText = @"
--- begin-snippet: PostgresTimestamp
-select pg_last_committed_xact();
--- end-snippet
-";
-            var result = (object[]?) await command.ExecuteScalarAsync(cancel);
-            // null on first run after SET track_commit_timestamp to 'on'
-            if (result is null)
-            {
-                return string.Empty;
-            }
-
-            var xid = (uint) result[0];
-            return xid.ToString();
-        }
-
-        throw new("Unsupported type " + name);
+        var timestampQueryExecutor = TimestampQueryExecutorFactory.Create(command);
+        return await timestampQueryExecutor.Execute(command, cancel);
     }
 }
