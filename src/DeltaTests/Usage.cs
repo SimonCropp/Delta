@@ -51,6 +51,41 @@ public class Usage :
     }
 
     [Test]
+    public async Task LastTimeStampRowVersionOnUpdate()
+    {
+        await using var database = await LocalDb();
+        await using var connection = database.Connection;
+        await connection.EnableTracking();
+
+        var companyGuid = Guid.NewGuid();
+        await using var addDataCommand = connection.CreateCommand();
+        addDataCommand.CommandText =
+            $"""
+             insert into [Companies] (Id, Content)
+             values ('{companyGuid}', 'The company')
+             """;
+        await addDataCommand.ExecuteNonQueryAsync();
+
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+        IsNotEmpty(timeStamp);
+        IsNotNull(timeStamp);
+
+        await using var updateCommand = connection.CreateCommand();
+        updateCommand.CommandText = $"""
+                                     UPDATE [Companies]
+                                     SET [Content] = 'New Content Value'
+                                     WHERE [Id] = @Id;
+                                     """;
+        updateCommand.Parameters.AddWithValue("@Id", companyGuid);
+        await updateCommand.ExecuteNonQueryAsync();
+
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+        IsNotEmpty(newTimeStamp);
+        IsNotNull(newTimeStamp);
+        AreNotEqual(newTimeStamp, timeStamp);
+    }
+
+    [Test]
     public async Task LastTimeStampRowVersionOnDelete()
     {
         await using var database = await LocalDb();
@@ -71,14 +106,14 @@ public class Usage :
         IsNotNull(timeStamp);
 
         await using var deleteCommand = connection.CreateCommand();
-        deleteCommand.CommandText = $"delete From Companies where Id=@deleteId";
-        deleteCommand.Parameters.AddWithValue("@deleteId", companyGuid);
+        deleteCommand.CommandText = $"delete From Companies where Id=@Id";
+        deleteCommand.Parameters.AddWithValue("@Id", companyGuid);
         await deleteCommand.ExecuteNonQueryAsync();
 
         var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
-       AreNotEqual(newTimeStamp, timeStamp);
+        AreNotEqual(newTimeStamp, timeStamp);
     }
 
     [Test]
