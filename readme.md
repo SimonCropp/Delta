@@ -328,7 +328,7 @@ var application = webApplicationBuilder.Build();
 application.UseDelta(
     getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L298-L304' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L297-L303' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection and transaction discovery:
@@ -346,7 +346,7 @@ webApplication.UseDelta(
         return new(sqlConnection, sqlTransaction);
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L309-L321' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransaction' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L308-L320' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransaction' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -533,7 +533,7 @@ Nuget: [Delta.SqlServer](https://www.nuget.org/packages/Delta.SqlServer)
 ```cs
 var timeStamp = await sqlConnection.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L154-L158' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampSqlConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L153-L157' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampSqlConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -561,7 +561,7 @@ foreach (var db in trackedDatabases)
     Trace.WriteLine(db);
 }
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L196-L204' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetDatabasesWithTracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L195-L203' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetDatabasesWithTracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -591,7 +591,7 @@ foreach (var db in trackedTables)
     Trace.WriteLine(db);
 }
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L222-L230' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTables' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L221-L229' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTables' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -616,7 +616,7 @@ Determine if change tracking is enabled for a database.
 ```cs
 var isTrackingEnabled = await sqlConnection.IsTrackingEnabled();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L287-L291' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabled' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L286-L290' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabled' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -643,7 +643,7 @@ Enable change tracking for a database.
 ```cs
 await sqlConnection.EnableTracking();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L281-L285' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L280-L284' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -671,7 +671,7 @@ Disable change tracking for a database and all tables within that database.
 ```cs
 await sqlConnection.DisableTracking();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L266-L270' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L265-L269' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -708,7 +708,7 @@ Enables change tracking for all tables listed, and disables change tracking for 
 ```cs
 await sqlConnection.SetTrackedTables(["Companies"]);
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L216-L220' title='Snippet source file'>snippet source</a> | <a href='#snippet-SetTrackedTables' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L215-L219' title='Snippet source file'>snippet source</a> | <a href='#snippet-SetTrackedTables' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
