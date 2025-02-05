@@ -79,7 +79,7 @@ A combination of [change_tracking_current_version](https://learn.microsoft.com/e
 <a id='snippet-SqlServerTimestamp'></a>
 ```cs
 select top 1 [End Time],[Current LSN]
-from fn_dblog({lsnString},null)
+from fn_dblog({lsnString}, null)
 where Operation = 'LOP_COMMIT_XACT'
 order by [End Time] desc;
 ```
