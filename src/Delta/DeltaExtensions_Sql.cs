@@ -47,8 +47,6 @@ public static partial class DeltaExtensions
 select log_end_lsn from sys.dm_db_log_stats(db_id())
 -- end-snippet
 ";
-Console.WriteLine(command.CommandText);
-            var startNew = Stopwatch.StartNew();
             await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
             var readAsync = await reader.ReadAsync(cancel);
             // for empty transaction log
@@ -57,9 +55,7 @@ Console.WriteLine(command.CommandText);
                 return string.Empty;
             }
 
-            var endTime = (string)reader[0];
-            Debug.WriteLine(startNew.ElapsedMilliseconds);
-            return endTime;
+            return (string)reader[0];
         }
 
         if (name == "NpgsqlCommand")

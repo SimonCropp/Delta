@@ -33,14 +33,14 @@ public class Usage :
     {
         await using var database = await LocalDb();
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
         Recording.Start();
 
-        await AddEntity(database.Connection);
+        await AddEntity(database);
 
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
         AreNotEqual(timeStamp, newTimeStamp);
@@ -50,17 +50,16 @@ public class Usage :
     public async Task LastTimeStampOnUpdate()
     {
         await using var database = await LocalDb();
-        await using var connection = database.Connection;
 
-        var companyGuid = await AddEntity(connection);
+        var companyGuid = await AddEntity(database);
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
 
-        await UpdateEntity(connection, companyGuid);
+        await UpdateEntity(database, companyGuid);
 
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
         AreNotEqual(newTimeStamp, timeStamp);
@@ -83,20 +82,31 @@ public class Usage :
     public async Task LastTimeStampOnDelete()
     {
         await using var database = await LocalDb();
-        await using var connection = database.Connection;
 
-        var companyGuid = await AddEntity(connection);
+        var companyGuid = await AddEntity(database);
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
 
-        await DeleteEntity(connection, companyGuid);
+        await DeleteEntity(database, companyGuid);
 
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
         AreNotEqual(newTimeStamp, timeStamp);
+    }
+
+    [Test]
+    public async Task LastTimeStampReadTwice()
+    {
+        await using var database = await LocalDb();
+
+        await AddEntity(database);
+
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        AreEqual(newTimeStamp, timeStamp);
     }
 
     static async Task<Guid> AddEntity(SqlConnection connection)
@@ -124,16 +134,15 @@ public class Usage :
     public async Task LastTimeStampOnTruncate()
     {
         await using var database = await LocalDb();
-        await using var connection = database.Connection;
-        await AddEntity(connection);
+        await AddEntity(database);
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
 
-        await TruncateTable(connection);
+        await TruncateTable(database);
 
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
         AreNotEqual(newTimeStamp, timeStamp);
