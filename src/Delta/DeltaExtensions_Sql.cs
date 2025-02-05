@@ -59,7 +59,7 @@ public static partial class DeltaExtensions
             command.CommandText = $@"
 -- begin-snippet: SqlServerTimestamp
 select top 1 [End Time],[Current LSN]
-from fn_dblog({lsnString},null)
+from fn_dblog({lsnString}, null)
 where Operation = 'LOP_COMMIT_XACT'
 order by [End Time] desc;
 -- end-snippet
@@ -67,7 +67,7 @@ order by [End Time] desc;
 
             await using var reader = await command.ExecuteReaderAsync( cancel);
             var readAsync = await reader.ReadAsync(cancel);
-            // no results on first run
+            // for empty transaction log
             if(!readAsync)
             {
                 return string.Empty;
