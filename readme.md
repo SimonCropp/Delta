@@ -78,15 +78,16 @@ A combination of [change_tracking_current_version](https://learn.microsoft.com/e
 <!-- snippet: SqlServerTimestamp -->
 <a id='snippet-SqlServerTimestamp'></a>
 ```cs
-declare @changeTracking bigint = change_tracking_current_version();
-declare @timeStamp bigint = convert(bigint, @@dbts);
-
-if (@changeTracking is null)
-  select cast(@timeStamp as varchar)
-else
-  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+select top 1
+	[End Time]
+FROM
+    fn_dblog(NULL, NULL)
+WHERE
+    [Operation] = 'LOP_COMMIT_XACT'
+ORDER BY
+    [End Time] DESC;
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L46-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimestamp' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L48-L57' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimestamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

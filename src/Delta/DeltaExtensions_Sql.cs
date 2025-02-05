@@ -1,5 +1,7 @@
 // ReSharper disable UseRawString
 
+using System.Globalization;
+
 namespace Delta;
 
 public static partial class DeltaExtensions
@@ -42,18 +44,27 @@ public static partial class DeltaExtensions
         var name = command.GetType().Name;
         if (name == "SqlCommand")
         {
-            command.CommandText = @"
+            command.CommandText = $@"
 -- begin-snippet: SqlServerTimestamp
-declare @changeTracking bigint = change_tracking_current_version();
-declare @timeStamp bigint = convert(bigint, @@dbts);
-
-if (@changeTracking is null)
-  select cast(@timeStamp as varchar)
-else
-  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+select top 1 [End Time]
+from fn_dblog(null, null)
+where [Operation] = 'LOP_COMMIT_XACT'
+order by [End Time] desc;
 -- end-snippet
 ";
-            return (string) (await command.ExecuteScalarAsync(cancel))!;
+
+            var startNew = Stopwatch.StartNew();
+            await using var reader = await command.ExecuteReaderAsync(cancel);
+            var readAsync = await reader.ReadAsync(cancel);
+            // no results on first run
+            if(!readAsync)
+            {
+                return string.Empty;
+            }
+
+            var executeTimestampQuery = await reader.GetFieldValueAsync<string>(0, cancel);
+            startNew.Stop();
+            return executeTimestampQuery;
         }
 
         if (name == "NpgsqlCommand")
