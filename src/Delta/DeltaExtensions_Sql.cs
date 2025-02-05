@@ -65,7 +65,6 @@ order by [End Time] desc;
 -- end-snippet
 ";
 
-            Trace.WriteLine(command.CommandText);
             await using var reader = await command.ExecuteReaderAsync( cancel);
             var readAsync = await reader.ReadAsync(cancel);
             // no results on first run
@@ -74,9 +73,9 @@ order by [End Time] desc;
                 return string.Empty;
             }
 
-            var executeTimestampQuery = (string)reader[0];
+            var endTime = (string)reader[0];
             lsn = (string)reader[1];
-            return executeTimestampQuery;
+            return endTime;
         }
 
         if (name == "NpgsqlCommand")
