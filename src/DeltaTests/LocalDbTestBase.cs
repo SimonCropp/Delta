@@ -3,7 +3,17 @@ public abstract class LocalDbTestBase
 {
     static SqlInstance sqlInstance = new(
         name: "DeltaTests",
-        buildTemplate: DbBuilder.Create);
+        buildTemplate: async connection =>
+        {
+            await  DbBuilder.Create(connection);
+            await using var command = connection.CreateCommand();
+            command.CommandText =
+                $"""
+                 insert into [Companies] (Id, Content)
+                 values ('{Guid.NewGuid()}', 'initial data')
+                 """;
+            await command.ExecuteNonQueryAsync();
+        });
 
     public Task<SqlDatabase> LocalDb(string? testSuffix = null)
     {
