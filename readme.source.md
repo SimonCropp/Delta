@@ -340,7 +340,6 @@ If disable cache is checked, the browser will not send the `if-none-match` heade
 Chromium, and hence the Chrome and Edge browsers, are very sensitive to certificate problems when determining if an item should be cached. Specifically, if a request is done dynamically (type: xhr) and the server is using a self-signed certificate, then the browser will not send the `if-none-match` header. [Reference]( https://issues.chromium.org/issues/40666473). If self-signed certificates are required during development in lower environment, then use FireFox to test the caching behavior. 
 
 
-
 ## Programmatic client usage
 
 Delta is primarily designed to support web browsers as a client. All web browsers have the necessary 304 and caching functionally required.
