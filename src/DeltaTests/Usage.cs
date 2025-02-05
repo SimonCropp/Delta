@@ -115,6 +115,35 @@
     }
 
     [Test]
+    public async Task LastTimeStampRowVersionOnTruncate()
+    {
+        await using var database = await LocalDb();
+        await using var connection = database.Connection;
+        await connection.EnableTracking();
+
+        await using var addDataCommand = connection.CreateCommand();
+        addDataCommand.CommandText =
+            $"""
+             insert into [Companies] (Id, Content)
+             values ('{Guid.NewGuid()}', 'The company')
+             """;
+        await addDataCommand.ExecuteNonQueryAsync();
+
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+        IsNotEmpty(timeStamp);
+        IsNotNull(timeStamp);
+
+        await using var truncateCommand = connection.CreateCommand();
+        truncateCommand.CommandText = "truncate table Companies";
+        await truncateCommand.ExecuteNonQueryAsync();
+
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
+        IsNotEmpty(newTimeStamp);
+        IsNotNull(newTimeStamp);
+        AreNotEqual(newTimeStamp, timeStamp);
+    }
+
+    [Test]
     public async Task GetLastTimeStampSqlServer()
     {
         await using var database = await LocalDb();
