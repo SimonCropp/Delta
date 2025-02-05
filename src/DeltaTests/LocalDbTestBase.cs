@@ -6,7 +6,10 @@ public abstract class LocalDbTestBase
         buildTemplate: DbBuilder.Create);
 
     public Task<SqlDatabase> LocalDb(string? testSuffix = null)
-        => sqlInstance.Build(testFile, null, GetName(testSuffix));
+    {
+        DeltaExtensions.ClearLsn();
+        return sqlInstance.Build(testFile, null, GetName(testSuffix));
+    }
 
     static string GetName(string? testSuffix)
     {

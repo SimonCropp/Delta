@@ -1,4 +1,6 @@
-﻿public static class ModuleInitializer
+﻿[assembly: NonParallelizable]
+
+public static class ModuleInitializer
 {
     [ModuleInitializer]
     public static void Init()

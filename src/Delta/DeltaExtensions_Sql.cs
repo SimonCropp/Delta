@@ -38,6 +38,9 @@ public static partial class DeltaExtensions
     }
 
     static string? lsn;
+
+    internal static void ClearLsn() => lsn = null;
+
     static async Task<string> ExecuteTimestampQuery(DbCommand command, Cancel cancel = default)
     {
 
