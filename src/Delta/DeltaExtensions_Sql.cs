@@ -1,7 +1,5 @@
 // ReSharper disable UseRawString
 
-using System.Globalization;
-
 namespace Delta;
 
 public static partial class DeltaExtensions
@@ -39,22 +37,33 @@ public static partial class DeltaExtensions
         return await ExecuteTimestampQuery(command, cancel);
     }
 
+    static string? lsn;
     static async Task<string> ExecuteTimestampQuery(DbCommand command, Cancel cancel = default)
     {
+
         var name = command.GetType().Name;
         if (name == "SqlCommand")
         {
+            string lsnString;
+            if (lsn is null)
+            {
+                lsnString = "null";
+            }
+            else
+            {
+                lsnString = $"'0x{lsn}'";
+            }
             command.CommandText = $@"
 -- begin-snippet: SqlServerTimestamp
-select top 1 [End Time]
-from fn_dblog(null, null)
-where [Operation] = 'LOP_COMMIT_XACT'
+select top 1 [End Time],[Current LSN]
+from fn_dblog({lsnString},null)
+where Operation = 'LOP_COMMIT_XACT'
 order by [End Time] desc;
 -- end-snippet
 ";
 
-            var startNew = Stopwatch.StartNew();
-            await using var reader = await command.ExecuteReaderAsync(cancel);
+            Trace.WriteLine(command.CommandText);
+            await using var reader = await command.ExecuteReaderAsync( cancel);
             var readAsync = await reader.ReadAsync(cancel);
             // no results on first run
             if(!readAsync)
@@ -62,8 +71,8 @@ order by [End Time] desc;
                 return string.Empty;
             }
 
-            var executeTimestampQuery = await reader.GetFieldValueAsync<string>(0, cancel);
-            startNew.Stop();
+            var executeTimestampQuery = (string)reader[0];
+            lsn = (string)reader[1];
             return executeTimestampQuery;
         }
 
