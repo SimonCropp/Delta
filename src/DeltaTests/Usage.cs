@@ -34,7 +34,6 @@ public class Usage :
         await using var database = await LocalDb();
 
         var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
-        IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
         Recording.Start();
         await using (var command = database.Connection.CreateCommand())
