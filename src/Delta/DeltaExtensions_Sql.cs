@@ -64,7 +64,7 @@ where Operation = 'LOP_COMMIT_XACT'
 order by [End Time] desc;
 -- end-snippet
 ";
-
+Console.WriteLine(command.CommandText);
             var startNew = Stopwatch.StartNew();
             await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
             var readAsync = await reader.ReadAsync(cancel);
