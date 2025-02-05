@@ -94,7 +94,7 @@ An optional string suffix that is dynamically calculated at runtime based on the
 var app = builder.Build();
 app.UseDelta(suffix: httpContext => "MySuffix");
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L6-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-Suffix' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L8-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-Suffix' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -274,7 +274,7 @@ app.UseDelta(
         return path.Contains("match");
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L16-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L18-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -325,7 +325,7 @@ var application = webApplicationBuilder.Build();
 application.UseDelta(
     getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L295-L301' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L329-L335' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection and transaction discovery:
@@ -338,12 +338,12 @@ webApplication.UseDelta(
     getConnection: httpContext =>
     {
         var provider = httpContext.RequestServices;
-        var sqlConnection = provider.GetRequiredService<SqlConnection>();
-        var sqlTransaction = provider.GetService<SqlTransaction>();
-        return new(sqlConnection, sqlTransaction);
+        var connection = provider.GetRequiredService<SqlConnection>();
+        var transaction = provider.GetService<SqlTransaction>();
+        return new(connection, transaction);
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L306-L318' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransaction' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L340-L352' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransaction' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -530,7 +530,7 @@ Nuget: [Delta.SqlServer](https://www.nuget.org/packages/Delta.SqlServer)
 ```cs
 var timeStamp = await sqlConnection.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L153-L157' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampSqlConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L165-L169' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampSqlConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -558,7 +558,7 @@ foreach (var db in trackedDatabases)
     Trace.WriteLine(db);
 }
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L193-L201' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetDatabasesWithTracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L227-L235' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetDatabasesWithTracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -588,7 +588,7 @@ foreach (var db in trackedTables)
     Trace.WriteLine(db);
 }
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L219-L227' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTables' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L253-L261' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTables' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -613,7 +613,7 @@ Determine if change tracking is enabled for a database.
 ```cs
 var isTrackingEnabled = await sqlConnection.IsTrackingEnabled();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L284-L288' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabled' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L318-L322' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabled' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -640,7 +640,7 @@ Enable change tracking for a database.
 ```cs
 await sqlConnection.EnableTracking();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L278-L282' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L312-L316' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -668,7 +668,7 @@ Disable change tracking for a database and all tables within that database.
 ```cs
 await sqlConnection.DisableTracking();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L263-L267' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTracking' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L297-L301' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTracking' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -705,7 +705,7 @@ Enables change tracking for all tables listed, and disables change tracking for 
 ```cs
 await sqlConnection.SetTrackedTables(["Companies"]);
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L213-L217' title='Snippet source file'>snippet source</a> | <a href='#snippet-SetTrackedTables' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L247-L251' title='Snippet source file'>snippet source</a> | <a href='#snippet-SetTrackedTables' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Uses the following SQL:
@@ -777,7 +777,6 @@ If disable cache is checked, the browser will not send the `if-none-match` heade
 ### Certificates and Chromium
 
 Chromium, and hence the Chrome and Edge browsers, are very sensitive to certificate problems when determining if an item should be cached. Specifically, if a request is done dynamically (type: xhr) and the server is using a self-signed certificate, then the browser will not send the `if-none-match` header. [Reference]( https://issues.chromium.org/issues/40666473). If self-signed certificates are required during development in lower environment, then use FireFox to test the caching behavior. 
-
 
 
 ## Programmatic client usage

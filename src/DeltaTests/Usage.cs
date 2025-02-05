@@ -1,4 +1,6 @@
-﻿public class Usage :
+﻿using Npgsql;
+
+public class Usage :
     LocalDbTestBase
 {
     public static void Suffix(WebApplicationBuilder builder)
@@ -35,13 +37,16 @@
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
         Recording.Start();
-        await using var command = database.Connection.CreateCommand();
-        command.CommandText =
-            $"""
-             insert into [Companies] (Id, Content)
-             values ('{Guid.NewGuid()}', 'The company')
-             """;
-        await command.ExecuteNonQueryAsync();
+        await using (var command = database.Connection.CreateCommand())
+        {
+            command.CommandText =
+                $"""
+                 insert into [Companies] (Id, Content)
+                 values ('{Guid.NewGuid()}', 'The company')
+                 """;
+            await command.ExecuteNonQueryAsync();
+        }
+
         var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
@@ -68,14 +73,17 @@
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
 
-        await using var updateCommand = connection.CreateCommand();
-        updateCommand.CommandText = $"""
-                                     UPDATE [Companies]
-                                     SET [Content] = 'New Content Value'
-                                     WHERE [Id] = @Id;
-                                     """;
-        updateCommand.Parameters.AddWithValue("@Id", companyGuid);
-        await updateCommand.ExecuteNonQueryAsync();
+        await using (var updateCommand = connection.CreateCommand())
+        {
+            updateCommand.CommandText =
+                $"""
+                 UPDATE [Companies]
+                 SET [Content] = 'New Content Value'
+                 WHERE [Id] = @Id;
+                 """;
+            updateCommand.Parameters.AddWithValue("@Id", companyGuid);
+            await updateCommand.ExecuteNonQueryAsync();
+        }
 
         var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(newTimeStamp);
@@ -103,10 +111,12 @@
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
 
-        await using var deleteCommand = connection.CreateCommand();
-        deleteCommand.CommandText = $"delete From Companies where Id=@Id";
-        deleteCommand.Parameters.AddWithValue("@Id", companyGuid);
-        await deleteCommand.ExecuteNonQueryAsync();
+        await using (var deleteCommand = connection.CreateCommand())
+        {
+            deleteCommand.CommandText = $"delete From Companies where Id=@Id";
+            deleteCommand.Parameters.AddWithValue("@Id", companyGuid);
+            await deleteCommand.ExecuteNonQueryAsync();
+        }
 
         var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(newTimeStamp);
@@ -133,9 +143,11 @@
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
 
-        await using var truncateCommand = connection.CreateCommand();
-        truncateCommand.CommandText = "truncate table Companies";
-        await truncateCommand.ExecuteNonQueryAsync();
+        await using (var truncateCommand = connection.CreateCommand())
+        {
+            truncateCommand.CommandText = "truncate table Companies";
+            await truncateCommand.ExecuteNonQueryAsync();
+        }
 
         var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(newTimeStamp);
@@ -157,6 +169,25 @@
         #endregion
 
         IsNotNull(timeStamp);
+    }
+
+    [Test]
+    public async Task GetLastTimeStampPostgres()
+    {
+        await using var connection = new NpgsqlConnection(PostgresConnection.ConnectionString);
+        await connection.OpenAsync();
+        await PostgresDbBuilder.Create(connection);
+        await using var command = connection.CreateCommand();
+        command.CommandText =
+            $"""
+             insert into "Companies"("Id", "Content")
+             values ('{Guid.NewGuid()}', 'The company')
+             """;
+        await command.ExecuteNonQueryAsync();
+
+        var timeStamp = await connection.GetLastTimeStamp();
+
+        IsNotNull(timeStamp);
         IsNotEmpty(timeStamp);
     }
 
@@ -170,13 +201,16 @@
         var timeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
-        await using var command = connection.CreateCommand();
-        command.CommandText =
-            $"""
-             insert into [Companies] (Id, Content)
-             values ('{Guid.NewGuid()}', 'The company')
-             """;
-        await command.ExecuteNonQueryAsync();
+        await using (var command = connection.CreateCommand())
+        {
+            command.CommandText =
+                $"""
+                 insert into [Companies] (Id, Content)
+                 values ('{Guid.NewGuid()}', 'The company')
+                 """;
+            await command.ExecuteNonQueryAsync();
+        }
+
         var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
@@ -310,9 +344,9 @@
             getConnection: httpContext =>
             {
                 var provider = httpContext.RequestServices;
-                var sqlConnection = provider.GetRequiredService<SqlConnection>();
-                var sqlTransaction = provider.GetService<SqlTransaction>();
-                return new(sqlConnection, sqlTransaction);
+                var connection = provider.GetRequiredService<SqlConnection>();
+                var transaction = provider.GetService<SqlTransaction>();
+                return new(connection, transaction);
             });
 
         #endregion
