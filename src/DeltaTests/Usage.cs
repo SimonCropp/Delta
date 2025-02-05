@@ -156,11 +156,8 @@
 
         #endregion
 
-        var timeStamp2 = await sqlConnection.GetLastTimeStamp();
-
         IsNotNull(timeStamp);
     }
-
 
     [Test]
     public async Task LastTimeStampRowVersionAndTracking()
