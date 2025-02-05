@@ -43,29 +43,20 @@ public static partial class DeltaExtensions
 
     static async Task<string> ExecuteTimestampQuery(DbCommand command, Cancel cancel = default)
     {
-
         var name = command.GetType().Name;
         if (name == "SqlCommand")
         {
-            string lsnString;
-            if (lsn is null)
-            {
-                lsnString = "null";
-            }
-            else
-            {
-                lsnString = $"'0x{lsn}'";
-            }
+            var lsnString = lsn is null ? "null" : $"'0x{lsn}'";
             command.CommandText = $@"
 -- begin-snippet: SqlServerTimestamp
-select top 1 [End Time],[Current LSN]
+select top 1 [End Time], [Current LSN]
 from fn_dblog({lsnString}, null)
 where Operation = 'LOP_COMMIT_XACT'
 order by [End Time] desc;
 -- end-snippet
 ";
 
-            await using var reader = await command.ExecuteReaderAsync( cancel);
+            await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
             var readAsync = await reader.ReadAsync(cancel);
             // for empty transaction log
             if(!readAsync)
