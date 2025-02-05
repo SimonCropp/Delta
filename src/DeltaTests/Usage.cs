@@ -157,6 +157,7 @@
         #endregion
 
         IsNotNull(timeStamp);
+        IsNotEmpty(timeStamp);
     }
 
     [Test]
