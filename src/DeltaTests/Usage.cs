@@ -34,8 +34,6 @@ public class Usage :
         await using var database = await LocalDb();
 
         var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
-        //seed with an entity so there is something in transaction log
-        await AddEntity(database.Connection);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
         Recording.Start();
@@ -133,16 +131,19 @@ public class Usage :
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
 
-        await using (var truncateCommand = connection.CreateCommand())
-        {
-            truncateCommand.CommandText = "truncate table Companies";
-            await truncateCommand.ExecuteNonQueryAsync();
-        }
+        await TruncateTable(connection);
 
         var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
         AreNotEqual(newTimeStamp, timeStamp);
+    }
+
+    static async Task TruncateTable(SqlConnection connection)
+    {
+        await using var command = connection.CreateCommand();
+        command.CommandText = "truncate table Companies";
+        await command.ExecuteNonQueryAsync();
     }
 
     [Test]

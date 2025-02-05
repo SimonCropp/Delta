@@ -49,13 +49,23 @@ public static partial class DeltaExtensions
             var lsnString = lsn is null ? "null" : $"'0x{lsn}'";
             command.CommandText = $@"
 -- begin-snippet: SqlServerTimestamp
-select top 1 [End Time], [Current LSN]
+declare @changeTracking bigint = change_tracking_current_version();
+declare @timeStamp bigint = convert(bigint, @@dbts);
+
+declare @timeResult varchar;
+if (@changeTracking is null)
+  set @timeResult = cast(@timeStamp as varchar)
+else
+  set @timeResult = cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+
+select top 1 [End Time] + '-' + @timeResult, [Current LSN]
 from fn_dblog({lsnString}, null)
 where Operation = 'LOP_COMMIT_XACT'
 order by [End Time] desc;
 -- end-snippet
 ";
 
+            var startNew = Stopwatch.StartNew();
             await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
             var readAsync = await reader.ReadAsync(cancel);
             // for empty transaction log
@@ -66,6 +76,7 @@ order by [End Time] desc;
 
             var endTime = (string)reader[0];
             lsn = (string)reader[1];
+            Debug.WriteLine(startNew.ElapsedMilliseconds);
             return endTime;
         }
 
