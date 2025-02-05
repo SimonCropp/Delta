@@ -15,11 +15,8 @@ public abstract class LocalDbTestBase
             await command.ExecuteNonQueryAsync();
         });
 
-    public Task<SqlDatabase> LocalDb(string? testSuffix = null)
-    {
-        DeltaExtensions.ClearLsn();
-        return sqlInstance.Build(testFile, null, GetName(testSuffix));
-    }
+    public Task<SqlDatabase> LocalDb(string? testSuffix = null) =>
+        sqlInstance.Build(testFile, null, GetName(testSuffix));
 
     static string GetName(string? testSuffix)
     {

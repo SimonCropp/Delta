@@ -37,31 +37,14 @@ public static partial class DeltaExtensions
         return await ExecuteTimestampQuery(command, cancel);
     }
 
-    static string? lsn;
-
-    internal static void ClearLsn() => lsn = null;
-
     static async Task<string> ExecuteTimestampQuery(DbCommand command, Cancel cancel = default)
     {
         var name = command.GetType().Name;
         if (name == "SqlCommand")
         {
-            var lsnString = lsn is null ? "null" : $"'0x{lsn}'";
             command.CommandText = $@"
 -- begin-snippet: SqlServerTimestamp
-declare @changeTracking bigint = change_tracking_current_version();
-declare @timeStamp bigint = convert(bigint, @@dbts);
-
-declare @timeResult varchar;
-if (@changeTracking is null)
-  set @timeResult = cast(@timeStamp as varchar)
-else
-  set @timeResult = cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
-
-select top 1 [End Time] + '-' + @timeResult, [Current LSN]
-from fn_dblog({lsnString}, null)
-where Operation = 'LOP_COMMIT_XACT'
-order by [End Time] desc;
+select log_end_lsn from sys.dm_db_log_stats(db_id())
 -- end-snippet
 ";
 Console.WriteLine(command.CommandText);
@@ -75,7 +58,6 @@ Console.WriteLine(command.CommandText);
             }
 
             var endTime = (string)reader[0];
-            lsn = (string)reader[1];
             Debug.WriteLine(startNew.ElapsedMilliseconds);
             return endTime;
         }
