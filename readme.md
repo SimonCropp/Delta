@@ -78,12 +78,12 @@ A combination of [change_tracking_current_version](https://learn.microsoft.com/e
 <!-- snippet: SqlServerTimestamp -->
 <a id='snippet-SqlServerTimestamp'></a>
 ```cs
-select top 1 [End Time],[Current LSN]
+select top 1 [End Time], [Current LSN]
 from fn_dblog({lsnString}, null)
 where Operation = 'LOP_COMMIT_XACT'
 order by [End Time] desc;
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L60-L65' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimestamp' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L51-L56' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimestamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
