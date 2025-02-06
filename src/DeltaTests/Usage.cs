@@ -241,17 +241,17 @@ public class Usage :
     public async Task DuplicateSetTrackedTables()
     {
         await using var database = await LocalDb();
-        var sqlConnection = database.Connection;
-        await sqlConnection.SetTrackedTables(["Companies"]);
-        await sqlConnection.SetTrackedTables(["Companies"]);
+        var connection = database.Connection;
+        await connection.SetTrackedTables(["Companies"]);
+        await connection.SetTrackedTables(["Companies"]);
     }
 
     [Test]
     public async Task EmptySetTrackedTables()
     {
         await using var database = await LocalDb();
-        var sqlConnection = database.Connection;
-        await sqlConnection.SetTrackedTables([]);
+        var connection = database.Connection;
+        await connection.SetTrackedTables([]);
     }
 
     [Test]
