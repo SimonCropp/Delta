@@ -495,7 +495,7 @@ Enable by setting UseResponseDiagnostics to true at startup:
 ```cs
 DeltaExtensions.UseResponseDiagnostics = true;
 ```
-<sup><a href='/src/DeltaTests/ModuleInitializer.cs#L8-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseResponseDiagnostics' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/ModuleInitializer.cs#L6-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseResponseDiagnostics' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Response diagnostics headers are prefixed with `Delta-`.
