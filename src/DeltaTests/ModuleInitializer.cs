@@ -8,6 +8,7 @@
         DeltaExtensions.UseResponseDiagnostics = true;
 
         #endregion
+
         VerifierSettings.InitializePlugins();
     }
 }

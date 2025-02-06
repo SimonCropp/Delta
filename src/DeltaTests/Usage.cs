@@ -29,24 +29,130 @@ public class Usage :
     }
 
     [Test]
-    public async Task LastTimeStampRowVersion()
+    public async Task LastTimeStamp()
     {
         await using var database = await LocalDb();
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
         Recording.Start();
-        await using var command = database.Connection.CreateCommand();
+
+        await AddEntity(database);
+
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        IsNotEmpty(newTimeStamp);
+        IsNotNull(newTimeStamp);
+        AreNotEqual(timeStamp, newTimeStamp);
+    }
+
+    [Test]
+    public async Task LastTimeStampOnUpdate()
+    {
+        await using var database = await LocalDb();
+
+        var companyGuid = await AddEntity(database);
+
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        IsNotEmpty(timeStamp);
+        IsNotNull(timeStamp);
+
+        await UpdateEntity(database, companyGuid);
+
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        IsNotEmpty(newTimeStamp);
+        IsNotNull(newTimeStamp);
+        AreNotEqual(newTimeStamp, timeStamp);
+    }
+
+    static async Task UpdateEntity(SqlConnection connection, Guid id)
+    {
+        await using var command = connection.CreateCommand();
+        command.CommandText =
+            $"""
+             update Companies
+             set Content = 'New Content Value'
+             where Id = @Id;
+             """;
+        command.Parameters.AddWithValue("@Id", id);
+        await command.ExecuteNonQueryAsync();
+    }
+
+    [Test]
+    public async Task LastTimeStampOnDelete()
+    {
+        await using var database = await LocalDb();
+
+        var companyGuid = await AddEntity(database);
+
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        IsNotEmpty(timeStamp);
+        IsNotNull(timeStamp);
+
+        await DeleteEntity(database, companyGuid);
+
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        IsNotEmpty(newTimeStamp);
+        IsNotNull(newTimeStamp);
+        AreNotEqual(newTimeStamp, timeStamp);
+    }
+
+    [Test]
+    public async Task LastTimeStampReadTwice()
+    {
+        await using var database = await LocalDb();
+
+        await AddEntity(database);
+
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        AreEqual(newTimeStamp, timeStamp);
+    }
+
+    static async Task<Guid> AddEntity(SqlConnection connection)
+    {
+        var id = Guid.NewGuid();
+        await using var command = connection.CreateCommand();
         command.CommandText =
             $"""
              insert into [Companies] (Id, Content)
-             values ('{Guid.NewGuid()}', 'The company')
+             values ('{id}', 'The company')
              """;
         await command.ExecuteNonQueryAsync();
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database.Connection, null);
+        return id;
+    }
+
+    static async Task DeleteEntity(SqlConnection connection, Guid id)
+    {
+        await using var command = connection.CreateCommand();
+        command.CommandText = $"delete From Companies where Id=@Id";
+        command.Parameters.AddWithValue("@Id", id);
+        await command.ExecuteNonQueryAsync();
+    }
+
+    [Test]
+    public async Task LastTimeStampOnTruncate()
+    {
+        await using var database = await LocalDb();
+        await AddEntity(database);
+
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        IsNotEmpty(timeStamp);
+        IsNotNull(timeStamp);
+
+        await TruncateTable(database);
+
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
+        AreNotEqual(newTimeStamp, timeStamp);
+    }
+
+    static async Task TruncateTable(SqlConnection connection)
+    {
+        await using var command = connection.CreateCommand();
+        command.CommandText = "truncate table Companies";
+        await command.ExecuteNonQueryAsync();
     }
 
     [Test]
@@ -83,29 +189,6 @@ public class Usage :
 
         IsNotNull(timeStamp);
         IsNotEmpty(timeStamp);
-    }
-
-    [Test]
-    public async Task LastTimeStampRowVersionAndTracking()
-    {
-        await using var database = await LocalDb();
-
-        var connection = database.Connection;
-        await connection.EnableTracking();
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
-        IsNotEmpty(timeStamp);
-        IsNotNull(timeStamp);
-        await using var command = connection.CreateCommand();
-        command.CommandText =
-            $"""
-             insert into [Companies] (Id, Content)
-             values ('{Guid.NewGuid()}', 'The company')
-             """;
-        await command.ExecuteNonQueryAsync();
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(connection, null);
-        IsNotEmpty(newTimeStamp);
-        IsNotNull(newTimeStamp);
-        AreNotEqual(timeStamp, newTimeStamp);
     }
 
     [Test]
@@ -158,17 +241,17 @@ public class Usage :
     public async Task DuplicateSetTrackedTables()
     {
         await using var database = await LocalDb();
-        var sqlConnection = database.Connection;
-        await sqlConnection.SetTrackedTables(["Companies"]);
-        await sqlConnection.SetTrackedTables(["Companies"]);
+        var connection = database.Connection;
+        await connection.SetTrackedTables(["Companies"]);
+        await connection.SetTrackedTables(["Companies"]);
     }
 
     [Test]
     public async Task EmptySetTrackedTables()
     {
         await using var database = await LocalDb();
-        var sqlConnection = database.Connection;
-        await sqlConnection.SetTrackedTables([]);
+        var connection = database.Connection;
+        await connection.SetTrackedTables([]);
     }
 
     [Test]
@@ -230,14 +313,14 @@ public class Usage :
     {
         #region CustomDiscoveryConnectionAndTransaction
 
-        var webApplication = webApplicationBuilder.Build();
-        webApplication.UseDelta(
+        var application = webApplicationBuilder.Build();
+        application.UseDelta(
             getConnection: httpContext =>
             {
                 var provider = httpContext.RequestServices;
-                var sqlConnection = provider.GetRequiredService<SqlConnection>();
-                var sqlTransaction = provider.GetService<SqlTransaction>();
-                return new(sqlConnection, sqlTransaction);
+                var connection = provider.GetRequiredService<SqlConnection>();
+                var transaction = provider.GetService<SqlTransaction>();
+                return new(connection, transaction);
             });
 
         #endregion

@@ -42,18 +42,20 @@ public static partial class DeltaExtensions
         var name = command.GetType().Name;
         if (name == "SqlCommand")
         {
-            command.CommandText = @"
+            command.CommandText = $@"
 -- begin-snippet: SqlServerTimestamp
-declare @changeTracking bigint = change_tracking_current_version();
-declare @timeStamp bigint = convert(bigint, @@dbts);
-
-if (@changeTracking is null)
-  select cast(@timeStamp as varchar)
-else
-  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+select log_end_lsn from sys.dm_db_log_stats(db_id())
 -- end-snippet
 ";
-            return (string) (await command.ExecuteScalarAsync(cancel))!;
+            await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
+            var readAsync = await reader.ReadAsync(cancel);
+            // for empty transaction log
+            if(!readAsync)
+            {
+                return string.Empty;
+            }
+
+            return (string)reader[0];
         }
 
         if (name == "NpgsqlCommand")

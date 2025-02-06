@@ -12,11 +12,8 @@ public abstract class LocalDbTestBase
             },
             storage: Storage.FromSuffix<SampleDbContext>("ef"));
 
-    public Task<SqlDatabase<SampleDbContext>> LocalDb(string? testSuffix = null)
-        => sqlInstance.Build(testFile, null, GetName(testSuffix));
-
-    public Task<SampleDbContext> LocalDbContext(string? testSuffix = null)
-        => sqlInstance.BuildContext(testFile, null, GetName(testSuffix));
+    public Task<SqlDatabase<SampleDbContext>> LocalDb(string? testSuffix = null) =>
+        sqlInstance.Build(testFile, null, GetName(testSuffix));
 
     static string GetName(string? testSuffix)
     {

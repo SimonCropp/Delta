@@ -19,10 +19,7 @@ Effectively consumers will always receive the most current data, while the load 
 ## Assumptions
 
  * Frequency of updates to data is relatively low compared to reads
- * Using SQL Server or Postgres timestamp features
-    * SQL Server: Using either [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
-    * Postgres: [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) is enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service
-
+ * Using SQL Server or Postgres. Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) to be enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service
 
 
 ## 304 Not Modified Flow
@@ -58,9 +55,6 @@ snippet: AssemblyWriteTime
 
 #### SQL timestamp
 
-A combination of [change_tracking_current_version](https://learn.microsoft.com/en-us/sql/relational-databases/system-functions/change-tracking-current-version-transact-sql) (if tracking is enabled) and [@@DBTS (row version timestamp)](https://learn.microsoft.com/en-us/sql/t-sql/functions/dbts-transact-sql)
-
-
 snippet: SqlServerTimestamp
 
 
@@ -90,8 +84,6 @@ Only one of the above should be used.
 
 
 ### SQL Server DB Schema
-
-Ensure [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql) is enabled for all relevant tables.
 
 Example SQL schema:
 
@@ -341,7 +333,6 @@ If disable cache is checked, the browser will not send the `if-none-match` heade
 ### Certificates and Chromium
 
 Chromium, and hence the Chrome and Edge browsers, are very sensitive to certificate problems when determining if an item should be cached. Specifically, if a request is done dynamically (type: xhr) and the server is using a self-signed certificate, then the browser will not send the `if-none-match` header. [Reference]( https://issues.chromium.org/issues/40666473). If self-signed certificates are required during development in lower environment, then use FireFox to test the caching behavior. 
-
 
 
 ## Programmatic client usage
