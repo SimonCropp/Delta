@@ -325,8 +325,8 @@ To use custom connection and transaction discovery:
 <!-- snippet: CustomDiscoveryConnectionAndTransaction -->
 <a id='snippet-CustomDiscoveryConnectionAndTransaction'></a>
 ```cs
-var webApplication = webApplicationBuilder.Build();
-webApplication.UseDelta(
+var application = webApplicationBuilder.Build();
+application.UseDelta(
     getConnection: httpContext =>
     {
         var provider = httpContext.RequestServices;
