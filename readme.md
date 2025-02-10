@@ -74,7 +74,7 @@ AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 ```cs
 select log_end_lsn from sys.dm_db_log_stats(db_id())
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L46-L48' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimestamp' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L45-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimestamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

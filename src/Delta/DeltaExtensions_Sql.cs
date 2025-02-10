@@ -1,5 +1,3 @@
-// ReSharper disable UseRawString
-
 namespace Delta;
 
 public static partial class DeltaExtensions
@@ -42,29 +40,31 @@ public static partial class DeltaExtensions
         var name = command.GetType().Name;
         if (name == "SqlCommand")
         {
-            command.CommandText = $@"
--- begin-snippet: SqlServerTimestamp
-select log_end_lsn from sys.dm_db_log_stats(db_id())
--- end-snippet
-";
+            command.CommandText =
+                $"""
+                 -- begin-snippet: SqlServerTimestamp
+                 select log_end_lsn from sys.dm_db_log_stats(db_id())
+                 -- end-snippet
+                 """;
             await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
             var readAsync = await reader.ReadAsync(cancel);
             // for empty transaction log
-            if(!readAsync)
+            if (!readAsync)
             {
                 return string.Empty;
             }
 
-            return (string)reader[0];
+            return (string) reader[0];
         }
 
         if (name == "NpgsqlCommand")
         {
-            command.CommandText = @"
--- begin-snippet: PostgresTimestamp
-select pg_last_committed_xact();
--- end-snippet
-";
+            command.CommandText =
+                """
+                -- begin-snippet: PostgresTimestamp
+                select pg_last_committed_xact();
+                -- end-snippet
+                """;
             var result = (object[]?) await command.ExecuteScalarAsync(cancel);
             // null on first run after SET track_commit_timestamp to 'on'
             if (result is null)
