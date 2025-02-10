@@ -65,14 +65,16 @@ public static partial class DeltaExtensions
                 select pg_last_committed_xact();
                 -- end-snippet
                 """;
-            var result = (object[]?) await command.ExecuteScalarAsync(cancel);
+            var results = (object?[]?) await command.ExecuteScalarAsync(cancel);
+
             // null on first run after SET track_commit_timestamp to 'on'
+            var result = results?[0];
             if (result is null)
             {
                 return string.Empty;
             }
 
-            var xid = (uint) result[0];
+            var xid = (uint) result;
             return xid.ToString();
         }
 
