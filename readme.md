@@ -53,7 +53,7 @@ graph TD
 The ETag is calculated from a combination several parts
 
 
-#### AssemblyWriteTime
+### AssemblyWriteTime
 
 The last write time of the web entry point assembly
 
@@ -67,18 +67,25 @@ AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 <!-- endSnippet -->
 
 
-#### SQL timestamp
+### SQL timestamp
 
-<!-- snippet: SqlServerTimestamp -->
-<a id='snippet-SqlServerTimestamp'></a>
-```cs
-select log_end_lsn from sys.dm_db_log_stats(db_id())
+
+#### SQL Server
+
+```sql
+select log_end_lsn
+from sys.dm_db_log_stats(db_id())
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L45-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimestamp' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
 
 
-#### Suffix
+#### Postgres
+
+```sql
+select pg_last_committed_xact();
+```
+
+
+### Suffix
 
 An optional string suffix that is dynamically calculated at runtime based on the current `HttpContext`.
 

@@ -46,19 +46,32 @@ graph TD
 The ETag is calculated from a combination several parts
 
 
-#### AssemblyWriteTime
+### AssemblyWriteTime
 
 The last write time of the web entry point assembly
 
 snippet: AssemblyWriteTime
 
 
-#### SQL timestamp
-
-snippet: SqlServerTimestamp
+### SQL timestamp
 
 
-#### Suffix
+#### SQL Server
+
+```sql
+select log_end_lsn
+from sys.dm_db_log_stats(db_id())
+```
+
+
+#### Postgres
+
+```sql
+select pg_last_committed_xact();
+```
+
+
+### Suffix
 
 An optional string suffix that is dynamically calculated at runtime based on the current `HttpContext`.
 

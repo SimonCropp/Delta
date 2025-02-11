@@ -40,12 +40,7 @@ public static partial class DeltaExtensions
         var name = command.GetType().Name;
         if (name == "SqlCommand")
         {
-            command.CommandText =
-                $"""
-                 -- begin-snippet: SqlServerTimestamp
-                 select log_end_lsn from sys.dm_db_log_stats(db_id())
-                 -- end-snippet
-                 """;
+            command.CommandText = $"select log_end_lsn from sys.dm_db_log_stats(db_id())";
             await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
             var readAsync = await reader.ReadAsync(cancel);
             // for empty transaction log
@@ -59,12 +54,7 @@ public static partial class DeltaExtensions
 
         if (name == "NpgsqlCommand")
         {
-            command.CommandText =
-                """
-                -- begin-snippet: PostgresTimestamp
-                select pg_last_committed_xact();
-                -- end-snippet
-                """;
+            command.CommandText = "select pg_last_committed_xact();";
             var results = (object?[]?) await command.ExecuteScalarAsync(cancel);
 
             // null on first run after SET track_commit_timestamp to 'on'
