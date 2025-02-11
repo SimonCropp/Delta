@@ -28,10 +28,15 @@ public class Usage :
         #endregion
     }
 
-    [Test]
-    public async Task LastTimeStamp()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task LastTimeStamp(bool tracking)
     {
         await using var database = await LocalDb();
+        if (tracking)
+        {
+            await database.Connection.EnableTracking();
+        }
 
         var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
         IsNotEmpty(timeStamp);
@@ -46,10 +51,15 @@ public class Usage :
         AreNotEqual(timeStamp, newTimeStamp);
     }
 
-    [Test]
-    public async Task LastTimeStampOnUpdate()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task LastTimeStampOnUpdate(bool tracking)
     {
         await using var database = await LocalDb();
+        if (tracking)
+        {
+            await database.Connection.EnableTracking();
+        }
 
         var companyGuid = await AddEntity(database);
 
@@ -78,10 +88,15 @@ public class Usage :
         await command.ExecuteNonQueryAsync();
     }
 
-    [Test]
-    public async Task LastTimeStampOnDelete()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task LastTimeStampOnDelete(bool tracking)
     {
         await using var database = await LocalDb();
+        if (tracking)
+        {
+            await database.Connection.EnableTracking();
+        }
 
         var companyGuid = await AddEntity(database);
 
@@ -97,10 +112,15 @@ public class Usage :
         AreNotEqual(newTimeStamp, timeStamp);
     }
 
-    [Test]
-    public async Task LastTimeStampReadTwice()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task LastTimeStampReadTwice(bool tracking)
     {
         await using var database = await LocalDb();
+        if (tracking)
+        {
+            await database.Connection.EnableTracking();
+        }
 
         await AddEntity(database);
 
@@ -130,10 +150,15 @@ public class Usage :
         await command.ExecuteNonQueryAsync();
     }
 
-    [Test]
-    public async Task LastTimeStampOnTruncate()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task LastTimeStampOnTruncate(bool tracking)
     {
         await using var database = await LocalDb();
+        if (tracking)
+        {
+            await database.Connection.EnableTracking();
+        }
         await AddEntity(database);
 
         var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
@@ -155,10 +180,15 @@ public class Usage :
         await command.ExecuteNonQueryAsync();
     }
 
-    [Test]
-    public async Task GetLastTimeStampSqlServer()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task GetLastTimeStampSqlServer(bool tracking)
     {
         await using var database = await LocalDb();
+        if (tracking)
+        {
+            await database.Connection.EnableTracking();
+        }
 
         var sqlConnection = database.Connection;
 

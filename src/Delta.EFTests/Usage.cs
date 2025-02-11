@@ -26,10 +26,15 @@
         #endregion
     }
 
-    [Test]
-    public async Task GetLastTimeStamp()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task GetLastTimeStamp(bool tracking)
     {
         await using var database = await LocalDb();
+        if (tracking)
+        {
+            await database.Connection.EnableTracking();
+        }
 
         var dbContext = database.Context;
 
@@ -42,10 +47,15 @@
         IsNotNull(timeStamp);
     }
 
-    [Test]
-    public async Task LastTimeStamp()
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task LastTimeStamp(bool tracking)
     {
         await using var database = await LocalDb();
+        if (tracking)
+        {
+            await database.Connection.EnableTracking();
+        }
         var context = database.Context;
         //seed with an entity so there is something in transaction log
         await database.AddData(
