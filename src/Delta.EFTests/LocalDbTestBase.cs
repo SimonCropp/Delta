@@ -12,10 +12,10 @@ public abstract class LocalDbTestBase
             },
             storage: Storage.FromSuffix<SampleDbContext>("ef"));
 
-    public Task<SqlDatabase<SampleDbContext>> LocalDb(string? testSuffix = null) =>
-        sqlInstance.Build(testFile, null, GetName(testSuffix));
+    public Task<SqlDatabase<SampleDbContext>> LocalDb(string? suffix = null) =>
+        sqlInstance.Build(testFile, null, GetName(suffix));
 
-    static string GetName(string? testSuffix)
+    static string GetName(string? suffix)
     {
         var test = TestContext.CurrentContext.Test;
         var methodName = test.MethodName!;
@@ -23,12 +23,12 @@ public abstract class LocalDbTestBase
             ' ',
             test.Arguments.Select(VerifierSettings.GetNameForParameter));
 
-        if (testSuffix == null)
+        if (suffix == null)
         {
-            return $"{test.MethodName}_{arguments}_{testSuffix}";
+            return $"{test.MethodName}_{arguments}_{suffix}";
         }
 
-        return $"{methodName}_{arguments}_{testSuffix}";
+        return $"{methodName}_{arguments}_{suffix}";
     }
 
     string testFile;
