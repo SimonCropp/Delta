@@ -1,0 +1,1 @@
+﻿[assembly: LevelOfParallelism(1)]
