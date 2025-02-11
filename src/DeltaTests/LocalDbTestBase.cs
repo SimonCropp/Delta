@@ -15,18 +15,23 @@ public abstract class LocalDbTestBase
             await command.ExecuteNonQueryAsync();
         });
 
-    public Task<SqlDatabase> LocalDb(string? testSuffix = null) =>
-        sqlInstance.Build(testFile, null, GetName(testSuffix));
+    public Task<SqlDatabase> LocalDb(string? suffix = null) =>
+        sqlInstance.Build(testFile, null, GetName(suffix));
 
-    static string GetName(string? testSuffix)
+    static string GetName(string? suffix)
     {
         var test = TestContext.CurrentContext.Test;
-        if (testSuffix == null)
+        var methodName = test.MethodName!;
+        var arguments = string.Join(
+            ' ',
+            test.Arguments.Select(VerifierSettings.GetNameForParameter));
+
+        if (suffix == null)
         {
-            return test.MethodName!;
+            return $"{test.MethodName}_{arguments}_{suffix}";
         }
 
-        return $"{test.MethodName}_{testSuffix}";
+        return $"{methodName}_{arguments}_{suffix}";
     }
 
     string testFile;
