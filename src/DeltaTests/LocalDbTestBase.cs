@@ -21,17 +21,12 @@ public abstract class LocalDbTestBase
     static string GetName(string? suffix)
     {
         var test = TestContext.CurrentContext.Test;
-        var methodName = test.MethodName!;
+        var method = test.MethodName!;
         var arguments = string.Join(
             ' ',
             test.Arguments.Select(VerifierSettings.GetNameForParameter));
 
-        if (suffix == null)
-        {
-            return $"{test.MethodName}_{arguments}_{suffix}";
-        }
-
-        return $"{methodName}_{arguments}_{suffix}";
+        return $"{method}_{arguments}_{suffix}";
     }
 
     string testFile;
