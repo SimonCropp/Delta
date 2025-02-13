@@ -5,7 +5,7 @@ public abstract class LocalDbTestBase
         name: "DeltaTests",
         buildTemplate: async connection =>
         {
-            await  DbBuilder.Create(connection);
+            await DbBuilder.Create(connection);
             await using var command = connection.CreateCommand();
             command.CommandText =
                 $"""
