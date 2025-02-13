@@ -30,7 +30,7 @@ public static partial class DeltaExtensions
             return;
         }
 
-        throw new("Unsupported type " + name);
+        throw new($"Unsupported type {name}");
     }
 
     static async Task<T> Execute<T>(DbConnection connection, DbTransaction? transaction, Func<DbCommand, Cancel, Task<T>> execute, Cancel cancel)
