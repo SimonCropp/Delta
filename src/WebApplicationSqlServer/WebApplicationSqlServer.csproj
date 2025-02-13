@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="LocalDb" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
+    <ProjectReference Include="..\Delta.SqlServer\Delta.SqlServer.csproj" />
     <ProjectReference Include="..\Delta\Delta.csproj" />
   </ItemGroup>
 </Project>

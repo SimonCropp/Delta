@@ -38,14 +38,14 @@ public class Usage :
             await database.Connection.EnableTracking();
         }
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
         Recording.Start();
 
         await AddEntity(database);
 
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
         AreNotEqual(timeStamp, newTimeStamp);
@@ -63,13 +63,13 @@ public class Usage :
 
         var companyGuid = await AddEntity(database);
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
 
         await UpdateEntity(database, companyGuid);
 
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
         AreNotEqual(newTimeStamp, timeStamp);
@@ -100,13 +100,13 @@ public class Usage :
 
         var companyGuid = await AddEntity(database);
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
 
         await DeleteEntity(database, companyGuid);
 
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
         AreNotEqual(newTimeStamp, timeStamp);
@@ -124,8 +124,8 @@ public class Usage :
 
         await AddEntity(database);
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database);
         AreEqual(newTimeStamp, timeStamp);
     }
 
@@ -161,13 +161,13 @@ public class Usage :
         }
         await AddEntity(database);
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database);
         IsNotEmpty(timeStamp);
         IsNotNull(timeStamp);
 
         await TruncateTable(database);
 
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database, null);
+        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database);
         IsNotEmpty(newTimeStamp);
         IsNotNull(newTimeStamp);
         AreNotEqual(newTimeStamp, timeStamp);
