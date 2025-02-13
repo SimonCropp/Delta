@@ -12,8 +12,11 @@ public abstract class LocalDbTestBase
             },
             storage: Storage.FromSuffix<SampleDbContext>("ef"));
 
-    public Task<SqlDatabase<SampleDbContext>> LocalDb(string? suffix = null) =>
-        sqlInstance.Build(testFile, null, GetName(suffix));
+    public Task<SqlDatabase<SampleDbContext>> LocalDb(string? suffix = null)
+    {
+        DeltaExtensions.Reset();
+        return sqlInstance.Build(testFile, null, GetName(suffix));
+    }
 
     static string GetName(string? suffix)
     {
