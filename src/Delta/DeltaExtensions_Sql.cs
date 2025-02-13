@@ -9,6 +9,7 @@ public static partial class DeltaExtensions
         return await Execute(connection, transaction, query, cancel);
     }
 
+    [MemberNotNull(nameof(query))]
     static void InitQuery(DbConnection connection)
     {
         if (query != null)
