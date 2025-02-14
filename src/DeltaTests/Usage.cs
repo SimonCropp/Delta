@@ -1,4 +1,5 @@
-﻿using Npgsql;
+﻿using System.Data.Common;
+using Npgsql;
 
 public class Usage :
     LocalDbTestBase
@@ -38,17 +39,33 @@ public class Usage :
             await database.Connection.EnableTracking();
         }
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database);
-        IsNotEmpty(timeStamp);
-        IsNotNull(timeStamp);
-        Recording.Start();
+        await AssertTimestamps(tracking, database, AddEntity);
+    }
 
-        await AddEntity(database);
+    static async Task AssertTimestamps(bool tracking, SqlDatabase database, Func<SqlConnection, Task> action)
+    {
+        var lsnTimeStamp = await GetLsnTimeStamp(database);
+        IsNotEmpty(lsnTimeStamp);
+        IsNotNull(lsnTimeStamp);
 
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database);
-        IsNotEmpty(newTimeStamp);
-        IsNotNull(newTimeStamp);
-        AreNotEqual(timeStamp, newTimeStamp);
+        var trackingTimeStamp = await GetTrackingTimeStamp(database);
+        IsNotEmpty(trackingTimeStamp);
+        IsNotNull(trackingTimeStamp);
+
+        await action(database);
+
+        if (tracking)
+        {
+            var newTackingTimeStamp = await GetTrackingTimeStamp(database);
+            IsNotEmpty(newTackingTimeStamp);
+            IsNotNull(newTackingTimeStamp);
+            AreNotEqual(newTackingTimeStamp, trackingTimeStamp);
+        }
+
+        var newLsnTimeStamp = await GetLsnTimeStamp(database);
+        IsNotEmpty(newLsnTimeStamp);
+        IsNotNull(newLsnTimeStamp);
+        AreNotEqual(newLsnTimeStamp, lsnTimeStamp);
     }
 
     [TestCase(true)]
@@ -63,16 +80,7 @@ public class Usage :
 
         var companyGuid = await AddEntity(database);
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database);
-        IsNotEmpty(timeStamp);
-        IsNotNull(timeStamp);
-
-        await UpdateEntity(database, companyGuid);
-
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database);
-        IsNotEmpty(newTimeStamp);
-        IsNotNull(newTimeStamp);
-        AreNotEqual(newTimeStamp, timeStamp);
+        await AssertTimestamps(tracking, database, connection => UpdateEntity(connection, companyGuid));
     }
 
     static async Task UpdateEntity(SqlConnection connection, Guid id)
@@ -100,16 +108,7 @@ public class Usage :
 
         var companyGuid = await AddEntity(database);
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database);
-        IsNotEmpty(timeStamp);
-        IsNotNull(timeStamp);
-
-        await DeleteEntity(database, companyGuid);
-
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database);
-        IsNotEmpty(newTimeStamp);
-        IsNotNull(newTimeStamp);
-        AreNotEqual(newTimeStamp, timeStamp);
+        await AssertTimestamps(tracking, database, connection => DeleteEntity(connection, companyGuid));
     }
 
     [TestCase(true)]
@@ -150,27 +149,26 @@ public class Usage :
         await command.ExecuteNonQueryAsync();
     }
 
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task LastTimeStampOnTruncate(bool tracking)
+    [Test]
+    public async Task LastTimeStampOnTruncate()
     {
         await using var database = await LocalDb();
-        if (tracking)
-        {
-            await database.Connection.EnableTracking();
-        }
+
         await AddEntity(database);
 
-        var timeStamp = await DeltaExtensions.GetLastTimeStamp(database);
-        IsNotEmpty(timeStamp);
-        IsNotNull(timeStamp);
+        await AssertTimestamps(false, database, TruncateTable);
+    }
 
-        await TruncateTable(database);
+    static Task<string> GetTrackingTimeStamp(SqlDatabase database) =>
+        Execute(database, DeltaExtensions.ExecuteSqlTimeStamp);
 
-        var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database);
-        IsNotEmpty(newTimeStamp);
-        IsNotNull(newTimeStamp);
-        AreNotEqual(newTimeStamp, timeStamp);
+    static async Task<string> GetLsnTimeStamp(SqlDatabase database) =>
+        await Execute(database, DeltaExtensions.ExecuteSqlLsn);
+
+    static async Task<string> Execute(SqlDatabase database, Func<DbCommand, Cancel, Task<string>> execute)
+    {
+        await using var command = database.Connection.CreateCommand();
+        return await execute(command, Cancel.None);
     }
 
     static async Task TruncateTable(SqlConnection connection)
@@ -285,10 +283,20 @@ public class Usage :
     }
 
     [Test]
+    public async Task SchemaWithTracking()
+    {
+        await using var database = await LocalDb();
+        await database.Connection.EnableTracking();
+        await database.Connection.SetTrackedTables(["Companies", "Employees"]);
+        await Verify(await database.OpenNewConnection()).SchemaAsSql();
+    }
+
+
+    [Test]
     public async Task Schema()
     {
         await using var database = await LocalDb();
-        await Verify(database.Connection).SchemaAsSql();
+        await Verify(await database.OpenNewConnection()).SchemaAsSql();
     }
 
     [Test]

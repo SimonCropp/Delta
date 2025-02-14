@@ -71,7 +71,7 @@ public static partial class DeltaExtensions
         return xid.ToString();
     }
 
-    static async Task<string> ExecuteSqlLsn(DbCommand command, Cancel cancel = default)
+    internal static async Task<string> ExecuteSqlLsn(DbCommand command, Cancel cancel = default)
     {
         command.CommandText = $"select log_end_lsn from sys.dm_db_log_stats(db_id())";
         await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
@@ -85,7 +85,7 @@ public static partial class DeltaExtensions
         return (string) reader[0];
     }
 
-    static async Task<string> ExecuteSqlTimeStamp(DbCommand command, Cancel cancel = default)
+    internal static async Task<string> ExecuteSqlTimeStamp(DbCommand command, Cancel cancel = default)
     {
         command.CommandText =
             """
