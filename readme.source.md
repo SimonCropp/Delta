@@ -32,11 +32,11 @@ Give the above certain kinds of operations will be detected:
 
 |             | Transaction Log | Change Tracking | Row Versioning | Change Tracking and Row Versioning |
 |-------------|:---------------:|:---------------:|:--------------:|:----------------------------------:|
-| Insert      |        ✔      |        ✔       |        ✔     |                  ✔                |
-| Update      |        ✔      |        ✔       |        ✔     |                  ✔                |
-| Hard Delete |        ✔      |        ✔       |        ✘      |                  ✔                |
-| Soft Delete |        ✔      |        ✔       |        ✔     |                  ✔                |
-| Truncate    |        ✔      |        ✘        |        ✘      |                  ✘                 |
+| Insert      |        ✅      |        ✅       |        ✅     |                  ✅                |
+| Update      |        ✅      |        ✅       |        ✅     |                  ✅                |
+| Hard Delete |        ✅      |        ✅       |        ❌     |                  ✅                |
+| Soft Delete |        ✅      |        ✅       |        ✅     |                  ✅                |
+| Truncate    |        ✅      |        ❌       |        ❌     |                  ❌                |
 
 
 
