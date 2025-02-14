@@ -4,30 +4,28 @@ public static partial class DeltaExtensions
 {
     public static async Task<string> GetLastTimeStamp(this DbConnection connection, DbTransaction? transaction = null, Cancel cancel = default)
     {
-        InitQuery(connection);
+        query ??= await ResolveQuery(connection, transaction, cancel);
 
         return await Execute(connection, transaction, query, cancel);
     }
 
-    [MemberNotNull(nameof(query))]
-    static void InitQuery(DbConnection connection)
+    static async Task<Func<DbCommand, Cancel, Task<string>>> ResolveQuery(DbConnection connection, DbTransaction? transaction, Cancel cancel)
     {
-        if (query != null)
-        {
-            return;
-        }
-
         var name = connection.GetType().Name;
+
         if (name == "SqlConnection")
         {
-            query = ExecuteSql;
-            return;
+            if (await Execute(connection, transaction, HasViewServerState, cancel))
+            {
+                return ExecuteSqlLsn;
+            }
+
+            return ExecuteSqlTimeStamp;
         }
 
         if (name == "NpgsqlConnection")
         {
-            query = ExecutePostgres;
-            return;
+            return ExecutePostgres;
         }
 
         throw new($"Unsupported type {name}");
@@ -73,7 +71,7 @@ public static partial class DeltaExtensions
         return xid.ToString();
     }
 
-    static async Task<string> ExecuteSql(DbCommand command, Cancel cancel = default)
+    internal static async Task<string> ExecuteSqlLsn(DbCommand command, Cancel cancel = default)
     {
         command.CommandText = $"select log_end_lsn from sys.dm_db_log_stats(db_id())";
         await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
@@ -85,6 +83,28 @@ public static partial class DeltaExtensions
         }
 
         return (string) reader[0];
+    }
+
+    internal static async Task<string> ExecuteSqlTimeStamp(DbCommand command, Cancel cancel = default)
+    {
+        command.CommandText =
+            """
+            declare @changeTracking bigint = change_tracking_current_version();
+            declare @timeStamp bigint = convert(bigint, @@dbts);
+
+            if (@changeTracking is null)
+              select cast(@timeStamp as varchar)
+            else
+              select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+            """;
+        return (string) (await command.ExecuteScalarAsync(cancel))!;
+    }
+
+    static async Task<bool> HasViewServerState(DbCommand command, Cancel cancel = default)
+    {
+        command.CommandText = "select has_perms_by_name(null, null, 'VIEW SERVER STATE')";
+        var result = (int)(await command.ExecuteScalarAsync(cancel))!;
+        return result == 1;
     }
 
     static Func<DbCommand, Cancel, Task<string>>? query;

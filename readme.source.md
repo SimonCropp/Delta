@@ -18,8 +18,31 @@ Effectively consumers will always receive the most current data, while the load 
 
 ## Assumptions
 
- * Frequency of updates to data is relatively low compared to reads
- * Using SQL Server or Postgres. Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) to be enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service
+Frequency of updates to data is relatively low compared to reads
+
+
+### SQL Server
+
+For SQL Server the transaction log is used (via [dm_db_log_stats](https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-db-log-stats-transact-sql)
+) if the current user has the `VIEW SERVER STATE` permission.
+
+If `VIEW SERVER STATE` is not allowed then a combination of [Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql) is used.
+
+Give the above certain kinds of operations will be detected:
+
+|             | Transaction Log | Change Tracking | Row Versioning | Change Tracking and Row Versioning |
+|-------------|:---------------:|:---------------:|:--------------:|:----------------------------------:|
+| Insert      |        ✔      |        ✔       |        ✔     |                  ✔                |
+| Update      |        ✔      |        ✔       |        ✔     |                  ✔                |
+| Hard Delete |        ✔      |        ✔       |        ✘      |                  ✔                |
+| Soft Delete |        ✔      |        ✔       |        ✔     |                  ✔                |
+| Truncate    |        ✔      |        ✘        |        ✘      |                  ✘                 |
+
+
+
+### Postgres
+
+Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) to be enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service
 
 
 ## 304 Not Modified Flow
@@ -58,9 +81,29 @@ snippet: AssemblyWriteTime
 
 #### SQL Server
 
+
+##### `VIEW SERVER STATE` permission
+
+Transaction log is used via [dm_db_log_stats](https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-db-log-stats-transact-sql).
+
 ```sql
 select log_end_lsn
 from sys.dm_db_log_stats(db_id())
+```
+
+
+##### No `VIEW SERVER STATE` permission
+
+A combination of [change_tracking_current_version](https://learn.microsoft.com/en-us/sql/relational-databases/system-functions/change-tracking-current-version-transact-sql) (if tracking is enabled) and [@@DBTS (row version timestamp)](https://learn.microsoft.com/en-us/sql/t-sql/functions/dbts-transact-sql)
+
+```sql
+declare @changeTracking bigint = change_tracking_current_version();
+declare @timeStamp bigint = convert(bigint, @@dbts);
+
+if (@changeTracking is null)
+  select cast(@timeStamp as varchar)
+else
+  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
 
 

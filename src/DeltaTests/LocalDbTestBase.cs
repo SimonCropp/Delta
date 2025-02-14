@@ -1,7 +1,7 @@
 ﻿[TestFixture]
 public abstract class LocalDbTestBase
 {
-    static SqlInstance sqlInstance = new(
+    private static SqlInstance sqlInstance = new(
         name: "DeltaTests",
         buildTemplate: async connection =>
         {
@@ -13,6 +13,7 @@ public abstract class LocalDbTestBase
                  values ('{Guid.NewGuid()}', 'initial data')
                  """;
             await command.ExecuteNonQueryAsync();
+            await connection.SetTrackedTables(["Companies"]);
         });
 
     public Task<SqlDatabase> LocalDb(string? suffix = null)
