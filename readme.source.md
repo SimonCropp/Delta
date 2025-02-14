@@ -30,7 +30,7 @@ If `VIEW SERVER STATE` is not allowed then a combination of [Change Tracking](ht
 
 Give the above certain kinds of operations will be detected:
 
-|             | Transaction Log | Change Tracking | Row Versioning | Change Tracking<br>andRow Versioning |
+|             | Transaction Log | Change Tracking | Row Versioning | Change Tracking<br>and Row Versioning |
 |-------------|:---------------:|:---------------:|:--------------:|:----------------------------------:|
 | Insert      |        ✅      |        ✅       |        ✅     |                  ✅                |
 | Update      |        ✅      |        ✅       |        ✅     |                  ✅                |
