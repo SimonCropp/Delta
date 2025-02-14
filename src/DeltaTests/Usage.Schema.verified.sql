@@ -10,6 +10,8 @@ CREATE TABLE [dbo].[Companies](
 ) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
+ALTER TABLE [dbo].[Companies] ENABLE CHANGE_TRACKING WITH(TRACK_COLUMNS_UPDATED = OFF)
+
 CREATE TABLE [dbo].[Employees](
 	[Id] [uniqueidentifier] NOT NULL,
 	[RowVersion] [timestamp] NOT NULL,
@@ -22,6 +24,7 @@ CREATE TABLE [dbo].[Employees](
 ) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
+ALTER TABLE [dbo].[Employees] ENABLE CHANGE_TRACKING WITH(TRACK_COLUMNS_UPDATED = OFF)
 CREATE NONCLUSTERED INDEX [IX_Employees_CompanyId] ON [dbo].[Employees]
 (
 	[CompanyId] ASC
