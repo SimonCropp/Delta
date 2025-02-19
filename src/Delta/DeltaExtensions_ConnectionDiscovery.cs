@@ -27,7 +27,7 @@ public static partial class DeltaExtensions
             return (mySqlConnection, transaction);
         }
 
-        throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection, Npgsql.NpgsqlConnection, and MySqlConnector.MySqlConnection");
+        throw new("Could not find connection type. Tried SqlConnection, NpgsqlConnection and MySqlConnection");
     }
 
     static Connection DiscoverConnection(HttpContext httpContext)
