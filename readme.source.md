@@ -16,6 +16,11 @@ Effectively consumers will always receive the most current data, while the load 
 **See [Milestones](../../milestones?state=closed) for release notes.**
 
 
+### Powered by
+
+[![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)
+
+
 ## Assumptions
 
 Frequency of updates to data is relatively low compared to reads
