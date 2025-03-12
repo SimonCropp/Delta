@@ -8,20 +8,20 @@
     <PackageVersion Include="LocalDb" Version="20.0.3" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="27.0.2" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.0.1" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.2" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.3" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.3" />
     <PackageVersion Include="Npgsql" Version="9.0.3" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="NUnit" Version="4.3.2" />
     <PackageVersion Include="NUnit3TestAdapter" Version="5.0.0" />
     <PackageVersion Include="ProjectDefaults" Version="1.0.148" />
     <PackageVersion Include="Verify.AspNetCore" Version="4.0.0" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
-    <PackageVersion Include="Verify.EntityFramework" Version="13.0.0" />
+    <PackageVersion Include="Verify.EntityFramework" Version="13.1.1" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="4.0.1" />
-    <PackageVersion Include="Verify.NUnit" Version="28.14.0" />
-    <PackageVersion Include="Verify.SqlServer" Version="11.0.1" />
+    <PackageVersion Include="Verify.NUnit" Version="28.14.1" />
+    <PackageVersion Include="Verify.SqlServer" Version="11.1.1" />
   </ItemGroup>
 </Project>

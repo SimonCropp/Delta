@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionItems", ".Solution
 		..\readme.md = ..\readme.md
 		mdsnippets.json = mdsnippets.json
 		..\readme.source.md = ..\readme.source.md
+		global.json = global.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Delta", "Delta\Delta.csproj", "{92E64F4E-6A8E-43C2-9C8D-694E0327BEF0}"
