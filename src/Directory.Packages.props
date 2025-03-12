@@ -22,6 +22,6 @@
     <PackageVersion Include="Verify.EntityFramework" Version="13.0.0" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="4.0.1" />
     <PackageVersion Include="Verify.NUnit" Version="28.14.0" />
-    <PackageVersion Include="Verify.SqlServer" Version="11.0.1" />
+    <PackageVersion Include="Verify.SqlServer" Version="11.1.1" />
   </ItemGroup>
 </Project>
