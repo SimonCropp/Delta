@@ -2,7 +2,7 @@
     LocalDbTestBase
 {
     [TestCaseSource(nameof(Cases))]
-    public async Task Combinations(bool suffixFunc, bool nullSuffixFunc, bool get, bool ifNoneMatch, bool sameIfNoneMatch, bool etag, bool executeFunc, bool trueExecuteFunc, bool immutable)
+    public async Task Combinations(bool suffixFunc, bool nullSuffixFunc, bool get, bool ifNoneMatch, bool sameIfNoneMatch, bool etag, bool executeFunc, bool trueExecuteFunc, bool immutable, bool requestCacheControl)
     {
         Recording.Start();
         var context = new DefaultHttpContext();
@@ -24,6 +24,11 @@
         else
         {
             request.Method = "POST";
+        }
+
+        if (requestCacheControl)
+        {
+            request.Headers.CacheControl = "no-cache";
         }
 
         if (ifNoneMatch)
@@ -76,6 +81,7 @@
         foreach (var alreadyHasEtag in bools)
         foreach (var useShouldExecuteFunc in bools)
         foreach (var useTrueShouldExecuteFunc in bools)
+        foreach (var requestCacheControl in bools)
         {
             yield return
             [
@@ -87,7 +93,8 @@
                 alreadyHasEtag,
                 useShouldExecuteFunc,
                 useTrueShouldExecuteFunc,
-                hasImmutableCache
+                hasImmutableCache,
+                requestCacheControl
             ];
         }
     }

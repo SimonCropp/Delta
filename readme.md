@@ -161,7 +161,7 @@ internal static string BuildEtag(string timeStamp, string? suffix)
     return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L130-L142' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L142-L154' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -274,7 +274,7 @@ builder.Services.AddScoped(_ => new SqlConnection(connectionString));
 var app = builder.Build();
 app.UseDelta();
 ```
-<sup><a href='/src/WebApplicationSqlServer/Program.cs#L10-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaSqlServer' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServer/Program.cs#L8-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaSqlServer' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -288,7 +288,7 @@ builder.Services.AddScoped(_ => new NpgsqlConnection(connectionString));
 var app = builder.Build();
 app.UseDelta();
 ```
-<sup><a href='/src/WebApplicationPostgres/Program.cs#L5-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaPostgres' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgres/Program.cs#L3-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -303,7 +303,7 @@ app.MapGroup("/group")
     .UseDelta()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationSqlServer/Program.cs#L63-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServer/Program.cs#L61-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -477,10 +477,11 @@ public class SampleDbContext(DbContextOptions options) :
 ```cs
 var builder = WebApplication.CreateBuilder();
 builder.Services.AddSqlServer<SampleDbContext>(connectionString);
+
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 ```
-<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L9-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaSQLServerEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L7-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaSQLServerEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -495,7 +496,7 @@ builder.Services.AddDbContext<SampleDbContext>(
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 ```
-<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L5-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaPostgresEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L3-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaPostgresEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -510,14 +511,14 @@ app.MapGroup("/group")
     .UseDelta<SampleDbContext>()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L46-L52' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationPostgresEF/Program.cs#L44-L50' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF' title='Start of snippet'>anchor</a></sup>
 <a id='snippet-UseDeltaMapGroupEF-1'></a>
 ```cs
 app.MapGroup("/group")
     .UseDelta<SampleDbContext>()
     .MapGet("/", () => "Hello Group!");
 ```
-<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L45-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF-1' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L44-L50' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -542,16 +543,16 @@ app.UseDelta<SampleDbContext>(
 
 ## UseResponseDiagnostics
 
-Response diagnostics is an opt-in feature that includes extra log information in the response headers.
+Response diagnostics is an opt-out feature that includes extra log information in the response headers.
 
-Enable by setting UseResponseDiagnostics to true at startup:
+Disable by setting UseResponseDiagnostics to false at startup:
 
 <!-- snippet: UseResponseDiagnostics -->
 <a id='snippet-UseResponseDiagnostics'></a>
 ```cs
-DeltaExtensions.UseResponseDiagnostics = true;
+DeltaExtensions.UseResponseDiagnostics = false;
 ```
-<sup><a href='/src/DeltaTests/ModuleInitializer.cs#L6-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseResponseDiagnostics' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/UseResponseDiagnosticsSnippet.cs#L4-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseResponseDiagnostics' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Response diagnostics headers are prefixed with `Delta-`.

@@ -1,5 +1,3 @@
-DeltaExtensions.UseResponseDiagnostics = true;
-
 var sqlInstance = new SqlInstance<SampleDbContext>(constructInstance: builder => new(builder.Options));
 
 await using var database = await sqlInstance.Build("WebAppEF");
@@ -10,6 +8,7 @@ var connectionString = database.ConnectionString;
 
 var builder = WebApplication.CreateBuilder();
 builder.Services.AddSqlServer<SampleDbContext>(connectionString);
+
 var app = builder.Build();
 app.UseDelta<SampleDbContext>();
 

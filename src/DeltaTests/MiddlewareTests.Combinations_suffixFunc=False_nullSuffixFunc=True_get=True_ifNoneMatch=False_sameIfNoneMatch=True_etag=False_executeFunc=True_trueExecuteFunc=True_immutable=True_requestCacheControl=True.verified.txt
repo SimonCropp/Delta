@@ -1,0 +1,31 @@
+﻿{
+  target: {
+    notModified: false,
+    context: {
+      Request: {
+        Headers: {
+          Cache-Control: no-cache
+        }
+      },
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: OK,
+        Headers: {
+          Cache-Control: public, max-age=31536000, immutable,
+          Delta-No304: Response already has Cache-Control=immutable
+        }
+      }
+    }
+  },
+  log: {
+    Information: Delta /path: No 304. Response already has Cache-Control=immutable,
+    State: [
+      {
+        path: /path
+      },
+      {
+        {OriginalFormat}: Delta {path}: No 304. Response already has Cache-Control=immutable
+      }
+    ]
+  }
+}

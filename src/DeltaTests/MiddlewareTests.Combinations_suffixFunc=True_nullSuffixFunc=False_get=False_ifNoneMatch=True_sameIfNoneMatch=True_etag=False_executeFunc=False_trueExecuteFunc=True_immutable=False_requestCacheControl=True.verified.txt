@@ -1,0 +1,31 @@
+﻿{
+  target: {
+    notModified: false,
+    context: {
+      Request: {
+        Headers: {
+          Cache-Control: no-cache,
+          If-None-Match: "AssemblyWriteTime-rowVersion-suffix"
+        }
+      },
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: OK,
+        Headers: {
+          Delta-No304: Request Method=POST
+        }
+      }
+    }
+  },
+  log: {
+    Information: Delta /path: No 304. Request Method=POST,
+    State: [
+      {
+        path: /path
+      },
+      {
+        {OriginalFormat}: Delta {path}: No 304. Request Method=POST
+      }
+    ]
+  }
+}

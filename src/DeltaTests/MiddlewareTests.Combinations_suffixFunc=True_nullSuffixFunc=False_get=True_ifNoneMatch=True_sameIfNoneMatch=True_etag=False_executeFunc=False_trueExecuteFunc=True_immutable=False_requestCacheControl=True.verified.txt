@@ -1,0 +1,48 @@
+﻿{
+  target: {
+    notModified: true,
+    context: {
+      Request: {
+        Headers: {
+          Cache-Control: no-cache,
+          If-None-Match: "AssemblyWriteTime-rowVersion-suffix"
+        }
+      },
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: NotModified,
+        Headers: {
+          Cache-Control: no-cache,
+          ETag: "AssemblyWriteTime-rowVersion-suffix"
+        }
+      }
+    }
+  },
+  log: [
+    {
+      Information: Delta /path: ETag "AssemblyWriteTime-rowVersion-suffix",
+      State: [
+        {
+          path: /path
+        },
+        {
+          etag: "AssemblyWriteTime-rowVersion-suffix"
+        },
+        {
+          {OriginalFormat}: Delta {path}: ETag {etag}
+        }
+      ]
+    },
+    {
+      Information: Delta /path: 304,
+      State: [
+        {
+          path: /path
+        },
+        {
+          {OriginalFormat}: Delta {path}: 304
+        }
+      ]
+    }
+  ]
+}

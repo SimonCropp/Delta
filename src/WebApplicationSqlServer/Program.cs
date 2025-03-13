@@ -1,5 +1,3 @@
-DeltaExtensions.UseResponseDiagnostics  = true;
-
 var sqlInstance = new SqlInstance(
     name: "DeltaWebApplication",
     buildTemplate: DbBuilder.Create);
