@@ -245,9 +245,9 @@ snippet: ShouldExecuteEF
 
 ## UseResponseDiagnostics
 
-Response diagnostics is an opt-in feature that includes extra log information in the response headers.
+Response diagnostics is an opt-out feature that includes extra log information in the response headers.
 
-Enable by setting UseResponseDiagnostics to true at startup:
+Disable by setting UseResponseDiagnostics to false at startup:
 
 snippet: UseResponseDiagnostics
 

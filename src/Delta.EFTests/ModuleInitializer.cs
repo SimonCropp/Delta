@@ -1,9 +1,6 @@
 ﻿public static class ModuleInitializer
 {
     [ModuleInitializer]
-    public static void Init()
-    {
-        DeltaExtensions.UseResponseDiagnostics = true;
+    public static void Init() =>
         VerifierSettings.InitializePlugins();
-    }
 }

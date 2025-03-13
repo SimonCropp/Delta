@@ -1,0 +1,47 @@
+﻿{
+  target: {
+    notModified: false,
+    context: {
+      Request: {
+        Headers: {
+          Cache-Control: no-cache
+        }
+      },
+      IsAbortedRequested: false,
+      Response: {
+        StatusCode: OK,
+        Headers: {
+          Delta-No304: Request has no If-None-Match. Request also has Cache-Control header (no-cache) which can interfere with caching,
+          ETag: "AssemblyWriteTime-rowVersion"
+        }
+      }
+    }
+  },
+  log: [
+    {
+      Information: Delta /path: ETag "AssemblyWriteTime-rowVersion",
+      State: [
+        {
+          path: /path
+        },
+        {
+          etag: "AssemblyWriteTime-rowVersion"
+        },
+        {
+          {OriginalFormat}: Delta {path}: ETag {etag}
+        }
+      ]
+    },
+    {
+      Information: Delta /path: No 304. Request has no If-None-Match. Request also has Cache-Control header (no-cache) which can interfere with caching,
+      State: [
+        {
+          path: /path
+        },
+        {
+          {OriginalFormat}: Delta {path}: No 304. Request has no If-None-Match. Request also has Cache-Control header (no-cache) which can interfere with caching
+        }
+      ]
+    }
+  ]
+}

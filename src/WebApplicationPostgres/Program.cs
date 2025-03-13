@@ -1,5 +1,3 @@
-DeltaExtensions.UseResponseDiagnostics  = true;
-
 var connectionString = PostgresConnection.ConnectionString;
 
 #region UseDeltaPostgres

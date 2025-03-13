@@ -2,7 +2,7 @@ namespace Delta;
 
 public static partial class DeltaExtensions
 {
-    public static bool UseResponseDiagnostics { get; set; }
+    public static bool UseResponseDiagnostics { get; set; } = true;
 
     public static void NoStore(this HttpResponse response) =>
         response.Headers.Append(HeaderNames.CacheControl, "no-store, max-age=0");
@@ -52,30 +52,26 @@ public static partial class DeltaExtensions
         var method = request.Method;
         if (method != "GET")
         {
-            WriteNo304Header(response, $"Request Method={method}");
-            logger.Log(level, "Delta {path}: No 304. Request Method={method}", path, method);
+            WriteNo304Header(response, $"Request Method={method}", level, logger, path);
             return false;
         }
 
         if (response.Headers.ETag.Count != 0)
         {
-            WriteNo304Header(response, $"Response already has ETag");
-            logger.Log(level, "Delta {path}: No 304. Response already has ETag", path);
+            WriteNo304Header(response, $"Response already has ETag", level, logger, path);
             return false;
         }
 
         if (response.IsImmutableCache())
         {
-            WriteNo304Header(response, $"Response already has Cache-Control=immutable");
-            logger.Log(level, "Delta {path}: No 304. Response already has Cache-Control=immutable", path);
+            WriteNo304Header(response, $"Response already has Cache-Control=immutable", level, logger, path);
             return false;
         }
 
         if (shouldExecute != null &&
             !shouldExecute(context))
         {
-            WriteNo304Header(response, $"shouldExecute=false");
-            logger.Log(level, "Delta {path}: No 304. shouldExecute=false", path);
+            WriteNo304Header(response, $"shouldExecute=false", level, logger, path);
             return false;
         }
 
@@ -86,14 +82,25 @@ public static partial class DeltaExtensions
         logger.Log(level, "Delta {path}: ETag {etag}", path, etag);
         if (!request.Headers.TryGetValue("If-None-Match", out var ifNoneMatch))
         {
-            WriteNo304Header(response, $"Request has no If-None-Match");
-            logger.Log(level, "Delta {path}: No 304. Request has no If-None-Match", path);
+            string reason;
+            var cacheControl = request.Headers.CacheControl;
+            if (cacheControl.Count == 0)
+            {
+                reason = "Request has no If-None-Match";
+            }
+            else
+            {
+                reason = $"Request has no If-None-Match. Request also has Cache-Control header ({cacheControl}) which can interfere with caching";
+            }
+
+            WriteNo304Header(response, reason, level, logger, path);
+
             return false;
         }
 
         if (ifNoneMatch != etag)
         {
-            WriteNo304Header(response, $"Request If-None-Match != ETag");
+            WriteNo304Header(response, $"Request If-None-Match != ETag", level, logger, path);
             logger.Log(
                 level,
                 """
@@ -113,11 +120,16 @@ public static partial class DeltaExtensions
         return true;
     }
 
-    static void WriteNo304Header(this HttpResponse response, string header)
+    static void WriteNo304Header(HttpResponse response, string reason, LogLevel level, ILogger logger, string path)
     {
         if (UseResponseDiagnostics)
         {
-            response.Headers["Delta-No304"] = header;
+            response.Headers["Delta-No304"] = reason;
+        }
+
+        if (logger.IsEnabled(level))
+        {
+            logger.Log(level, $"Delta {{path}}: No 304. {reason}", path);
         }
     }
 
