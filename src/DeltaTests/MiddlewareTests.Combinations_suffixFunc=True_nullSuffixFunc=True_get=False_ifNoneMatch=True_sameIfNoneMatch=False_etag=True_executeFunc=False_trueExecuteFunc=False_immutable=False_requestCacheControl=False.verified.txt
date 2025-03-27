@@ -7,7 +7,6 @@
           If-None-Match: diffEtag
         }
       },
-      IsAbortedRequested: false,
       Response: {
         StatusCode: OK,
         Headers: {
@@ -24,7 +23,10 @@
         path: /path
       },
       {
-        {OriginalFormat}: Delta {path}: No 304. Request Method=POST
+        reason: Request Method=POST
+      },
+      {
+        {OriginalFormat}: Delta {path}: No 304. {reason}
       }
     ]
   }
