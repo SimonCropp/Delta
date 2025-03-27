@@ -3,7 +3,6 @@
     notModified: false,
     context: {
       Request: {},
-      IsAbortedRequested: false,
       Response: {
         StatusCode: OK,
         Headers: {
@@ -35,7 +34,10 @@
           path: /path
         },
         {
-          {OriginalFormat}: Delta {path}: No 304. Request has no If-None-Match
+          reason: Request has no If-None-Match
+        },
+        {
+          {OriginalFormat}: Delta {path}: No 304. {reason}
         }
       ]
     }

@@ -3,7 +3,6 @@
     notModified: false,
     context: {
       Request: {},
-      IsAbortedRequested: false,
       Response: {
         StatusCode: OK,
         Headers: {
@@ -19,7 +18,10 @@
         path: /path
       },
       {
-        {OriginalFormat}: Delta {path}: No 304. shouldExecute=false
+        reason: shouldExecute=false
+      },
+      {
+        {OriginalFormat}: Delta {path}: No 304. {reason}
       }
     ]
   }

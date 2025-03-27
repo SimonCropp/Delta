@@ -8,7 +8,6 @@
           If-None-Match: "AssemblyWriteTime-rowVersion-suffix"
         }
       },
-      IsAbortedRequested: false,
       Response: {
         StatusCode: OK,
         Headers: {
@@ -26,7 +25,10 @@
         path: /path
       },
       {
-        {OriginalFormat}: Delta {path}: No 304. Response already has ETag
+        reason: Response already has ETag
+      },
+      {
+        {OriginalFormat}: Delta {path}: No 304. {reason}
       }
     ]
   }

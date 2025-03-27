@@ -129,7 +129,7 @@ public static partial class DeltaExtensions
 
         if (logger.IsEnabled(level))
         {
-            logger.Log(level, $"Delta {{path}}: No 304. {reason}", path);
+            logger.Log(level, "Delta {path}: No 304. {reason}", path, reason);
         }
     }
 
