@@ -188,6 +188,8 @@ snippet: ShouldExecute
 
 By default, Delta uses `HttpContext.RequestServices` to discover the SqlConnection and SqlTransaction:
 
+snippet: DiscoverConnectionType
+
 snippet: DiscoverConnection
 
 To use custom connection discovery:

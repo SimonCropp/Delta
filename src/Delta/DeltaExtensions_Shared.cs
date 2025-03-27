@@ -41,6 +41,28 @@ public static partial class DeltaExtensions
         AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 
         #endregion
+
+        #region DiscoverConnectionType
+
+        var sqlConnectionType = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
+        if (sqlConnectionType != null)
+        {
+            connectionType = sqlConnectionType;
+            transactionType = sqlConnectionType.Assembly.GetType("Microsoft.Data.SqlClient.SqlTransaction")!;
+            return;
+        }
+
+        var npgConnectionType = Type.GetType("Npgsql.NpgsqlConnection, Npgsql");
+        if (npgConnectionType != null)
+        {
+            connectionType = npgConnectionType;
+            transactionType = npgConnectionType.Assembly.GetType("Npgsql.NpgsqlTransaction")!;
+            return;
+        }
+
+        throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection and Npgsql.NpgsqlTransaction");
+
+        #endregion
     }
 
     internal static async Task<bool> HandleRequest(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, Task<string>> getTimeStamp, Func<HttpContext, bool>? shouldExecute, LogLevel level)
