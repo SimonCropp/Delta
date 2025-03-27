@@ -87,11 +87,11 @@ public class Usage :
     {
         await using var command = connection.CreateCommand();
         command.CommandText =
-            $"""
-             update Companies
-             set Content = 'New Content Value'
-             where Id = @Id;
-             """;
+            """
+            update Companies
+            set Content = 'New Content Value'
+            where Id = @Id;
+            """;
         command.Parameters.AddWithValue("@Id", id);
         await command.ExecuteNonQueryAsync();
     }
@@ -144,7 +144,7 @@ public class Usage :
     static async Task DeleteEntity(SqlConnection connection, Guid id)
     {
         await using var command = connection.CreateCommand();
-        command.CommandText = $"delete From Companies where Id=@Id";
+        command.CommandText = "delete From Companies where Id=@Id";
         command.Parameters.AddWithValue("@Id", id);
         await command.ExecuteNonQueryAsync();
     }

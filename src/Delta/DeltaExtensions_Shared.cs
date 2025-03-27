@@ -68,20 +68,20 @@ public static partial class DeltaExtensions
 
         if (response.Headers.ETag.Count != 0)
         {
-            WriteNo304Header(response, $"Response already has ETag", level, logger, path);
+            WriteNo304Header(response, "Response already has ETag", level, logger, path);
             return false;
         }
 
         if (response.IsImmutableCache())
         {
-            WriteNo304Header(response, $"Response already has Cache-Control=immutable", level, logger, path);
+            WriteNo304Header(response, "Response already has Cache-Control=immutable", level, logger, path);
             return false;
         }
 
         if (shouldExecute != null &&
             !shouldExecute(context))
         {
-            WriteNo304Header(response, $"shouldExecute=false", level, logger, path);
+            WriteNo304Header(response, "shouldExecute=false", level, logger, path);
             return false;
         }
 
@@ -110,7 +110,7 @@ public static partial class DeltaExtensions
 
         if (ifNoneMatch != etag)
         {
-            WriteNo304Header(response, $"Request If-None-Match != ETag", level, logger, path);
+            WriteNo304Header(response, "Request If-None-Match != ETag", level, logger, path);
             logger.Log(
                 level,
                 """

@@ -73,7 +73,7 @@ public static partial class DeltaExtensions
 
     internal static async Task<string> ExecuteSqlLsn(DbCommand command, Cancel cancel = default)
     {
-        command.CommandText = $"select log_end_lsn from sys.dm_db_log_stats(db_id())";
+        command.CommandText = "select log_end_lsn from sys.dm_db_log_stats(db_id())";
         await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
         var readAsync = await reader.ReadAsync(cancel);
         // for empty transaction log
