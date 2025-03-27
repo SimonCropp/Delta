@@ -90,7 +90,7 @@ The last write time of the web entry point assembly
 var webAssemblyLocation = Assembly.GetEntryAssembly()!.Location;
 AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L38-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-AssemblyWriteTime' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L44-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-AssemblyWriteTime' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -161,7 +161,7 @@ internal static string BuildEtag(string timeStamp, string? suffix)
     return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L146-L158' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L152-L164' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

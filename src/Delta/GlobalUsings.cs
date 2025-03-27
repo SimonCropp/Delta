@@ -4,3 +4,4 @@ global using System.Diagnostics.CodeAnalysis;
 global using Microsoft.Net.Http.Headers;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Primitives;
