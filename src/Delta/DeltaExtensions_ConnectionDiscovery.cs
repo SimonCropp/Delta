@@ -2,22 +2,28 @@ namespace Delta;
 
 public static partial class DeltaExtensions
 {
-    #region DiscoverConnection
+    static Type connectionType;
+    static Type transactionType;
 
-    static (Type sqlConnection, Type transaction) FindConnectionType()
+    [MemberNotNull(nameof(connectionType))]
+    [MemberNotNull(nameof(transactionType))]
+    #region DiscoverConnection
+    static void InitConnectionTypes()
     {
-        var sqlConnection = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
-        if (sqlConnection != null)
+        var sqlConnectionType = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
+        if (sqlConnectionType != null)
         {
-            var transaction = sqlConnection.Assembly.GetType("Microsoft.Data.SqlClient.SqlTransaction")!;
-            return (sqlConnection, transaction);
+            connectionType = sqlConnectionType;
+            transactionType = sqlConnectionType.Assembly.GetType("Microsoft.Data.SqlClient.SqlTransaction")!;
+            return;
         }
 
         var npgsqlConnection = Type.GetType("Npgsql.NpgsqlConnection, Npgsql");
         if (npgsqlConnection != null)
         {
-            var transaction = npgsqlConnection.Assembly.GetType("Npgsql.NpgsqlTransaction")!;
-            return (npgsqlConnection, transaction);
+            connectionType = npgsqlConnection;
+            transactionType = npgsqlConnection.Assembly.GetType("Npgsql.NpgsqlTransaction")!;
+            return;
         }
 
         throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection and Npgsql.NpgsqlTransaction");
@@ -25,7 +31,6 @@ public static partial class DeltaExtensions
 
     static Connection DiscoverConnection(HttpContext httpContext)
     {
-        var (connectionType, transactionType) = FindConnectionType();
         var provider = httpContext.RequestServices;
         var connection = (DbConnection) provider.GetRequiredService(connectionType);
         var transaction = (DbTransaction?) provider.GetService(transactionType);
