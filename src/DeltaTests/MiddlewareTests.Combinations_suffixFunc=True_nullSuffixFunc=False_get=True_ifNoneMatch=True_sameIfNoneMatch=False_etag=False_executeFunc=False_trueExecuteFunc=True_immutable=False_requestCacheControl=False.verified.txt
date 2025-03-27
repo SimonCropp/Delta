@@ -7,7 +7,6 @@
           If-None-Match: diffEtag
         }
       },
-      IsAbortedRequested: false,
       Response: {
         StatusCode: OK,
         Headers: {
@@ -39,7 +38,10 @@
           path: /path
         },
         {
-          {OriginalFormat}: Delta {path}: No 304. Request If-None-Match != ETag
+          reason: Request If-None-Match != ETag
+        },
+        {
+          {OriginalFormat}: Delta {path}: No 304. {reason}
         }
       ]
     },
