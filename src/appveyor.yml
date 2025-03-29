@@ -5,6 +5,8 @@ environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 services:
   - postgresql13
+init:
+  - choco install mariadb
 build_script:
 - cmd: >-
     SET PGUSER=postgres
