@@ -291,7 +291,6 @@ public class Usage :
         await Verify(await database.OpenNewConnection()).SchemaAsSql();
     }
 
-
     [Test]
     public async Task Schema()
     {
