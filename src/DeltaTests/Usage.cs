@@ -29,9 +29,8 @@ public class Usage :
         #endregion
     }
 
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task LastTimeStamp(bool tracking)
+    [Test]
+    public async Task LastTimeStamp([Values] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -68,9 +67,8 @@ public class Usage :
         AreNotEqual(newLsnTimeStamp, lsnTimeStamp);
     }
 
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task LastTimeStampOnUpdate(bool tracking)
+    [Test]
+    public async Task LastTimeStampOnUpdate([Values] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -96,9 +94,8 @@ public class Usage :
         await command.ExecuteNonQueryAsync();
     }
 
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task LastTimeStampOnDelete(bool tracking)
+    [Test]
+    public async Task LastTimeStampOnDelete([Values] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -111,9 +108,8 @@ public class Usage :
         await AssertTimestamps(tracking, database, connection => DeleteEntity(connection, companyGuid));
     }
 
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task LastTimeStampReadTwice(bool tracking)
+    [Test]
+    public async Task LastTimeStampReadTwice([Values] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -178,9 +174,8 @@ public class Usage :
         await command.ExecuteNonQueryAsync();
     }
 
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task GetLastTimeStampSqlServer(bool tracking)
+    [Test]
+    public async Task GetLastTimeStampSqlServer([Values] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
