@@ -1,5 +1,5 @@
-﻿public class MiddlewareTests :
-    LocalDbTestBase
+﻿[TestFixture]
+public class MiddlewareTests
 {
     [Test]
     public async Task Combinations([Values] bool suffixFunc, [Values] bool nullSuffixFunc, [Values] bool get, [Values] bool ifNoneMatch, [Values] bool sameIfNoneMatch, [Values] bool etag, [Values] bool executeFunc, [Values] bool trueExecuteFunc, [Values] bool immutable, [Values] bool requestCacheControl)
