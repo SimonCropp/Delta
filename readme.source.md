@@ -199,6 +199,13 @@ To use custom connection and transaction discovery:
 snippet: CustomDiscoveryConnectionAndTransaction
 
 
+### GetLastTimeStamp
+
+For a `DbConnection`:
+
+snippet: GetLastTimeStampConnection
+
+
 ## EF Usage
 
 
@@ -243,6 +250,11 @@ Optionally control what requests Delta is executed on.
 snippet: ShouldExecuteEF
 
 
+### GetLastTimeStamp:
+
+snippet: GetLastTimeStampEF
+
+
 ## UseResponseDiagnostics
 
 Response diagnostics is an opt-out feature that includes extra log information in the response headers.
@@ -263,19 +275,6 @@ Example Response header when the Request has not `If-None-Match` header.
 A set of helper methods for working with [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
 
 Nuget: [Delta.SqlServer](https://www.nuget.org/packages/Delta.SqlServer)
-
-
-### GetLastTimeStamp
-
-
-#### For a `SqlConnection`:
-
-snippet: GetLastTimeStampSqlConnection
-
-
-#### For a `DbContext`:
-
-snippet: GetLastTimeStampEF
 
 
 ### GetDatabasesWithTracking

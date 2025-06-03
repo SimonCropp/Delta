@@ -396,6 +396,19 @@ application.UseDelta(
 <!-- endSnippet -->
 
 
+### GetLastTimeStamp
+
+For a `DbConnection`:
+
+<!-- snippet: GetLastTimeStampConnection -->
+<a id='snippet-GetLastTimeStampConnection'></a>
+```cs
+var timeStamp = await connection.GetLastTimeStamp();
+```
+<sup><a href='/src/DeltaTests/Usage.cs#L188-L192' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
 ## EF Usage
 
 
@@ -542,6 +555,17 @@ app.UseDelta<SampleDbContext>(
 <!-- endSnippet -->
 
 
+### GetLastTimeStamp:
+
+<!-- snippet: GetLastTimeStampEF -->
+<a id='snippet-GetLastTimeStampEF'></a>
+```cs
+var timeStamp = await dbContext.GetLastTimeStamp();
+```
+<sup><a href='/src/Delta.EFTests/Usage.cs#L41-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampEF' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
 ## UseResponseDiagnostics
 
 Response diagnostics is an opt-out feature that includes extra log information in the response headers.
@@ -568,31 +592,6 @@ Example Response header when the Request has not `If-None-Match` header.
 A set of helper methods for working with [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
 
 Nuget: [Delta.SqlServer](https://www.nuget.org/packages/Delta.SqlServer)
-
-
-### GetLastTimeStamp
-
-
-#### For a `SqlConnection`:
-
-<!-- snippet: GetLastTimeStampSqlConnection -->
-<a id='snippet-GetLastTimeStampSqlConnection'></a>
-```cs
-var timeStamp = await sqlConnection.GetLastTimeStamp();
-```
-<sup><a href='/src/DeltaTests/Usage.cs#L188-L192' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampSqlConnection' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
-
-
-#### For a `DbContext`:
-
-<!-- snippet: GetLastTimeStampEF -->
-<a id='snippet-GetLastTimeStampEF'></a>
-```cs
-var timeStamp = await dbContext.GetLastTimeStamp();
-```
-<sup><a href='/src/Delta.EFTests/Usage.cs#L41-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampEF' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
 
 
 ### GetDatabasesWithTracking

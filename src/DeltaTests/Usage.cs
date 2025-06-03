@@ -183,11 +183,11 @@ public class Usage :
             await database.Connection.EnableTracking();
         }
 
-        var sqlConnection = database.Connection;
+        var connection = database.Connection;
 
-        #region GetLastTimeStampSqlConnection
+        #region GetLastTimeStampConnection
 
-        var timeStamp = await sqlConnection.GetLastTimeStamp();
+        var timeStamp = await connection.GetLastTimeStamp();
 
         #endregion
 
