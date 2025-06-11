@@ -23,7 +23,14 @@ Effectively consumers will always receive the most current data, while the load 
 **See [Milestones](../../milestones?state=closed) for release notes.**
 
 
-### Powered by
+## Sponsors
+
+[Entity Framework Extensions](https://entityframework-extensions.net/) is a major sponsor and is proud to contribute to the development this project.<!-- include: zzz. path: /docs/zzz.include.md -->
+
+[![Entity Framework Extensions](docs/zzz.png)](https://entityframework-extensions.net)<!-- endInclude -->
+
+
+### JetBrains
 
 [![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)
 
