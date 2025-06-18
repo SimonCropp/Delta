@@ -1,4 +1,4 @@
-var connectionString = PostgresConnection.ConnectionString;
+var connectionString = PostgresConnectionString.Value;
 
 #region UseDeltaPostgresEF
 

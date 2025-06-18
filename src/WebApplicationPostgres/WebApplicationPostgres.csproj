@@ -8,8 +8,5 @@
     <PackageReference Include="Npgsql" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <ProjectReference Include="..\Delta\Delta.csproj" />
-    <Compile Include="..\DeltaTests\PostgresConnection.cs">
-      <Link>PostgresConnection.cs</Link>
-    </Compile>
   </ItemGroup>
 </Project>

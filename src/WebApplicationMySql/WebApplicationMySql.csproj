@@ -5,12 +5,8 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Npgsql" />
+    <PackageReference Include="MySqlConnector" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
-    <ProjectReference Include="..\Delta.EF\Delta.EF.csproj" />
-    <Compile Include="..\WebApplicationPostgres\PostgresConnectionString.cs">
-      <Link>PostgresConnection.cs</Link>
-    </Compile>
+    <ProjectReference Include="..\Delta\Delta.csproj" />
   </ItemGroup>
 </Project>

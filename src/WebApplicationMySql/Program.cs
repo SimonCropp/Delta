@@ -1,18 +1,20 @@
-var connectionString = PostgresConnectionString.Value;
+using MySqlConnector;
 
-#region UseDeltaPostgres
+var connectionString = MySqlConnectionString.Value;
+
+#region UseDeltaMySql
 
 var builder = WebApplication.CreateBuilder();
-builder.Services.AddScoped(_ => new NpgsqlConnection(connectionString));
+builder.Services.AddScoped(_ => new MySqlConnection(connectionString));
 var app = builder.Build();
 app.UseDelta();
 
 #endregion
 
-await using (var connection = new NpgsqlConnection(connectionString))
+await using (var connection = new MySqlConnection(connectionString))
 {
     await connection.OpenAsync();
-    await PostgresDbBuilder.Create(connection);
+    await MySqlDbBuilder.Create(connection);
     await using var command = connection.CreateCommand();
     command.CommandText =
         $"""
@@ -26,7 +28,7 @@ app.MapGet(
     "/",
     async _ =>
     {
-        var connection = _.RequestServices.GetRequiredService<NpgsqlConnection>();
+        var connection = _.RequestServices.GetRequiredService<MySqlConnection>();
 
         if (connection.State == ConnectionState.Closed)
         {

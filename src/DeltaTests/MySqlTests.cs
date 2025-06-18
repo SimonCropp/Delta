@@ -1,13 +1,11 @@
-﻿using Npgsql;
-
-public class PostgresTests
+﻿public class MySqlTests
 {
     [Test]
     public async Task GetLastTimeStamp()
     {
-        await using var connection = new NpgsqlConnection(PostgresConnectionString.Value);
+        await using var connection = new MySqlConnector.MySqlConnection(MySqlConnectionString.Value);
         await connection.OpenAsync();
-        await PostgresDbBuilder.Create(connection);
+        await MySqlDbBuilder.Create(connection);
         await using var command = connection.CreateCommand();
         command.CommandText =
             $"""

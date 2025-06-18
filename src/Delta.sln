@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationPostgresEF", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationPostgres", "WebApplicationPostgres\WebApplicationPostgres.csproj", "{DC1821ED-6680-495E-9EA9-FE96FA9569CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationMySql", "WebApplicationMySql\WebApplicationMySql.csproj", "{037B6426-6D23-4576-86CC-A4ACF8AC3C29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{DC1821ED-6680-495E-9EA9-FE96FA9569CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC1821ED-6680-495E-9EA9-FE96FA9569CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC1821ED-6680-495E-9EA9-FE96FA9569CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{037B6426-6D23-4576-86CC-A4ACF8AC3C29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{037B6426-6D23-4576-86CC-A4ACF8AC3C29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{037B6426-6D23-4576-86CC-A4ACF8AC3C29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{037B6426-6D23-4576-86CC-A4ACF8AC3C29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,5 +100,6 @@ Global
 		{D167BFA5-BBA5-4BB3-B73E-75C9681AB850} = {B84437AD-ECAE-457D-B6D4-228AD7F2E52E}
 		{4D6C1415-036D-4A85-9BD2-1EA396B5EE0E} = {220EFFC5-0A70-4C18-9948-3C344DC0E09D}
 		{DC1821ED-6680-495E-9EA9-FE96FA9569CF} = {B84437AD-ECAE-457D-B6D4-228AD7F2E52E}
+		{037B6426-6D23-4576-86CC-A4ACF8AC3C29} = {B84437AD-ECAE-457D-B6D4-228AD7F2E52E}
 	EndGlobalSection
 EndGlobal
