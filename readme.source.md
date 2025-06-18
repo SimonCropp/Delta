@@ -5,18 +5,17 @@
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.EF.svg?label=Delta.EF)](https://www.nuget.org/packages/Delta.EF/)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.SqlServer.svg?label=Delta.SqlServer)](https://www.nuget.org/packages/Delta.SqlServer/)
 
-Delta is an approach to implementing a [304 Not Modified](https://www.keycdn.com/support/304-not-modified) leveraging DB change tracking.
-
-The approach uses a last updated timestamp from the database to generate an [ETag](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/ETag). All dynamic requests then have that ETag checked/applied.
-
-This approach works well when the frequency of updates is relatively low. In this scenario, the majority of requests will leverage the result in a 304 Not Modified being returned and the browser loading the content its cache.
-
-Effectively consumers will always receive the most current data, while the load on the server remains low.
+include: intro
 
 **See [Milestones](../../milestones?state=closed) for release notes.**
 
 
-### Powered by
+## Sponsors
+
+include: zzz
+
+
+### JetBrains
 
 [![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)
 
@@ -199,6 +198,13 @@ To use custom connection and transaction discovery:
 snippet: CustomDiscoveryConnectionAndTransaction
 
 
+### GetLastTimeStamp
+
+For a `DbConnection`:
+
+snippet: GetLastTimeStampConnection
+
+
 ## EF Usage
 
 
@@ -243,6 +249,11 @@ Optionally control what requests Delta is executed on.
 snippet: ShouldExecuteEF
 
 
+### GetLastTimeStamp:
+
+snippet: GetLastTimeStampEF
+
+
 ## UseResponseDiagnostics
 
 Response diagnostics is an opt-out feature that includes extra log information in the response headers.
@@ -263,19 +274,6 @@ Example Response header when the Request has not `If-None-Match` header.
 A set of helper methods for working with [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
 
 Nuget: [Delta.SqlServer](https://www.nuget.org/packages/Delta.SqlServer)
-
-
-### GetLastTimeStamp
-
-
-#### For a `SqlConnection`:
-
-snippet: GetLastTimeStampSqlConnection
-
-
-#### For a `DbContext`:
-
-snippet: GetLastTimeStampEF
 
 
 ### GetDatabasesWithTracking

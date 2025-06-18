@@ -26,9 +26,9 @@
         #endregion
     }
 
-    [TestCase(true)]
+    [Test]
     [TestCase(false)]
-    public async Task GetLastTimeStamp(bool tracking)
+    public async Task GetLastTimeStamp([Values] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -47,9 +47,8 @@
         IsNotNull(timeStamp);
     }
 
-    [TestCase(true)]
-    [TestCase(false)]
-    public async Task LastTimeStamp(bool tracking)
+    [Test]
+    public async Task LastTimeStamp([Values] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)

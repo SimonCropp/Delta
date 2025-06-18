@@ -34,10 +34,7 @@ public static partial class DeltaExtensions
     static async Task<T> Execute<T>(DbConnection connection, DbTransaction? transaction, Func<DbCommand, Cancel, Task<T>> execute, Cancel cancel)
     {
         await using var command = connection.CreateCommand();
-        if (transaction != null)
-        {
-            command.Transaction = transaction;
-        }
+        command.Transaction = transaction;
 
         if (connection.State != ConnectionState.Closed)
         {

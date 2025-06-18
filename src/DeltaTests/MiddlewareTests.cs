@@ -1,8 +1,8 @@
-﻿public class MiddlewareTests :
-    LocalDbTestBase
+﻿[TestFixture]
+public class MiddlewareTests
 {
-    [TestCaseSource(nameof(Cases))]
-    public async Task Combinations(bool suffixFunc, bool nullSuffixFunc, bool get, bool ifNoneMatch, bool sameIfNoneMatch, bool etag, bool executeFunc, bool trueExecuteFunc, bool immutable, bool requestCacheControl)
+    [Test]
+    public async Task Combinations([Values] bool suffixFunc, [Values] bool nullSuffixFunc, [Values] bool get, [Values] bool ifNoneMatch, [Values] bool sameIfNoneMatch, [Values] bool etag, [Values] bool executeFunc, [Values] bool trueExecuteFunc, [Values] bool immutable, [Values] bool requestCacheControl)
     {
         Recording.Start();
         var context = new DefaultHttpContext();
@@ -62,40 +62,5 @@
                     context
                 })
             .AddScrubber(_ => _.Replace(DeltaExtensions.AssemblyWriteTime, "AssemblyWriteTime"));
-    }
-
-    static bool[] bools =
-    [
-        true,
-        false
-    ];
-
-    public static IEnumerable<object[]> Cases()
-    {
-        foreach (var useSuffixFunc in bools)
-        foreach (var useNullSuffixFunc in bools)
-        foreach (var isGet in bools)
-        foreach (var hasIfNoneMatch in bools)
-        foreach (var hasImmutableCache in bools)
-        foreach (var hasSameIfNoneMatch in bools)
-        foreach (var alreadyHasEtag in bools)
-        foreach (var useShouldExecuteFunc in bools)
-        foreach (var useTrueShouldExecuteFunc in bools)
-        foreach (var requestCacheControl in bools)
-        {
-            yield return
-            [
-                useSuffixFunc,
-                useNullSuffixFunc,
-                isGet,
-                hasIfNoneMatch,
-                hasSameIfNoneMatch,
-                alreadyHasEtag,
-                useShouldExecuteFunc,
-                useTrueShouldExecuteFunc,
-                hasImmutableCache,
-                requestCacheControl
-            ];
-        }
     }
 }

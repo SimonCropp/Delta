@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <NoWarn>CS1591;NU1608</NoWarn>
-    <Version>6.4.0</Version>
+    <NoWarn>CS1591;NU1608;NU1109</NoWarn>
+    <Version>6.4.2</Version>
     <LangVersion>preview</LangVersion>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>

@@ -272,6 +272,9 @@ dotnet_style_coalesce_expression = false:error
 dotnet_style_null_propagation = true:error
 dotnet_style_explicit_tuple_names = true:error
 
+# Use collection expression syntax
+resharper_use_collection_expression_highlighting = error
+
 # Prefer "var" everywhere
 csharp_style_var_for_built_in_types = true:error
 csharp_style_var_when_type_is_apparent = true:error
@@ -340,6 +343,10 @@ resharper_all_underscore_local_parameter_name_highlighting = none
 
 resharper_misleading_body_like_statement_highlighting = error
 
+resharper_redundant_record_class_keyword_highlighting = error
+
+resharper_redundant_extends_list_entry_highlighting = error
+
 # Xml files
 [*.{xml,config,nuspec,resx,vsixmanifest,csproj,targets,props,fsproj}]
 indent_size = 2
@@ -352,8 +359,8 @@ ij_xml_space_inside_empty_tag = true
 indent_size = 2
 
 # Verify settings
-[*.{received,verified}.{txt,xml,json,md,sql,csv,html,md}]
-charset = "utf-8-bom"
+[*.{received,verified}.{txt,xml,json,md,sql,csv,html,htm,md}]
+charset = utf-8-bom
 end_of_line = lf
 indent_size = unset
 indent_style = unset
