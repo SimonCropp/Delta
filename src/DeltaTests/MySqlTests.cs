@@ -1,16 +1,18 @@
-﻿public class MySqlTests
+﻿using MySqlConnector;
+
+public class MySqlTests
 {
     [Test]
     public async Task GetLastTimeStamp()
     {
-        await using var connection = new MySqlConnector.MySqlConnection(MySqlConnectionString.Value);
+        await using var connection = new MySqlConnection(MySqlConnectionString.Value);
         await connection.OpenAsync();
         await MySqlDbBuilder.Create(connection);
         await using var command = connection.CreateCommand();
         command.CommandText =
             $"""
-             insert into "Companies"("Id", "Content")
-             values ('{Guid.NewGuid()}', 'The company')
+             INSERT INTO Companies (Id, Content)
+             VALUES ('{Guid.NewGuid()}', 'The company')
              """;
         await command.ExecuteNonQueryAsync();
 

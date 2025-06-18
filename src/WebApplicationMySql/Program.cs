@@ -18,8 +18,8 @@ await using (var connection = new MySqlConnection(connectionString))
     await using var command = connection.CreateCommand();
     command.CommandText =
         $"""
-         insert into "Companies"("Id", "Content")
-         values ('{Guid.NewGuid()}', 'The company')
+         INSERT INTO Companies (Id, Content)
+         VALUES ('{Guid.NewGuid()}', 'The company')
          """;
     await command.ExecuteNonQueryAsync();
 }
@@ -37,9 +37,7 @@ app.MapGet(
 
         var lastTimeStamp = await connection.GetLastTimeStamp();
         await using var command = connection.CreateCommand();
-        command.CommandText = """
-                              select * from "Companies"
-                              """;
+        command.CommandText = "select * from Companies";
         await using var reader = await command.ExecuteReaderAsync();
         var builder = new StringBuilder("Results: ");
         builder.AppendLine();

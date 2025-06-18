@@ -157,8 +157,8 @@ public class Usage :
     static Task<string> GetTrackingTimeStamp(SqlDatabase database) =>
         Execute(database, DeltaExtensions.ExecuteSqlTimeStamp);
 
-    static async Task<string> GetLsnTimeStamp(SqlDatabase database) =>
-        await Execute(database, DeltaExtensions.ExecuteSqlLsn);
+    static Task<string> GetLsnTimeStamp(SqlDatabase database) =>
+        Execute(database, DeltaExtensions.ExecuteSqlLsn);
 
     static async Task<string> Execute(SqlDatabase database, Func<DbCommand, Cancel, Task<string>> execute)
     {

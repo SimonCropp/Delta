@@ -7,7 +7,9 @@ public static partial class DeltaExtensions
 
     [MemberNotNull(nameof(connectionType))]
     [MemberNotNull(nameof(transactionType))]
+
     #region DiscoverConnection
+
     static void InitConnectionTypes()
     {
         var sqlConnectionType = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
@@ -26,7 +28,15 @@ public static partial class DeltaExtensions
             return;
         }
 
-        throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection and Npgsql.NpgsqlTransaction");
+        var mySqlConnection = Type.GetType("MySqlConnector.MySqlConnection, MySqlConnector");
+        if (mySqlConnection != null)
+        {
+            connectionType = mySqlConnection;
+            transactionType = mySqlConnection.Assembly.GetType("MySqlConnector.MySqlTransaction")!;
+            return;
+        }
+
+        throw new("Could not find connection type. Tried SqlConnection, NpgsqlConnection, and MySqlConnection");
     }
 
     static Connection DiscoverConnection(HttpContext httpContext)

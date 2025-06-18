@@ -28,6 +28,16 @@ public static partial class DeltaExtensions
             return ExecutePostgres;
         }
 
+        if (name == "MySqlConnection")
+        {
+            if (connection.ServerVersion.EndsWith("MariaDB"))
+            {
+                return ExecuteSqlTimeStampMariaDb;
+            }
+
+            return ExecuteMySql;
+        }
+
         throw new($"Unsupported type {name}");
     }
 
@@ -52,10 +62,48 @@ public static partial class DeltaExtensions
         }
     }
 
-    static async Task<string> ExecutePostgres(DbCommand command, Cancel cancel = default)
+    static async Task<string> ExecuteMySql(DbCommand command, Cancel cancel = default)
+    {
+        command.CommandText =
+            """
+            SHOW MASTER STATUS;
+            """;
+
+        await using var reader = await command.ExecuteReaderAsync(cancel);
+        if (await reader.ReadAsync(cancel))
+        {
+            // Binlog file name
+            var file = reader.GetString(0);
+            // Binlog position
+            var position = reader.GetInt64(1);
+            return $"{file}-{position}";
+        }
+
+// If binary logging is disabled
+        return "No-binlog";
+    }
+
+    static async Task<string> ExecuteSqlTimeStampMariaDb(DbCommand command, Cancel cancel)
+    {
+        command.CommandText =
+            """
+            -- Get the current binary log file and position
+            SELECT CONCAT(file, '-', position)
+            FROM (
+                SELECT variable_value AS file FROM information_schema.global_status WHERE variable_name = 'Binlog_Enabled'
+            ) AS binlog_file,
+            (
+                SELECT variable_value AS position FROM information_schema.global_status WHERE variable_name = 'Binlog_Position'
+            ) AS binlog_position;
+            """;
+
+        return (string)(await command.ExecuteScalarAsync(cancel))!;
+    }
+
+    static async Task<string> ExecutePostgres(DbCommand command, Cancel cancel)
     {
         command.CommandText = "select pg_last_committed_xact();";
-        var results = (object?[]?) await command.ExecuteScalarAsync(cancel);
+        var results = (object?[]?)await command.ExecuteScalarAsync(cancel);
 
         // null on first run after SET track_commit_timestamp to 'on'
         var result = results?[0];
@@ -64,7 +112,7 @@ public static partial class DeltaExtensions
             return string.Empty;
         }
 
-        var xid = (uint) result;
+        var xid = (uint)result;
         return xid.ToString();
     }
 
@@ -79,10 +127,10 @@ public static partial class DeltaExtensions
             return string.Empty;
         }
 
-        return (string) reader[0];
+        return (string)reader[0];
     }
 
-    internal static async Task<string> ExecuteSqlTimeStamp(DbCommand command, Cancel cancel = default)
+    internal static async Task<string> ExecuteSqlTimeStamp(DbCommand command, Cancel cancel)
     {
         command.CommandText =
             """
@@ -94,10 +142,10 @@ public static partial class DeltaExtensions
             else
               select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
             """;
-        return (string) (await command.ExecuteScalarAsync(cancel))!;
+        return (string)(await command.ExecuteScalarAsync(cancel))!;
     }
 
-    static async Task<bool> HasViewServerState(DbCommand command, Cancel cancel = default)
+    static async Task<bool> HasViewServerState(DbCommand command, Cancel cancel)
     {
         command.CommandText = "select has_perms_by_name(null, null, 'VIEW SERVER STATE')";
         var result = (int)(await command.ExecuteScalarAsync(cancel))!;

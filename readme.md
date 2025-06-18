@@ -360,7 +360,15 @@ static void InitConnectionTypes()
         return;
     }
 
-    throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection and Npgsql.NpgsqlTransaction");
+    var mySqlConnection = Type.GetType("MySqlConnector.MySqlConnection, MySqlConnector");
+    if (mySqlConnection != null)
+    {
+        connectionType = mySqlConnection;
+        transactionType = mySqlConnection.Assembly.GetType("MySqlConnector.MySqlTransaction")!;
+        return;
+    }
+
+    throw new("Could not find connection type. Tried SqlConnection, NpgsqlConnection, and MySqlConnection");
 }
 
 static Connection DiscoverConnection(HttpContext httpContext)
@@ -371,7 +379,7 @@ static Connection DiscoverConnection(HttpContext httpContext)
     return new(connection, transaction);
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_ConnectionDiscovery.cs#L10-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_ConnectionDiscovery.cs#L11-L50' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection discovery:

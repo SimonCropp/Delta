@@ -6,10 +6,10 @@
     {
         if (Environment.GetEnvironmentVariable("AppVeyor") == "True")
         {
-            Value = "User ID=postgres;Password=Password12!;Host=localhost;Port=5432;Database=delta";
+            Value = "Server=127.0.0.1;Port=3307;User ID=root;Password=password;Database=delta;";
             return;
         }
 
-        Value = "Server=127.0.0.1:3307;Database=delta;User Id=root;Password=password;";
+        Value = "Server=127.0.0.1;Port=3307;User ID=root;Password=password;Database=delta;";
     }
 }
