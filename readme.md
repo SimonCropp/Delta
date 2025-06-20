@@ -42,29 +42,6 @@ Effectively consumers will always receive the most current data, while the load 
 Frequency of updates to data is relatively low compared to reads
 
 
-### SQL Server
-
-For SQL Server the transaction log is used (via [dm_db_log_stats](https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-db-log-stats-transact-sql)) if the current user has the `VIEW SERVER STATE` permission.
-
-If `VIEW SERVER STATE` is not allowed then a combination of [Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql) is used.
-
-Give the above certain kinds of operations will be detected:
-
-|             | Transaction Log | Change Tracking | Row Versioning | Change Tracking<br>and Row Versioning |
-|-------------|:---------------:|:---------------:|:--------------:|:----------------------------------:|
-| Insert      |        ✅      |        ✅       |        ✅     |                  ✅                |
-| Update      |        ✅      |        ✅       |        ✅     |                  ✅                |
-| Hard Delete |        ✅      |        ✅       |        ❌     |                  ✅                |
-| Soft Delete |        ✅      |        ✅       |        ✅     |                  ✅                |
-| Truncate    |        ✅      |        ❌       |        ❌     |                  ❌                |
-
-
-
-### Postgres
-
-Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) to be enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service
-
-
 ## 304 Not Modified Flow
 
 ```mermaid
@@ -82,6 +59,30 @@ graph TD
     EtagMatch -->|No| AddETag
     EtagMatch -->|Yes| 304
 ```
+
+
+### SQL Server
+
+For SQL Server the transaction log is used (via [dm_db_log_stats](https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-db-log-stats-transact-sql)) if the current user has the `VIEW SERVER STATE` permission.<!-- include: sqlserver-implemenation. path: /docs/mdsource/sqlserver-implemenation.include.md -->
+
+If `VIEW SERVER STATE` is not allowed then a combination of [Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql) is used.
+
+Give the above certain kinds of operations will be detected:
+
+|             | Transaction Log | Change Tracking | Row Versioning | Change Tracking<br>and Row Versioning |
+|-------------|:---------------:|:---------------:|:--------------:|:----------------------------------:|
+| Insert      |        ✅      |        ✅       |        ✅     |                  ✅                |
+| Update      |        ✅      |        ✅       |        ✅     |                  ✅                |
+| Hard Delete |        ✅      |        ✅       |        ❌     |                  ✅                |
+| Soft Delete |        ✅      |        ✅       |        ✅     |                  ✅                |
+| Truncate    |        ✅      |        ❌       |        ❌     |                  ❌                |
+<!-- endInclude -->
+
+
+
+### Postgres
+
+Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) to be enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service<!-- singleLineInclude: postgres-implemenation. path: /docs/mdsource/postgres-implemenation.include.md -->
 
 
 ## ETag calculation logic
