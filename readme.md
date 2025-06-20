@@ -79,7 +79,6 @@ Give the above certain kinds of operations will be detected:
 <!-- endInclude -->
 
 
-
 ### Postgres
 
 Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) to be enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service<!-- singleLineInclude: postgres-implemenation. path: /docs/mdsource/postgres-implemenation.include.md -->
@@ -88,6 +87,10 @@ Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/ru
 ## ETag calculation logic
 
 The ETag is calculated from a combination several parts
+
+```
+{AssemblyWriteTime}-{DbTimeStamp}-{Suffix}
+```
 
 
 ### AssemblyWriteTime
@@ -104,7 +107,7 @@ AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 <!-- endSnippet -->
 
 
-### SQL timestamp
+### DB timestamp
 
 
 #### SQL Server
