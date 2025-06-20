@@ -58,6 +58,10 @@ include: postgres-implemenation
 
 The ETag is calculated from a combination several parts
 
+```
+{AssemblyWriteTime}-{DbTimeStamp}-{Suffix}
+```
+
 
 ### AssemblyWriteTime
 
@@ -66,7 +70,7 @@ The last write time of the web entry point assembly
 snippet: AssemblyWriteTime
 
 
-### SQL timestamp
+### DB timestamp
 
 
 #### SQL Server
