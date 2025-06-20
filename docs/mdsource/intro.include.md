@@ -4,4 +4,4 @@ The approach uses a last updated timestamp from the database to generate an [ETa
 
 This approach works well when the frequency of updates is relatively low. In this scenario, the majority of requests will leverage the result in a 304 Not Modified being returned and the browser loading the content its cache.
 
-Effectively consumers will always receive the most current data, while the load on the server remains low.
+Effectively consumers will always receive the most current data, while the load on the server is reduced.
