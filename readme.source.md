@@ -70,36 +70,24 @@ The last write time of the web entry point assembly
 snippet: AssemblyWriteTime
 
 
-### DB timestamp
-
-
-#### SQL Server
-
-
-##### `VIEW SERVER STATE` permission
-
-Transaction log is used via [dm_db_log_stats](https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-db-log-stats-transact-sql).
-
-snippet: SqlServerTimeStampWithServerState
-
-
-##### No `VIEW SERVER STATE` permission
-
-A combination of [change_tracking_current_version](https://learn.microsoft.com/en-us/sql/relational-databases/system-functions/change-tracking-current-version-transact-sql) (if tracking is enabled) and [@@DBTS (row version timestamp)](https://learn.microsoft.com/en-us/sql/t-sql/functions/dbts-transact-sql)
-
-snippet: SqlServerTimeStampNoServerState
-
-
-#### Postgres
-
-snippet: PostgresTimeStamp
-
-
 ### Suffix
 
 An optional string suffix that is dynamically calculated at runtime based on the current `HttpContext`.
 
 snippet: Suffix
+
+
+### DB timestamp
+
+
+#### SQL Server
+
+include: sqlserver-timestamp
+
+
+#### Postgres
+
+snippet: PostgresTimeStamp
 
 
 ### Combining the above
@@ -150,11 +138,7 @@ snippet: UseDeltaPostgres
 include: map-group
 
 
-### ShouldExecute
-
-Optionally control what requests Delta is executed on.
-
-snippet: ShouldExecute
+include: should-execute
 
 
 include: connection-discovery
@@ -200,11 +184,7 @@ snippet: UseDeltaPostgresEF
 include: map-group-ef
 
 
-### ShouldExecute
-
-Optionally control what requests Delta is executed on.
-
-snippet: ShouldExecuteEF
+include: should-execute-ef
 
 
 ### GetLastTimeStamp:

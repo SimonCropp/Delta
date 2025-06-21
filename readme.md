@@ -107,12 +107,26 @@ AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 <!-- endSnippet -->
 
 
+### Suffix
+
+An optional string suffix that is dynamically calculated at runtime based on the current `HttpContext`.
+
+<!-- snippet: Suffix -->
+<a id='snippet-Suffix'></a>
+```cs
+var app = builder.Build();
+app.UseDelta(suffix: httpContext => "MySuffix");
+```
+<sup><a href='/src/DeltaTests/Usage.cs#L8-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-Suffix' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
 ### DB timestamp
 
 
 #### SQL Server
 
-
+<!-- include: sqlserver-timestamp. path: /docs/mdsource/sqlserver-timestamp.include.md -->
 ##### `VIEW SERVER STATE` permission
 
 Transaction log is used via [dm_db_log_stats](https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-db-log-stats-transact-sql).
@@ -144,6 +158,7 @@ else
 ```
 <sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L99-L107' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampNoServerState' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+<!-- endInclude -->
 
 
 #### Postgres
@@ -154,20 +169,6 @@ else
 select pg_last_committed_xact();
 ```
 <sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L58-L60' title='Snippet source file'>snippet source</a> | <a href='#snippet-PostgresTimeStamp' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
-
-
-### Suffix
-
-An optional string suffix that is dynamically calculated at runtime based on the current `HttpContext`.
-
-<!-- snippet: Suffix -->
-<a id='snippet-Suffix'></a>
-```cs
-var app = builder.Build();
-app.UseDelta(suffix: httpContext => "MySuffix");
-```
-<sup><a href='/src/DeltaTests/Usage.cs#L8-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-Suffix' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -333,7 +334,7 @@ app.MapGroup("/group")
 <!-- endInclude -->
 
 
-### ShouldExecute
+### ShouldExecute<!-- include: should-execute. path: /docs/mdsource/should-execute.include.md -->
 
 Optionally control what requests Delta is executed on.
 
@@ -350,6 +351,7 @@ app.UseDelta(
 ```
 <sup><a href='/src/DeltaTests/Usage.cs#L18-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+<!-- endInclude -->
 
 
 ### Custom Connection discovery<!-- include: connection-discovery. path: /docs/mdsource/connection-discovery.include.md -->
@@ -541,8 +543,7 @@ app.UseDelta<SampleDbContext>();
 <!-- endSnippet -->
 
 
-<!-- include: map-group-ef. path: /docs/mdsource/map-group-ef.include.md -->
-### Add to a Route Group
+### Add to a Route Group<!-- include: map-group-ef. path: /docs/mdsource/map-group-ef.include.md -->
 
 To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
 
@@ -565,23 +566,24 @@ app.MapGroup("/group")
 <!-- endInclude -->
 
 
-### ShouldExecute
+### ShouldExecute<!-- include: should-execute-ef. path: /docs/mdsource/should-execute-ef.include.md -->
 
 Optionally control what requests Delta is executed on.
 
-<!-- snippet: ShouldExecuteEF -->
-<a id='snippet-ShouldExecuteEF'></a>
+<!-- snippet: ShouldExecute -->
+<a id='snippet-ShouldExecute'></a>
 ```cs
 var app = builder.Build();
-app.UseDelta<SampleDbContext>(
+app.UseDelta(
     shouldExecute: httpContext =>
     {
         var path = httpContext.Request.Path.ToString();
         return path.Contains("match");
     });
 ```
-<sup><a href='/src/Delta.EFTests/Usage.cs#L16-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecuteEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L18-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+<!-- endInclude -->
 
 
 ### GetLastTimeStamp:
