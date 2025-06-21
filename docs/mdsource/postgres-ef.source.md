@@ -39,6 +39,4 @@ include: map-group-ef
 include: should-execute-ef
 
 
-### GetLastTimeStamp:
-
-snippet: GetLastTimeStampEF
+include: last-timestamp-ef

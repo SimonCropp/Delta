@@ -229,7 +229,9 @@ application.UseDelta(
 <!-- endInclude -->
 
 
-### GetLastTimeStamp
+### GetLastTimeStamp:<!-- include: last-timestamp. path: /docs/mdsource/last-timestamp.include.md -->
+
+`GetLastTimeStamp` is a helper method to get the DB timestamp that Delta uses to calculate the etag.
 
 <!-- snippet: GetLastTimeStampConnection -->
 <a id='snippet-GetLastTimeStampConnection'></a>
@@ -238,6 +240,7 @@ var timeStamp = await connection.GetLastTimeStamp();
 ```
 <sup><a href='/src/DeltaTests/Usage.cs#L187-L191' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+<!-- endInclude -->
 
 
 ## Delta.SqlServer<!-- include: sqlserver-helpers. path: /docs/mdsource/sqlserver-helpers.include.md -->

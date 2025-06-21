@@ -156,7 +156,9 @@ app.UseDelta<SampleDbContext>(
 <!-- endInclude -->
 
 
-### GetLastTimeStamp:
+### GetLastTimeStamp:<!-- include: last-timestamp-ef. path: /docs/mdsource/last-timestamp-ef.include.md -->
+
+`GetLastTimeStamp` is a helper method to get the DB timestamp that Delta uses to calculate the etag.
 
 <!-- snippet: GetLastTimeStampEF -->
 <a id='snippet-GetLastTimeStampEF'></a>
@@ -165,3 +167,4 @@ var timeStamp = await dbContext.GetLastTimeStamp();
 ```
 <sup><a href='/src/Delta.EFTests/Usage.cs#L41-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+<!-- endInclude -->

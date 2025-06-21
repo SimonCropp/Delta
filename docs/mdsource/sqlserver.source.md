@@ -35,9 +35,7 @@ include: should-execute
 include: connection-discovery
 
 
-### GetLastTimeStamp
-
-snippet: GetLastTimeStampConnection
+include: last-timestamp
 
 
 include: sqlserver-helpers
