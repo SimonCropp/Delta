@@ -37,6 +37,14 @@ Effectively consumers will always receive the most current data, while the load 
 [![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)
 
 
+## Jump to specific docs
+
+ * [SQL Server Docs](/docs/sqlserver.md) when using [SQL Server SqlClient](https://github.com/dotnet/SqlClient)
+ * [PostgreSQL Docs](/docs/postgres.md) when using [PostgreSQL Npgsql](https://www.npgsql.org)
+ * [EF with SQL Server Docs](/docs/sqlserver-ef.md) when using the [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli)
+ * [EF with PostgreSQL Docs](/docs/postgres-ef.md) when using the [PostgreSQL EF Database Provider](https://www.npgsql.org/efcore)
+
+
 ## Assumptions
 
 Frequency of updates to data is relatively low compared to reads
@@ -65,7 +73,7 @@ graph TD
 Implementation is specific to the target database
 
  * [SQL Server implementation](/docs/sqlserver.md#implementation)
- * [Postgres implementation](/docs/postgres.md#implementation)
+ * [PostgreSQL implementation](/docs/postgres.md#implementation)
 
 
 ## ETag calculation logic
@@ -132,14 +140,33 @@ internal static string BuildEtag(string timeStamp, string? suffix)
 <!-- endSnippet -->
 
 
-## NuGet
+## Usage
 
-Delta is shipped as two nugets:
+Delta has two approaches to usage:
 
- * [Delta](https://nuget.org/packages/Delta/): Delivers functionality using SqlConnection and SqlTransaction.
- * [Delta.EF](https://nuget.org/packages/Delta.EF/): Delivers functionality using [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli).
 
-Only one of the above should be used.
+### Raw DbConnection approach
+
+Delivers functionality using DbConnection and DbTransaction.
+
+NuGet: [Delta](https://nuget.org/packages/Delta/)
+
+Documentation is specific to choice of database:
+
+ * [SQL Server Docs](/docs/sqlserver.md) when using [SQL Server SqlClient](https://github.com/dotnet/SqlClient)
+ * [PostgreSQL Docs](/docs/postgres.md) when using [PostgreSQL Npgsql](https://www.npgsql.org)
+
+
+### Entity Framework approach
+
+Delivers functionality using [Entity Framework](https://learn.microsoft.com/en-us/ef/).
+
+NuGet: [Delta.EF](https://nuget.org/packages/Delta.EF/)
+
+Documentation is specific to choice of database:
+
+ * [EF with SQL Server Docs](/docs/sqlserver-ef.md) when using the [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli)
+ * [EF with PostgreSQL Docs](/docs/postgres-ef.md) when using the [PostgreSQL EF Database Provider](https://www.npgsql.org/efcore)
 
 
 ## UseResponseDiagnostics
