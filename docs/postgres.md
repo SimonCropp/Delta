@@ -115,12 +115,12 @@ app.UseDelta(
         return path.Contains("match");
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L18-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L19-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->
 
 
-### Custom Connection discovery<!-- include: connection-discovery. path: /docs/mdsource/connection-discovery.include.md -->
+### Custom Connection discovery
 
 By default, Delta uses `HttpContext.RequestServices` to discover the DbConnection and DbTransaction:
 
@@ -161,34 +161,34 @@ static Connection DiscoverConnection(HttpContext httpContext)
 
 To use custom connection discovery:
 
-<!-- snippet: CustomDiscoveryConnection -->
-<a id='snippet-CustomDiscoveryConnection'></a>
+<!-- snippet: CustomDiscoveryConnectionPostgres -->
+<a id='snippet-CustomDiscoveryConnectionPostgres'></a>
 ```cs
 var application = webApplicationBuilder.Build();
 application.UseDelta(
-    getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
+    getConnection: httpContext =>
+        httpContext.RequestServices.GetRequiredService<NpgsqlConnection>());
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L314-L320' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L326-L333' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection and transaction discovery:
 
-<!-- snippet: CustomDiscoveryConnectionAndTransaction -->
-<a id='snippet-CustomDiscoveryConnectionAndTransaction'></a>
+<!-- snippet: CustomDiscoveryConnectionAndTransactionPostgres -->
+<a id='snippet-CustomDiscoveryConnectionAndTransactionPostgres'></a>
 ```cs
 var application = webApplicationBuilder.Build();
 application.UseDelta(
     getConnection: httpContext =>
     {
         var provider = httpContext.RequestServices;
-        var connection = provider.GetRequiredService<SqlConnection>();
-        var transaction = provider.GetService<SqlTransaction>();
+        var connection = provider.GetRequiredService<NpgsqlConnection>();
+        var transaction = provider.GetService<NpgsqlTransaction>();
         return new(connection, transaction);
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L325-L337' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransaction' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L354-L366' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransactionPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
-<!-- endInclude -->
 
 
 ### GetLastTimeStamp:<!-- include: last-timestamp. path: /docs/mdsource/last-timestamp.include.md -->
@@ -200,6 +200,6 @@ application.UseDelta(
 ```cs
 var timeStamp = await connection.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L187-L191' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L188-L192' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->

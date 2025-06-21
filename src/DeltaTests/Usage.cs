@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using Npgsql;
 
 public class Usage :
     LocalDbTestBase
@@ -309,20 +310,32 @@ public class Usage :
         IsTrue(isTrackingEnabled);
     }
 
-    static void CustomDiscoveryConnection(WebApplicationBuilder webApplicationBuilder)
+    static void CustomDiscoveryConnectionSqlServer(WebApplicationBuilder webApplicationBuilder)
     {
-        #region CustomDiscoveryConnection
+        #region CustomDiscoveryConnectionSqlServer
 
         var application = webApplicationBuilder.Build();
         application.UseDelta(
-            getConnection: httpContext => httpContext.RequestServices.GetRequiredService<SqlConnection>());
+            getConnection: httpContext =>
+                httpContext.RequestServices.GetRequiredService<SqlConnection>());
+
+        #endregion
+    }
+    static void CustomDiscoveryConnectionPostgres(WebApplicationBuilder webApplicationBuilder)
+    {
+        #region CustomDiscoveryConnectionPostgres
+
+        var application = webApplicationBuilder.Build();
+        application.UseDelta(
+            getConnection: httpContext =>
+                httpContext.RequestServices.GetRequiredService<NpgsqlConnection>());
 
         #endregion
     }
 
-    static void CustomDiscoveryConnectionAndTransaction(WebApplicationBuilder webApplicationBuilder)
+    static void CustomDiscoveryConnectionAndTransactionSqlServer(WebApplicationBuilder webApplicationBuilder)
     {
-        #region CustomDiscoveryConnectionAndTransaction
+        #region CustomDiscoveryConnectionAndTransactionSqlServer
 
         var application = webApplicationBuilder.Build();
         application.UseDelta(
@@ -331,6 +344,22 @@ public class Usage :
                 var provider = httpContext.RequestServices;
                 var connection = provider.GetRequiredService<SqlConnection>();
                 var transaction = provider.GetService<SqlTransaction>();
+                return new(connection, transaction);
+            });
+
+        #endregion
+    }
+    static void CustomDiscoveryConnectionAndTransactionPostgres(WebApplicationBuilder webApplicationBuilder)
+    {
+        #region CustomDiscoveryConnectionAndTransactionPostgres
+
+        var application = webApplicationBuilder.Build();
+        application.UseDelta(
+            getConnection: httpContext =>
+            {
+                var provider = httpContext.RequestServices;
+                var connection = provider.GetRequiredService<NpgsqlConnection>();
+                var transaction = provider.GetService<NpgsqlTransaction>();
                 return new(connection, transaction);
             });
 

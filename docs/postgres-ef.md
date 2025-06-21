@@ -177,6 +177,6 @@ Or a DbConnection:
 ```cs
 var timeStamp = await connection.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L187-L191' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L188-L192' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->

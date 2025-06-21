@@ -117,7 +117,7 @@ An optional string suffix that is dynamically calculated at runtime based on the
 var app = builder.Build();
 app.UseDelta(suffix: httpContext => "MySuffix");
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L8-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-Suffix' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L9-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-Suffix' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

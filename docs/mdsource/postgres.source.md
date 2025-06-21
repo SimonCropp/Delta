@@ -34,7 +34,19 @@ include: map-group
 include: should-execute
 
 
-include: connection-discovery
+### Custom Connection discovery
+
+By default, Delta uses `HttpContext.RequestServices` to discover the DbConnection and DbTransaction:
+
+snippet: DiscoverConnection
+
+To use custom connection discovery:
+
+snippet: CustomDiscoveryConnectionPostgres
+
+To use custom connection and transaction discovery:
+
+snippet: CustomDiscoveryConnectionAndTransactionPostgres
 
 
 include: last-timestamp
