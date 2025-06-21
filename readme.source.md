@@ -70,24 +70,19 @@ The last write time of the web entry point assembly
 snippet: AssemblyWriteTime
 
 
+### DB timestamp
+
+Timestamp calculation is specific to the target database
+
+ * [SQL Server timestamp calculation]()
+ * [Postgres timestamp calculation]()
+
+
 ### Suffix
 
 An optional string suffix that is dynamically calculated at runtime based on the current `HttpContext`.
 
 snippet: Suffix
-
-
-### DB timestamp
-
-
-#### SQL Server
-
-include: sqlserver-timestamp
-
-
-#### Postgres
-
-snippet: PostgresTimeStamp
 
 
 ### Combining the above
@@ -105,93 +100,6 @@ Delta is shipped as two nugets:
 Only one of the above should be used.
 
 
-## Usage
-
-
-### SQL Server DB Schema
-
-Example SQL schema:
-
-snippet: Usage.Schema.verified.sql
-
-
-### Postgres DB Schema
-
-Example SQL schema:
-
-snippet: PostgresSchema
-
-
-### Add to WebApplicationBuilder
-
-
-#### SQL Server
-
-snippet: UseDeltaSqlServer
-
-
-#### PostgreSQL
-
-snippet: UseDeltaPostgres
-
-
-include: map-group
-
-
-include: should-execute
-
-
-include: connection-discovery
-
-
-### GetLastTimeStamp
-
-For a `DbConnection`:
-
-snippet: GetLastTimeStampConnection
-
-
-## EF Usage
-
-
-### SqlServer DbContext using RowVersion
-
-Enable row versioning in Entity Framework
-
-snippet: SampleSqlServerDbContext
-
-
-### Postgres DbContext
-
-Enable row versioning in Entity Framework
-
-snippet: SamplePostgresDbContext
-
-
-### Add to WebApplicationBuilder
-
-
-#### SQL Server
-
-snippet: UseDeltaSQLServerEF
-
-
-#### Postgres
-
-snippet: UseDeltaPostgresEF
-
-
-include: map-group-ef
-
-
-include: should-execute-ef
-
-
-### GetLastTimeStamp:
-
-snippet: GetLastTimeStampEF
-
-
 ## UseResponseDiagnostics
 
 Response diagnostics is an opt-out feature that includes extra log information in the response headers.
@@ -205,100 +113,6 @@ Response diagnostics headers are prefixed with `Delta-`.
 Example Response header when the Request has not `If-None-Match` header.
 
 <img src="/src/Delta-No304.png">
-
-
-## Delta.SqlServer
-
-A set of helper methods for working with [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
-
-Nuget: [Delta.SqlServer](https://www.nuget.org/packages/Delta.SqlServer)
-
-
-### GetDatabasesWithTracking
-
-Get a list of all databases with change tracking enabled.
-
-snippet: GetDatabasesWithTracking
-
-Uses the following SQL:
-
-snippet: GetTrackedDatabasesSql
-
-
-### GetTrackedTables
-
-Get a list of all tracked tables in database.
-
-snippet: GetTrackedTables
-
-Uses the following SQL:
-
-snippet: GetTrackedTablesSql
-
-
-### IsTrackingEnabled
-
-Determine if change tracking is enabled for a database.
-
-snippet: IsTrackingEnabled
-
-Uses the following SQL:
-
-snippet: IsTrackingEnabledSql
-
-
-### EnableTracking
-
-Enable change tracking for a database.
-
-snippet: EnableTracking
-
-Uses the following SQL:
-
-snippet: EnableTrackingSql
-
-
-### DisableTracking
-
-Disable change tracking for a database and all tables within that database.
-
-snippet: DisableTracking
-
-Uses the following SQL:
-
-
-#### For disabling tracking on a database:
-
-snippet: DisableTrackingSqlDB
-
-
-#### For disabling tracking on tables:
-
-snippet: DisableTrackingSqlTable
-
-
-### SetTrackedTables
-
-Enables change tracking for all tables listed, and disables change tracking for all tables not listed.
-
-snippet: SetTrackedTables
-
-Uses the following SQL:
-
-
-#### For enabling tracking on a database:
-
-snippet: EnableTrackingSql
-
-
-#### For enabling tracking on tables:
-
-snippet: EnableTrackingTableSql
-
-
-#### For disabling tracking on tables:
-
-snippet: DisableTrackingTableSql
 
 
 ## Verifying behavior
@@ -346,4 +160,3 @@ In the scenario where web apis (that support using 304) are being consumed using
 ## Icon
 
 [Estuary](https://thenounproject.com/term/estuary/1847616/) designed by [Daan](https://thenounproject.com/Asphaleia/) from [The Noun Project](https://thenounproject.com).
-
