@@ -317,7 +317,7 @@ app.UseDelta();
 <!-- endSnippet -->
 
 
-### Add to a Route Group
+### Add to a Route Group<!-- include: map-group. path: /docs/mdsource/map-group.include.md -->
 
 To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
 
@@ -330,6 +330,7 @@ app.MapGroup("/group")
 ```
 <sup><a href='/src/WebApplicationSqlServer/Program.cs#L61-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroup' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+<!-- endInclude -->
 
 
 ### ShouldExecute
@@ -351,9 +352,9 @@ app.UseDelta(
 <!-- endSnippet -->
 
 
-### Custom Connection discovery
+### Custom Connection discovery<!-- include: connection-discovery. path: /docs/mdsource/connection-discovery.include.md -->
 
-By default, Delta uses `HttpContext.RequestServices` to discover the SqlConnection and SqlTransaction:
+By default, Delta uses `HttpContext.RequestServices` to discover the DbConnection and DbTransaction:
 
 <!-- snippet: DiscoverConnection -->
 <a id='snippet-DiscoverConnection'></a>
@@ -419,6 +420,7 @@ application.UseDelta(
 ```
 <sup><a href='/src/DeltaTests/Usage.cs#L325-L337' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransaction' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+<!-- endInclude -->
 
 
 ### GetLastTimeStamp
@@ -539,6 +541,7 @@ app.UseDelta<SampleDbContext>();
 <!-- endSnippet -->
 
 
+<!-- include: map-group-ef. path: /docs/mdsource/map-group-ef.include.md -->
 ### Add to a Route Group
 
 To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
@@ -559,6 +562,7 @@ app.MapGroup("/group")
 ```
 <sup><a href='/src/WebApplicationSqlServerEF/Program.cs#L44-L50' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaMapGroupEF-1' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+<!-- endInclude -->
 
 
 ### ShouldExecute

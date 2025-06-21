@@ -147,11 +147,7 @@ snippet: UseDeltaSqlServer
 snippet: UseDeltaPostgres
 
 
-### Add to a Route Group
-
-To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
-
-snippet: UseDeltaMapGroup
+include: map-group
 
 
 ### ShouldExecute
@@ -161,19 +157,7 @@ Optionally control what requests Delta is executed on.
 snippet: ShouldExecute
 
 
-### Custom Connection discovery
-
-By default, Delta uses `HttpContext.RequestServices` to discover the SqlConnection and SqlTransaction:
-
-snippet: DiscoverConnection
-
-To use custom connection discovery:
-
-snippet: CustomDiscoveryConnection
-
-To use custom connection and transaction discovery:
-
-snippet: CustomDiscoveryConnectionAndTransaction
+include: connection-discovery
 
 
 ### GetLastTimeStamp
@@ -213,11 +197,7 @@ snippet: UseDeltaSQLServerEF
 snippet: UseDeltaPostgresEF
 
 
-### Add to a Route Group
-
-To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
-
-snippet: UseDeltaMapGroupEF
+include: map-group-ef
 
 
 ### ShouldExecute
