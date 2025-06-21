@@ -17,7 +17,7 @@ To change this file edit the source file and then run MarkdownSnippets.
 Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) to be enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service<!-- singleLineInclude: postgres-implemenation. path: /docs/mdsource/postgres-implemenation.include.md -->
 
 
-## Timestamp
+## Timestamp calculation
 
 <!-- snippet: PostgresTimeStamp -->
 <a id='snippet-PostgresTimeStamp'></a>

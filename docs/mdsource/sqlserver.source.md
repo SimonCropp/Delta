@@ -9,7 +9,7 @@
 include: sqlserver-implemenation
 
 
-## Timestamp
+## Timestamp calculation
 
 include: sqlserver-timestamp
 

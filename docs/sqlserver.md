@@ -29,7 +29,7 @@ Give the above certain kinds of operations will be detected:
 <!-- endInclude -->
 
 
-## Timestamp
+## Timestamp calculation
 
 <!-- include: sqlserver-timestamp. path: /docs/mdsource/sqlserver-timestamp.include.md -->
 ##### `VIEW SERVER STATE` permission

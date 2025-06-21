@@ -10,7 +10,7 @@
 include: postgres-implemenation
 
 
-## Timestamp
+## Timestamp calculation
 
 snippet: PostgresTimeStamp
 
