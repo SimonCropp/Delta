@@ -38,6 +38,8 @@ include: should-execute
 
 By default, Delta uses `HttpContext.RequestServices` to discover the SqlConnection and SqlTransaction:
 
+snippet: InitConnectionTypesSqlServer
+
 snippet: DiscoverConnection
 
 To use custom connection discovery:

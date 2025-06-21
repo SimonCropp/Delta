@@ -122,32 +122,25 @@ app.UseDelta(
 
 ### Custom Connection discovery
 
-By default, Delta uses `HttpContext.RequestServices` to discover the DbConnection and DbTransaction:
+By default, Delta uses `HttpContext.RequestServices` to discover the NpgsqlConnection and NpgsqlTransaction:
+
+<!-- snippet: InitConnectionTypesPostgres -->
+<a id='snippet-InitConnectionTypesPostgres'></a>
+```cs
+var npgsqlConnection = Type.GetType("Npgsql.NpgsqlConnection, Npgsql");
+if (npgsqlConnection != null)
+{
+    connectionType = npgsqlConnection;
+    transactionType = npgsqlConnection.Assembly.GetType("Npgsql.NpgsqlTransaction")!;
+    return;
+}
+```
+<sup><a href='/src/Delta/DeltaExtensions_ConnectionDiscovery.cs#L24-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-InitConnectionTypesPostgres' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 <!-- snippet: DiscoverConnection -->
 <a id='snippet-DiscoverConnection'></a>
 ```cs
-static void InitConnectionTypes()
-{
-    var sqlConnectionType = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
-    if (sqlConnectionType != null)
-    {
-        connectionType = sqlConnectionType;
-        transactionType = sqlConnectionType.Assembly.GetType("Microsoft.Data.SqlClient.SqlTransaction")!;
-        return;
-    }
-
-    var npgsqlConnection = Type.GetType("Npgsql.NpgsqlConnection, Npgsql");
-    if (npgsqlConnection != null)
-    {
-        connectionType = npgsqlConnection;
-        transactionType = npgsqlConnection.Assembly.GetType("Npgsql.NpgsqlTransaction")!;
-        return;
-    }
-
-    throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection and Npgsql.NpgsqlTransaction");
-}
-
 static Connection DiscoverConnection(HttpContext httpContext)
 {
     var provider = httpContext.RequestServices;
@@ -156,7 +149,7 @@ static Connection DiscoverConnection(HttpContext httpContext)
     return new(connection, transaction);
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_ConnectionDiscovery.cs#L10-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_ConnectionDiscovery.cs#L39-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-DiscoverConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection discovery:

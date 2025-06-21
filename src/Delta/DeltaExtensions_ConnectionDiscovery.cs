@@ -7,9 +7,10 @@ public static partial class DeltaExtensions
 
     [MemberNotNull(nameof(connectionType))]
     [MemberNotNull(nameof(transactionType))]
-    #region DiscoverConnection
     static void InitConnectionTypes()
     {
+        #region InitConnectionTypesSqlServer
+
         var sqlConnectionType = Type.GetType("Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient");
         if (sqlConnectionType != null)
         {
@@ -17,6 +18,10 @@ public static partial class DeltaExtensions
             transactionType = sqlConnectionType.Assembly.GetType("Microsoft.Data.SqlClient.SqlTransaction")!;
             return;
         }
+
+        #endregion
+
+        #region InitConnectionTypesPostgres
 
         var npgsqlConnection = Type.GetType("Npgsql.NpgsqlConnection, Npgsql");
         if (npgsqlConnection != null)
@@ -26,8 +31,12 @@ public static partial class DeltaExtensions
             return;
         }
 
+        #endregion
+
         throw new("Could not find connection type. Tried Microsoft.Data.SqlClient.SqlConnection and Npgsql.NpgsqlTransaction");
     }
+
+    #region DiscoverConnection
 
     static Connection DiscoverConnection(HttpContext httpContext)
     {

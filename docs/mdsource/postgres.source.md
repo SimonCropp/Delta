@@ -36,7 +36,9 @@ include: should-execute
 
 ### Custom Connection discovery
 
-By default, Delta uses `HttpContext.RequestServices` to discover the DbConnection and DbTransaction:
+By default, Delta uses `HttpContext.RequestServices` to discover the NpgsqlConnection and NpgsqlTransaction:
+
+snippet: InitConnectionTypesPostgres
 
 snippet: DiscoverConnection
 
