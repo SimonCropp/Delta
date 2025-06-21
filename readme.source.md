@@ -74,8 +74,8 @@ snippet: AssemblyWriteTime
 
 Timestamp calculation is specific to the target database
 
- * [SQL Server timestamp calculation]()
- * [Postgres timestamp calculation]()
+ * [SQL Server timestamp calculation](/docs/sqlserver.md#timestamp-calculation)
+ * [Postgres timestamp calculation](/docs/postgres.md#timestamp-calculation)
 
 
 ### Suffix
