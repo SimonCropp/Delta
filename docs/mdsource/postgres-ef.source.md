@@ -1,8 +1,8 @@
 # PostgreSQL usage with EntityFramework
 
-[![NuGet Status](https://img.shields.io/nuget/v/Delta.svg?label=Delta)](https://www.nuget.org/packages/Delta/)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.EF.svg?label=Delta.EF)](https://www.nuget.org/packages/Delta.EF/)
-[![NuGet Status](https://img.shields.io/nuget/v/Delta.SqlServer.svg?label=Delta.SqlServer)](https://www.nuget.org/packages/Delta.SqlServer/)
+
+Docs for when using when using the [PostgreSQL EF Database Provider](https://www.npgsql.org/efcore)
 
 
 ## Implementation
