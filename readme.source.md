@@ -43,15 +43,12 @@ graph TD
     EtagMatch -->|Yes| 304
 ```
 
+## DB implementation
 
-### SQL Server
+Implementation is specific to the target database
 
-include: sqlserver-implemenation
-
-
-### Postgres
-
-include: postgres-implemenation
+ * [SQL Server implementation](/docs/sqlserver.md#implementation)
+ * [Postgres implementation](/docs/postgres.md#implementation)
 
 
 ## ETag calculation logic
