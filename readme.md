@@ -117,17 +117,23 @@ AssemblyWriteTime = File.GetLastWriteTime(webAssemblyLocation).Ticks.ToString();
 
 Transaction log is used via [dm_db_log_stats](https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-db-log-stats-transact-sql).
 
-```sql
+<!-- snippet: SqlServerTimeStampWithServerState -->
+<a id='snippet-SqlServerTimeStampWithServerState'></a>
+```cs
 select log_end_lsn
 from sys.dm_db_log_stats(db_id())
 ```
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L79-L82' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampWithServerState' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 
 ##### No `VIEW SERVER STATE` permission
 
 A combination of [change_tracking_current_version](https://learn.microsoft.com/en-us/sql/relational-databases/system-functions/change-tracking-current-version-transact-sql) (if tracking is enabled) and [@@DBTS (row version timestamp)](https://learn.microsoft.com/en-us/sql/t-sql/functions/dbts-transact-sql)
 
-```sql
+<!-- snippet: SqlServerTimeStampNoServerState -->
+<a id='snippet-SqlServerTimeStampNoServerState'></a>
+```cs
 declare @changeTracking bigint = change_tracking_current_version();
 declare @timeStamp bigint = convert(bigint, @@dbts);
 
@@ -136,13 +142,19 @@ if (@changeTracking is null)
 else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L99-L107' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampNoServerState' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 
 #### Postgres
 
-```sql
+<!-- snippet: PostgresTimeStamp -->
+<a id='snippet-PostgresTimeStamp'></a>
+```cs
 select pg_last_committed_xact();
 ```
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L58-L60' title='Snippet source file'>snippet source</a> | <a href='#snippet-PostgresTimeStamp' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 
 ### Suffix
