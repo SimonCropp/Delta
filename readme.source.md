@@ -20,32 +20,17 @@ include: zzz
 [![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)
 
 
+## Jump to specific docs
+
+ * [SQL Server Docs](/docs/sqlserver.md) when using [SQL Server SqlClient](https://github.com/dotnet/SqlClient)
+ * [PostgreSQL Docs](/docs/postgres.md) when using [PostgreSQL Npgsql](https://www.npgsql.org)
+ * [EF with SQL Server Docs](/docs/sqlserver-ef.md) when using the [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli)
+ * [EF with PostgreSQL Docs](/docs/postgres-ef.md) when using the [PostgreSQL EF Database Provider](https://www.npgsql.org/efcore)
+
+
 ## Assumptions
 
 Frequency of updates to data is relatively low compared to reads
-
-
-### SQL Server
-
-For SQL Server the transaction log is used (via [dm_db_log_stats](https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-db-log-stats-transact-sql)) if the current user has the `VIEW SERVER STATE` permission.
-
-If `VIEW SERVER STATE` is not allowed then a combination of [Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and/or [Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql) is used.
-
-Give the above certain kinds of operations will be detected:
-
-|             | Transaction Log | Change Tracking | Row Versioning | Change Tracking<br>and Row Versioning |
-|-------------|:---------------:|:---------------:|:--------------:|:----------------------------------:|
-| Insert      |        ✅      |        ✅       |        ✅     |                  ✅                |
-| Update      |        ✅      |        ✅       |        ✅     |                  ✅                |
-| Hard Delete |        ✅      |        ✅       |        ❌     |                  ✅                |
-| Soft Delete |        ✅      |        ✅       |        ✅     |                  ✅                |
-| Truncate    |        ✅      |        ❌       |        ❌     |                  ❌                |
-
-
-
-### Postgres
-
-Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/runtime-config-replication.html#GUC-TRACK-COMMIT-TIMESTAMP) to be enabled. This can be done using `ALTER SYSTEM SET track_commit_timestamp to "on"` and then restarting the Postgres service
 
 
 ## 304 Not Modified Flow
@@ -66,10 +51,21 @@ graph TD
     EtagMatch -->|Yes| 304
 ```
 
+## DB implementation
+
+Implementation is specific to the target database
+
+ * [SQL Server implementation](/docs/sqlserver.md#implementation)
+ * [PostgreSQL implementation](/docs/postgres.md#implementation)
+
 
 ## ETag calculation logic
 
 The ETag is calculated from a combination several parts
+
+```
+{AssemblyWriteTime}-{DbTimeStamp}-{Suffix}
+```
 
 
 ### AssemblyWriteTime
@@ -79,42 +75,12 @@ The last write time of the web entry point assembly
 snippet: AssemblyWriteTime
 
 
-### SQL timestamp
+### DB timestamp
 
+Timestamp calculation is specific to the target database
 
-#### SQL Server
-
-
-##### `VIEW SERVER STATE` permission
-
-Transaction log is used via [dm_db_log_stats](https://learn.microsoft.com/en-us/sql/relational-databases/system-dynamic-management-views/sys-dm-db-log-stats-transact-sql).
-
-```sql
-select log_end_lsn
-from sys.dm_db_log_stats(db_id())
-```
-
-
-##### No `VIEW SERVER STATE` permission
-
-A combination of [change_tracking_current_version](https://learn.microsoft.com/en-us/sql/relational-databases/system-functions/change-tracking-current-version-transact-sql) (if tracking is enabled) and [@@DBTS (row version timestamp)](https://learn.microsoft.com/en-us/sql/t-sql/functions/dbts-transact-sql)
-
-```sql
-declare @changeTracking bigint = change_tracking_current_version();
-declare @timeStamp bigint = convert(bigint, @@dbts);
-
-if (@changeTracking is null)
-  select cast(@timeStamp as varchar)
-else
-  select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
-```
-
-
-#### Postgres
-
-```sql
-select pg_last_committed_xact();
-```
+ * [SQL Server timestamp calculation](/docs/sqlserver.md#timestamp-calculation)
+ * [Postgres timestamp calculation](/docs/postgres.md#timestamp-calculation)
 
 
 ### Suffix
@@ -129,129 +95,33 @@ snippet: Suffix
 snippet: BuildEtag
 
 
-## NuGet
-
-Delta is shipped as two nugets:
-
- * [Delta](https://nuget.org/packages/Delta/): Delivers functionality using SqlConnection and SqlTransaction.
- * [Delta.EF](https://nuget.org/packages/Delta.EF/): Delivers functionality using [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli).
-
-Only one of the above should be used.
-
-
 ## Usage
 
+Delta has two approaches to usage:
 
-### SQL Server DB Schema
 
-Example SQL schema:
+### Raw DbConnection approach
 
-snippet: Usage.Schema.verified.sql
+Delivers functionality using DbConnection and DbTransaction.
 
+NuGet: [Delta](https://nuget.org/packages/Delta/)
 
-### Postgres DB Schema
+Documentation is specific to choice of database:
 
-Example SQL schema:
+ * [SQL Server Docs](/docs/sqlserver.md) when using [SQL Server SqlClient](https://github.com/dotnet/SqlClient)
+ * [PostgreSQL Docs](/docs/postgres.md) when using [PostgreSQL Npgsql](https://www.npgsql.org)
 
-snippet: PostgresSchema
 
+### Entity Framework approach
 
-### Add to WebApplicationBuilder
+Delivers functionality using [Entity Framework](https://learn.microsoft.com/en-us/ef/).
 
+NuGet: [Delta.EF](https://nuget.org/packages/Delta.EF/)
 
-#### SQL Server
+Documentation is specific to choice of database:
 
-snippet: UseDeltaSqlServer
-
-
-#### PostgreSQL
-
-snippet: UseDeltaPostgres
-
-
-### Add to a Route Group
-
-To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
-
-snippet: UseDeltaMapGroup
-
-
-### ShouldExecute
-
-Optionally control what requests Delta is executed on.
-
-snippet: ShouldExecute
-
-
-### Custom Connection discovery
-
-By default, Delta uses `HttpContext.RequestServices` to discover the SqlConnection and SqlTransaction:
-
-snippet: DiscoverConnection
-
-To use custom connection discovery:
-
-snippet: CustomDiscoveryConnection
-
-To use custom connection and transaction discovery:
-
-snippet: CustomDiscoveryConnectionAndTransaction
-
-
-### GetLastTimeStamp
-
-For a `DbConnection`:
-
-snippet: GetLastTimeStampConnection
-
-
-## EF Usage
-
-
-### SqlServer DbContext using RowVersion
-
-Enable row versioning in Entity Framework
-
-snippet: SampleSqlServerDbContext
-
-
-### Postgres DbContext
-
-Enable row versioning in Entity Framework
-
-snippet: SamplePostgresDbContext
-
-
-### Add to WebApplicationBuilder
-
-
-#### SQL Server
-
-snippet: UseDeltaSQLServerEF
-
-
-#### Postgres
-
-snippet: UseDeltaPostgresEF
-
-
-### Add to a Route Group
-
-To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
-
-snippet: UseDeltaMapGroupEF
-
-
-### ShouldExecute
-
-Optionally control what requests Delta is executed on.
-
-snippet: ShouldExecuteEF
-
-
-### GetLastTimeStamp:
-
-snippet: GetLastTimeStampEF
+ * [EF with SQL Server Docs](/docs/sqlserver-ef.md) when using the [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli)
+ * [EF with PostgreSQL Docs](/docs/postgres-ef.md) when using the [PostgreSQL EF Database Provider](https://www.npgsql.org/efcore)
 
 
 ## UseResponseDiagnostics
@@ -267,100 +137,6 @@ Response diagnostics headers are prefixed with `Delta-`.
 Example Response header when the Request has not `If-None-Match` header.
 
 <img src="/src/Delta-No304.png">
-
-
-## Delta.SqlServer
-
-A set of helper methods for working with [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
-
-Nuget: [Delta.SqlServer](https://www.nuget.org/packages/Delta.SqlServer)
-
-
-### GetDatabasesWithTracking
-
-Get a list of all databases with change tracking enabled.
-
-snippet: GetDatabasesWithTracking
-
-Uses the following SQL:
-
-snippet: GetTrackedDatabasesSql
-
-
-### GetTrackedTables
-
-Get a list of all tracked tables in database.
-
-snippet: GetTrackedTables
-
-Uses the following SQL:
-
-snippet: GetTrackedTablesSql
-
-
-### IsTrackingEnabled
-
-Determine if change tracking is enabled for a database.
-
-snippet: IsTrackingEnabled
-
-Uses the following SQL:
-
-snippet: IsTrackingEnabledSql
-
-
-### EnableTracking
-
-Enable change tracking for a database.
-
-snippet: EnableTracking
-
-Uses the following SQL:
-
-snippet: EnableTrackingSql
-
-
-### DisableTracking
-
-Disable change tracking for a database and all tables within that database.
-
-snippet: DisableTracking
-
-Uses the following SQL:
-
-
-#### For disabling tracking on a database:
-
-snippet: DisableTrackingSqlDB
-
-
-#### For disabling tracking on tables:
-
-snippet: DisableTrackingSqlTable
-
-
-### SetTrackedTables
-
-Enables change tracking for all tables listed, and disables change tracking for all tables not listed.
-
-snippet: SetTrackedTables
-
-Uses the following SQL:
-
-
-#### For enabling tracking on a database:
-
-snippet: EnableTrackingSql
-
-
-#### For enabling tracking on tables:
-
-snippet: EnableTrackingTableSql
-
-
-#### For disabling tracking on tables:
-
-snippet: DisableTrackingTableSql
 
 
 ## Verifying behavior
@@ -408,4 +184,3 @@ In the scenario where web apis (that support using 304) are being consumed using
 ## Icon
 
 [Estuary](https://thenounproject.com/term/estuary/1847616/) designed by [Daan](https://thenounproject.com/Asphaleia/) from [The Noun Project](https://thenounproject.com).
-

@@ -54,7 +54,11 @@ public static partial class DeltaExtensions
 
     static async Task<string> ExecutePostgres(DbCommand command, Cancel cancel = default)
     {
-        command.CommandText = "select pg_last_committed_xact();";
+        command.CommandText = """
+                              --begin-snippet: PostgresTimeStamp
+                              select pg_last_committed_xact();
+                              --end-snippet
+                              """;
         var results = (object?[]?) await command.ExecuteScalarAsync(cancel);
 
         // null on first run after SET track_commit_timestamp to 'on'
@@ -70,7 +74,13 @@ public static partial class DeltaExtensions
 
     internal static async Task<string> ExecuteSqlLsn(DbCommand command, Cancel cancel = default)
     {
-        command.CommandText = "select log_end_lsn from sys.dm_db_log_stats(db_id())";
+        command.CommandText =
+            """
+            --begin-snippet: SqlServerTimeStampWithServerState
+            select log_end_lsn
+            from sys.dm_db_log_stats(db_id())
+            --end-snippet
+            """;
         await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
         var readAsync = await reader.ReadAsync(cancel);
         // for empty transaction log
@@ -86,6 +96,7 @@ public static partial class DeltaExtensions
     {
         command.CommandText =
             """
+            --begin-snippet: SqlServerTimeStampNoServerState
             declare @changeTracking bigint = change_tracking_current_version();
             declare @timeStamp bigint = convert(bigint, @@dbts);
 
@@ -93,6 +104,7 @@ public static partial class DeltaExtensions
               select cast(@timeStamp as varchar)
             else
               select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+            --end-snippet
             """;
         return (string) (await command.ExecuteScalarAsync(cancel))!;
     }
