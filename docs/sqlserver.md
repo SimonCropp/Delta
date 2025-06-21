@@ -5,7 +5,7 @@ Source File: /docs/mdsource/sqlserver.source.md
 To change this file edit the source file and then run MarkdownSnippets.
 -->
 
-# SQL Server
+# SQL Server usage
 
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.svg?label=Delta)](https://www.nuget.org/packages/Delta/)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.SqlServer.svg?label=Delta.SqlServer)](https://www.nuget.org/packages/Delta.SqlServer/)
