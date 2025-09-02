@@ -74,22 +74,40 @@ public static partial class DeltaExtensions
 
     internal static async Task<string> ExecuteSqlLsn(DbCommand command, Cancel cancel = default)
     {
-        command.CommandText =
+        #region SqlServerTimeStampWithServerState
+
+        const string logRndLsnCommand =
             """
-            --begin-snippet: SqlServerTimeStampWithServerState
             select log_end_lsn
             from sys.dm_db_log_stats(db_id())
-            --end-snippet
             """;
-        await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
-        var readAsync = await reader.ReadAsync(cancel);
-        // for empty transaction log
-        if (!readAsync)
-        {
-            return string.Empty;
-        }
 
-        return (string) reader[0];
+        #endregion
+
+        command.CommandText = logRndLsnCommand;
+
+        try
+        {
+            await using var reader = await command.ExecuteReaderAsync(CommandBehavior.SingleRow, cancel);
+            var readAsync = await reader.ReadAsync(cancel);
+            // for empty transaction log
+            if (!readAsync)
+            {
+                return string.Empty;
+            }
+
+            return (string) reader[0];
+        }
+        catch (DbException exception)
+        {
+            throw new(
+                $"""
+                 Failed to execute log_end_lsn:
+                 {logRndLsnCommand}
+                 It is possible the current user does not have the VIEW SERVER STATE permission.
+                 """,
+                exception);
+        }
     }
 
     internal static async Task<string> ExecuteSqlTimeStamp(DbCommand command, Cancel cancel = default)
