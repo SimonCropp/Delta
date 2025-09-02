@@ -41,10 +41,13 @@ Transaction log is used via [dm_db_log_stats](https://learn.microsoft.com/en-us/
 <!-- snippet: SqlServerTimeStampWithServerState -->
 <a id='snippet-SqlServerTimeStampWithServerState'></a>
 ```cs
-select log_end_lsn
-from sys.dm_db_log_stats(db_id())
+const string logRndLsnCommand =
+    """
+    select log_end_lsn
+    from sys.dm_db_log_stats(db_id())
+    """;
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L79-L82' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampWithServerState' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L77-L85' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampWithServerState' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -63,7 +66,7 @@ if (@changeTracking is null)
 else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L99-L107' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampNoServerState' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L117-L125' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampNoServerState' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->
 
