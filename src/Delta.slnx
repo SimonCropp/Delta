@@ -1,0 +1,25 @@
+<Solution>
+  <Folder Name="/.SolutionItems/">
+    <File Path="../readme.md" />
+    <File Path="../readme.source.md" />
+    <File Path=".editorconfig" />
+    <File Path="appveyor.yml" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="mdsnippets.json" />
+  </Folder>
+  <Folder Name="/EF/">
+    <Project Path="Delta.EF/Delta.EF.csproj" />
+    <Project Path="Delta.EFTests/Delta.EFTests.csproj" />
+    <Project Path="WebApplicationPostgresEF/WebApplicationPostgresEF.csproj" />
+    <Project Path="WebApplicationSqlServerEF/WebApplicationSqlServerEF.csproj" />
+  </Folder>
+  <Folder Name="/Raw/">
+    <Project Path="Delta/Delta.csproj" />
+    <Project Path="DeltaTests/DeltaTests.csproj" />
+    <Project Path="WebApplicationPostgres/WebApplicationPostgres.csproj" />
+    <Project Path="WebApplicationSqlServer/WebApplicationSqlServer.csproj" />
+  </Folder>
+  <Project Path="Delta.SqlServer/Delta.SqlServer.csproj" />
+</Solution>
