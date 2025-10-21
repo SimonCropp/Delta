@@ -9,6 +9,25 @@
     <File Path="global.json" />
     <File Path="mdsnippets.json" />
   </Folder>
+  <Folder Name="/.SolutionItems/Docs/">
+    <File Path="..\readme.source.md" />
+    <File Path="..\docs\mdsource\intro.include.md" />
+    <File Path="..\docs\mdsource\last-timestamp.include.md" />
+    <File Path="..\docs\mdsource\last-timestamp-ef.include.md" />
+    <File Path="..\docs\mdsource\map-group.include.md" />
+    <File Path="..\docs\mdsource\map-group-ef.include.md" />
+    <File Path="..\docs\mdsource\postgres.source.md" />
+    <File Path="..\docs\mdsource\postgres-ef.source.md" />
+    <File Path="..\docs\mdsource\postgres-implemenation.include.md" />
+    <File Path="..\docs\mdsource\should-execute.include.md" />
+    <File Path="..\docs\mdsource\should-execute-ef.include.md" />
+    <File Path="..\docs\mdsource\sqlserver.source.md" />
+    <File Path="..\docs\mdsource\sqlserver-ef.source.md" />
+    <File Path="..\docs\mdsource\sqlserver-helpers.include.md" />
+    <File Path="..\docs\mdsource\sqlserver-implemenation.include.md" />
+    <File Path="..\docs\mdsource\sqlserver-timestamp.include.md" />
+    <File Path="..\docs\mdsource\zzz.include.md" />
+  </Folder>
   <Folder Name="/EF/">
     <Project Path="Delta.EF/Delta.EF.csproj" />
     <Project Path="Delta.EFTests/Delta.EFTests.csproj" />
