@@ -38,20 +38,32 @@ public class Usage :
             await database.Connection.EnableTracking();
         }
 
-        await AssertTimestamps(tracking, database, AddEntity);
+        await AssertTimestamps(tracking, true, database, AddEntity);
     }
 
-    static async Task AssertTimestamps(bool tracking, SqlDatabase database, Func<SqlConnection, Task> action)
+    static async Task AssertTimestamps(bool tracking, bool timeStampChange, SqlDatabase database, Func<SqlConnection, Task> action)
     {
         var lsnTimeStamp = await GetLsnTimeStamp(database);
         IsNotEmpty(lsnTimeStamp);
         IsNotNull(lsnTimeStamp);
+
+        var timeStamp = await GetTimeStamp(database);
+        IsNotEmpty(timeStamp);
+        IsNotNull(timeStamp);
 
         var trackingTimeStamp = await GetTrackingTimeStamp(database);
         IsNotEmpty(trackingTimeStamp);
         IsNotNull(trackingTimeStamp);
 
         await action(database);
+
+        if (timeStampChange)
+        {
+            var newTimeStamp = await GetTimeStamp(database);
+            IsNotEmpty(newTimeStamp);
+            IsNotNull(newTimeStamp);
+            AreNotEqual(newTimeStamp, timeStamp);
+        }
 
         if (tracking)
         {
@@ -78,7 +90,7 @@ public class Usage :
 
         var companyGuid = await AddEntity(database);
 
-        await AssertTimestamps(tracking, database, connection => UpdateEntity(connection, companyGuid));
+        await AssertTimestamps(tracking, true, database, connection => UpdateEntity(connection, companyGuid));
     }
 
     static async Task UpdateEntity(SqlConnection connection, Guid id)
@@ -105,7 +117,7 @@ public class Usage :
 
         var companyGuid = await AddEntity(database);
 
-        await AssertTimestamps(tracking, database, connection => DeleteEntity(connection, companyGuid));
+        await AssertTimestamps(tracking, false, database, connection => DeleteEntity(connection, companyGuid));
     }
 
     [Test]
@@ -152,10 +164,13 @@ public class Usage :
 
         await AddEntity(database);
 
-        await AssertTimestamps(false, database, TruncateTable);
+        await AssertTimestamps(false, false, database, TruncateTable);
     }
 
     static Task<string> GetTrackingTimeStamp(SqlDatabase database) =>
+        Execute(database, DeltaExtensions.ExecuteSqlTimeStampWithChangeTracking);
+
+    static Task<string> GetTimeStamp(SqlDatabase database) =>
         Execute(database, DeltaExtensions.ExecuteSqlTimeStamp);
 
     static Task<string> GetLsnTimeStamp(SqlDatabase database) =>

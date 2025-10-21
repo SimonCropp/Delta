@@ -20,6 +20,11 @@ public static partial class DeltaExtensions
                 return ExecuteSqlLsn;
             }
 
+            if (await Execute(connection, transaction, HasChangeTracking, cancel))
+            {
+                return ExecuteSqlTimeStampWithChangeTracking;
+            }
+
             return ExecuteSqlTimeStamp;
         }
 
@@ -114,14 +119,22 @@ public static partial class DeltaExtensions
     {
         command.CommandText =
             """
-            --begin-snippet: SqlServerTimeStampNoServerState
+            --begin-snippet: SqlServerTimeStamp
+            declare @timeStamp bigint = convert(bigint, @@dbts);
+            select cast(@timeStamp as varchar)
+            --end-snippet
+            """;
+        return (string) (await command.ExecuteScalarAsync(cancel))!;
+    }
+
+    internal static async Task<string> ExecuteSqlTimeStampWithChangeTracking(DbCommand command, Cancel cancel = default)
+    {
+        command.CommandText =
+            """
+            --begin-snippet: SqlServerTimeStampWithChangeTracking
             declare @changeTracking bigint = change_tracking_current_version();
             declare @timeStamp bigint = convert(bigint, @@dbts);
-
-            if (@changeTracking is null)
-              select cast(@timeStamp as varchar)
-            else
-              select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
+            select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
             --end-snippet
             """;
         return (string) (await command.ExecuteScalarAsync(cancel))!;
@@ -132,6 +145,13 @@ public static partial class DeltaExtensions
         command.CommandText = "select has_perms_by_name(null, null, 'VIEW SERVER STATE')";
         var result = (int)(await command.ExecuteScalarAsync(cancel))!;
         return result == 1;
+    }
+
+    static async Task<bool> HasChangeTracking(DbCommand command, Cancel cancel = default)
+    {
+        command.CommandText = "change_tracking_current_version()";
+        var result = await command.ExecuteScalarAsync(cancel);
+        return result != null;
     }
 
     static Func<DbCommand, Cancel, Task<string>>? query;

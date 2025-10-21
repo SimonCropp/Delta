@@ -24,7 +24,7 @@ Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/ru
 ```cs
 select pg_last_committed_xact();
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L58-L60' title='Snippet source file'>snippet source</a> | <a href='#snippet-PostgresTimeStamp' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L63-L65' title='Snippet source file'>snippet source</a> | <a href='#snippet-PostgresTimeStamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -162,7 +162,7 @@ application.UseDelta(
     getConnection: httpContext =>
         httpContext.RequestServices.GetRequiredService<NpgsqlConnection>());
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L326-L333' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionPostgres' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L341-L348' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection and transaction discovery:
@@ -180,7 +180,7 @@ application.UseDelta(
         return new(connection, transaction);
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L354-L366' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransactionPostgres' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L369-L381' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransactionPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -193,6 +193,6 @@ application.UseDelta(
 ```cs
 var timeStamp = await connection.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L188-L192' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L203-L207' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->
