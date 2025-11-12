@@ -31,7 +31,7 @@
   <Folder Name="/EF/">
     <Project Path="Delta.EF/Delta.EF.csproj" />
     <Project Path="Delta.EFTests/Delta.EFTests.csproj" />
-    <Project Path="WebApplicationPostgresEF/WebApplicationPostgresEF.csproj" />
+    <!--<Project Path="WebApplicationPostgresEF/WebApplicationPostgresEF.csproj" />-->
     <Project Path="WebApplicationSqlServerEF/WebApplicationSqlServerEF.csproj" />
   </Folder>
   <Folder Name="/Raw/">
