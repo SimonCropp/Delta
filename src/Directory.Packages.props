@@ -23,6 +23,6 @@
     <PackageVersion Include="Verify.MicrosoftLogging" Version="4.0.1" />
     <PackageVersion Include="Verify.NUnit" Version="31.8.0" />
     <PackageVersion Include="Verify.SqlServer" Version="11.2.0" />
-    <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.4" />
+    <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.5" />
   </ItemGroup>
 </Project>
