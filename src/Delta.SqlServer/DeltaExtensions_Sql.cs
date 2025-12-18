@@ -97,17 +97,17 @@ public static class TrackingExtensions
     public static async Task<bool> IsTrackingEnabled(this SqlConnection connection, Cancel cancel = default)
     {
         await using var command = connection.CreateCommand();
-        var database = connection.Database;
         command.CommandText =
-            $"""
+            """
              -- begin-snippet: IsTrackingEnabledSql
              select count(d.name)
              from sys.databases as d inner join
                sys.change_tracking_databases as t on
                t.database_id = d.database_id
-             where d.name = '{database}'
+             where d.name = @database
              -- end-snippet
              """;
+        command.Parameters.AddWithValue("@database", connection.Database);
         return await command.ExecuteScalarAsync(cancel) is 1;
     }
 
