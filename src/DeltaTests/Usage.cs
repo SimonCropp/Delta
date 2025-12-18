@@ -250,6 +250,17 @@ public class Usage :
     }
 
     [Test]
+    public async Task SetTrackedTablesCaseInsensitive()
+    {
+        await using var database = await LocalDb();
+        var connection = database.Connection;
+        await connection.SetTrackedTables(["Companies"]);
+        await connection.SetTrackedTables(["COMPANIES"]);
+        var trackedTables = await connection.GetTrackedTables();
+        That(trackedTables, Has.Count.EqualTo(1));
+    }
+
+    [Test]
     public async Task EmptySetTrackedTables()
     {
         await using var database = await LocalDb();

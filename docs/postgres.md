@@ -162,7 +162,7 @@ application.UseDelta(
     getConnection: httpContext =>
         httpContext.RequestServices.GetRequiredService<NpgsqlConnection>());
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L326-L333' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionPostgres' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L337-L344' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection and transaction discovery:
@@ -180,7 +180,7 @@ application.UseDelta(
         return new(connection, transaction);
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L354-L366' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransactionPostgres' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L365-L377' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransactionPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
