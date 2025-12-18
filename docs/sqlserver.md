@@ -328,9 +328,9 @@ select count(d.name)
 from sys.databases as d inner join
   sys.change_tracking_databases as t on
   t.database_id = d.database_id
-where d.name = '{database}'
+where d.name = @database
 ```
-<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L103-L109' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabledSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L102-L108' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabledSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
