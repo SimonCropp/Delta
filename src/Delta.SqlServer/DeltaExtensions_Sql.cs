@@ -26,7 +26,7 @@ public static class TrackingExtensions
                  """);
         }
 
-        var tablesToDisable = trackedTables.Except(tablesToTrack);
+        var tablesToDisable = trackedTables.Except(tablesToTrack, StringComparer.OrdinalIgnoreCase);
         foreach (var table in tablesToDisable)
         {
             builder.AppendLine(
