@@ -1,6 +1,33 @@
 ﻿[TestFixture]
 public class MiddlewareTests
 {
+    [TestCase("immutable")]
+    [TestCase("IMMUTABLE")]
+    [TestCase("Immutable")]
+    [TestCase("public, max-age=31536000, IMMUTABLE")]
+    public async Task ImmutableCacheControlCaseInsensitive(string cacheControlValue)
+    {
+        Recording.Start();
+        var context = new DefaultHttpContext();
+        var request = context.Request;
+        var response = context.Response;
+
+        request.Path = "/path";
+        request.Method = "GET";
+        response.Headers.CacheControl = cacheControlValue;
+
+        var notModified = await DeltaExtensions.HandleRequest(
+            context,
+            new RecordingLogger(),
+            null,
+            _ => Task.FromResult("rowVersion"),
+            null,
+            LogLevel.Information);
+
+        IsFalse(notModified);
+        That(response.Headers["Delta-No304"].ToString(), Does.Contain("immutable"));
+    }
+
     [Test]
     public async Task Combinations([Values] bool suffixFunc, [Values] bool nullSuffixFunc, [Values] bool get, [Values] bool ifNoneMatch, [Values] bool sameIfNoneMatch, [Values] bool etag, [Values] bool executeFunc, [Values] bool trueExecuteFunc, [Values] bool immutable, [Values] bool requestCacheControl)
     {
