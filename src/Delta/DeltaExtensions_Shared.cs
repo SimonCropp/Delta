@@ -28,7 +28,7 @@ public static partial class DeltaExtensions
                 continue;
             }
 
-            if (header.Contains("immutable"))
+            if (header.Contains("immutable", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
