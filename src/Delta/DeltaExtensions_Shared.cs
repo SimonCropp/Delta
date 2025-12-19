@@ -59,29 +59,30 @@ public static partial class DeltaExtensions
         var response = context.Response;
         var path = request.Path;
 
+        var logEnabled = logger.IsEnabled(level);
         var method = request.Method;
         if (method != "GET")
         {
-            WriteNo304Header(response, $"Request Method={method}", level, logger, path);
+            WriteNo304Header(response, $"Request Method={method}", level, logger, path, logEnabled);
             return false;
         }
 
         if (response.Headers.ETag.Count != 0)
         {
-            WriteNo304Header(response, "Response already has ETag", level, logger, path);
+            WriteNo304Header(response, "Response already has ETag", level, logger, path, logEnabled);
             return false;
         }
 
         if (response.IsImmutableCache())
         {
-            WriteNo304Header(response, "Response already has Cache-Control=immutable", level, logger, path);
+            WriteNo304Header(response, "Response already has Cache-Control=immutable", level, logger, path, logEnabled);
             return false;
         }
 
         if (shouldExecute != null &&
             !shouldExecute(context))
         {
-            WriteNo304Header(response, "shouldExecute=false", level, logger, path);
+            WriteNo304Header(response, "shouldExecute=false", level, logger, path, logEnabled);
             return false;
         }
 
@@ -89,7 +90,11 @@ public static partial class DeltaExtensions
         var suffixValue = suffix?.Invoke(context);
         var etag = BuildEtag(timeStamp, suffixValue);
         response.Headers.ETag = etag;
-        logger.Log(level, "Delta {path}: ETag {etag}", path, etag);
+        if (logEnabled)
+        {
+            logger.Log(level, "Delta {path}: ETag {etag}", path, etag);
+        }
+
         if (!request.Headers.TryGetValue("If-None-Match", out var ifNoneMatch))
         {
             string reason;
@@ -103,41 +108,49 @@ public static partial class DeltaExtensions
                 reason = $"Request has no If-None-Match. Request also has Cache-Control header ({cacheControl}) which can interfere with caching";
             }
 
-            WriteNo304Header(response, reason, level, logger, path);
+            WriteNo304Header(response, reason, level, logger, path, logEnabled);
 
             return false;
         }
 
         if (ifNoneMatch != etag)
         {
-            WriteNo304Header(response, "Request If-None-Match != ETag", level, logger, path);
-            logger.Log(
-                level,
-                """
-                Delta {path}: No 304. Request If-None-Match != ETag
-                If-None-Match: {ifNoneMatch}
-                ETag: {etag}
-                """,
-                path,
-                ifNoneMatch,
-                etag);
+            WriteNo304Header(response, "Request If-None-Match != ETag", level, logger, path, logEnabled);
+            if (logEnabled)
+            {
+                logger.Log(
+                    level,
+                    """
+                    Delta {path}: No 304. Request If-None-Match != ETag
+                    If-None-Match: {ifNoneMatch}
+                    ETag: {etag}
+                    """,
+                    path,
+                    ifNoneMatch,
+                    etag);
+            }
+
             return false;
         }
 
-        logger.Log(level, "Delta {path}: 304", path);
+        if (logEnabled)
+        {
+            logger.Log(level, "Delta {path}: 304", path);
+        }
+
         response.StatusCode = 304;
         response.NoCache();
         return true;
     }
 
-    static void WriteNo304Header(HttpResponse response, string reason, LogLevel level, ILogger logger, string path)
+    static void WriteNo304Header(HttpResponse response, string reason, LogLevel level, ILogger logger, string path, bool logEnabled)
     {
         if (UseResponseDiagnostics)
         {
             response.Headers["Delta-No304"] = reason;
         }
 
-        if (logger.IsEnabled(level))
+        if (logEnabled)
         {
             logger.Log(level, "Delta {path}: No 304. {reason}", path, reason);
         }
