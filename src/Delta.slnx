@@ -2,7 +2,7 @@
   <Folder Name="/.SolutionItems/">
     <File Path="../readme.md" />
     <File Path="../readme.source.md" />
-    <File Path=".editorconfig" />
+    <File Path="../.editorconfig" />
     <File Path="appveyor.yml" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
