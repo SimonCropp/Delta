@@ -7,7 +7,7 @@ To change this file edit the source file and then run MarkdownSnippets.
 
 # <img src="/src/icon.png" height="30px"> Delta
 
-[![Build status](https://ci.appveyor.com/api/projects/status/20t96gnsmysklh09/branch/main?svg=true)](https://ci.appveyor.com/project/SimonCropp/Delta)
+[![Build status](https://img.shields.io/appveyor/build/SimonCropp/Delta)](https://ci.appveyor.com/project/SimonCropp/Delta)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.svg?label=Delta)](https://www.nuget.org/packages/Delta/)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.EF.svg?label=Delta.EF)](https://www.nuget.org/packages/Delta.EF/)
 [![NuGet Status](https://img.shields.io/nuget/v/Delta.SqlServer.svg?label=Delta.SqlServer)](https://www.nuget.org/packages/Delta.SqlServer/)
