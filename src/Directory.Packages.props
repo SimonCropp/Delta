@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="EfLocalDb" Version="22.0.0" />
-    <PackageVersion Include="LocalDb" Version="22.0.0" />
+    <PackageVersion Include="LocalDb" Version="23.1.0" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.0.0-beta.10" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.3" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.1" />
