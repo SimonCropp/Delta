@@ -274,7 +274,7 @@ from sys.databases as d inner join
   sys.change_tracking_databases as t on
   t.database_id = d.database_id
 ```
-<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L151-L156' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedDatabasesSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L150-L155' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedDatabasesSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -303,7 +303,7 @@ select t.Name
 from sys.tables as t inner join
   sys.change_tracking_tables as c on t.[object_id] = c.[object_id]
 ```
-<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L81-L85' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTablesSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L80-L84' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetTrackedTablesSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -330,7 +330,7 @@ from sys.databases as d inner join
   t.database_id = d.database_id
 where d.name = @database
 ```
-<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L102-L108' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabledSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L101-L107' title='Snippet source file'>snippet source</a> | <a href='#snippet-IsTrackingEnabledSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -358,7 +358,7 @@ set change_tracking = on
   auto_cleanup = on
 )
 ```
-<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L64-L71' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L63-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -384,7 +384,7 @@ Uses the following SQL:
 ```cs
 alter database [{database}] set change_tracking = off;
 ```
-<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L135-L137' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSqlDB' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L134-L136' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSqlDB' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -395,7 +395,7 @@ alter database [{database}] set change_tracking = off;
 ```cs
 alter table [{table}] disable change_tracking;
 ```
-<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L126-L128' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSqlTable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L125-L127' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingSqlTable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -426,7 +426,7 @@ set change_tracking = on
   auto_cleanup = on
 )
 ```
-<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L64-L71' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L63-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-EnableTrackingSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -448,6 +448,6 @@ alter table [{table}] enable change_tracking
 ```cs
 alter table [{table}] disable change_tracking;
 ```
-<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L34-L36' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingTableSql' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.SqlServer/DeltaExtensions_Sql.cs#L33-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-DisableTrackingTableSql' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->
