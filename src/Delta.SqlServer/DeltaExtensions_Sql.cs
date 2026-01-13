@@ -12,11 +12,11 @@ public static class TrackingExtensions
 
         var trackedTables = await connection.GetTrackedTables(cancel);
 
-        tablesToTrack = tablesToTrack.ToList();
+        var tablesToTrackSet = new HashSet<string>(tablesToTrack, StringComparer.OrdinalIgnoreCase);
+        var trackedTablesSet = new HashSet<string>(trackedTables, StringComparer.OrdinalIgnoreCase);
 
         var builder = new StringBuilder();
-        var except = tablesToTrack.Except(trackedTables, StringComparer.OrdinalIgnoreCase);
-        foreach (var table in except)
+        foreach (var table in tablesToTrackSet.Where(t => !trackedTablesSet.Contains(t)))
         {
             builder.AppendLine(
                 $"""
@@ -26,8 +26,7 @@ public static class TrackingExtensions
                  """);
         }
 
-        var tablesToDisable = trackedTables.Except(tablesToTrack, StringComparer.OrdinalIgnoreCase);
-        foreach (var table in tablesToDisable)
+        foreach (var table in trackedTablesSet.Where(t => !tablesToTrackSet.Contains(t)))
         {
             builder.AppendLine(
                 $"""
