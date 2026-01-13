@@ -130,10 +130,10 @@ internal static string BuildEtag(string timeStamp, string? suffix)
 {
     if (suffix == null)
     {
-        return $"\"{AssemblyWriteTime}-{timeStamp}\"";
+        return string.Concat("\"", AssemblyWriteTime, "-", timeStamp, "\"");
     }
 
-    return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
+    return string.Concat("\"", AssemblyWriteTime, "-", timeStamp, "-", suffix, "\"");
 }
 ```
 <sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L165-L177' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
