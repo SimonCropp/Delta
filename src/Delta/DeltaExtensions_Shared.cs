@@ -168,10 +168,10 @@ public static partial class DeltaExtensions
     {
         if (suffix == null)
         {
-            return $"\"{AssemblyWriteTime}-{timeStamp}\"";
+            return string.Concat("\"", AssemblyWriteTime, "-", timeStamp, "\"");
         }
 
-        return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
+        return string.Concat("\"", AssemblyWriteTime, "-", timeStamp, "-", suffix, "\"");
     }
 
     #endregion
