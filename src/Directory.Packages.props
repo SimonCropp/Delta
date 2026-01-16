@@ -4,7 +4,7 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="EfLocalDb" Version="23.1.6" />
+    <PackageVersion Include="EfLocalDb" Version="23.1.7" />
     <PackageVersion Include="LocalDb" Version="23.1.6" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.0.0-beta.11" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.3" />
