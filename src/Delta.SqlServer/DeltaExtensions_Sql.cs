@@ -52,7 +52,7 @@ public static class TrackingExtensions
         uint retentionDays = 1,
         Cancel cancel = default)
     {
-        if (await IsTrackingEnabled(connection, cancel))
+        if (await connection.IsTrackingEnabled(cancel))
         {
             return;
         }
@@ -113,7 +113,7 @@ public static class TrackingExtensions
 
     public static async Task DisableTracking(this SqlConnection connection, Cancel cancel = default)
     {
-        if (!await IsTrackingEnabled(connection, cancel))
+        if (!await connection.IsTrackingEnabled(cancel))
         {
             return;
         }

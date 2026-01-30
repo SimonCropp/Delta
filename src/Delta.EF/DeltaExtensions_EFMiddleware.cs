@@ -52,7 +52,7 @@ public static partial class DeltaExtensions
         var database = context.Database;
         var connection = database.GetDbConnection();
         var transaction = database.CurrentTransaction?.GetDbTransaction();
-        return GetLastTimeStamp(connection, transaction, cancel);
+        return connection.GetLastTimeStamp(transaction, cancel);
     }
 
     public static ComponentEndpointConventionBuilder UseDelta<TDbContext>(

@@ -52,7 +52,7 @@ public static partial class DeltaExtensions
             _ =>
             {
                 var (connection, transaction) = getConnection(_);
-                return GetLastTimeStamp(connection, transaction);
+                return connection.GetLastTimeStamp(transaction);
             },
             shouldExecute,
             logLevel);
