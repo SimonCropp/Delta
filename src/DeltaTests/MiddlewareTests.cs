@@ -110,8 +110,8 @@ public class MiddlewareTests
     [Test]
     public void ConnectionImplicitOperator()
     {
-        using var dbConnection = new Microsoft.Data.SqlClient.SqlConnection();
-        Delta.Connection connection = dbConnection;
+        using var dbConnection = new SqlConnection();
+        Connection connection = dbConnection;
 
         AreEqual(dbConnection, connection.SqlConnection);
         IsNull(connection.DbTransaction);
