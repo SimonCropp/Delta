@@ -13,6 +13,7 @@
     <PackageReference Include="Verify.AspNetCore" />
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="coverlet.collector" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
     <PackageReference Include="MarkdownSnippets.MsBuild" PrivateAssets="all" />
     <ProjectReference Include="..\Delta.SqlServer\Delta.SqlServer.csproj" />
     <ProjectReference Include="..\Delta\Delta.csproj" />

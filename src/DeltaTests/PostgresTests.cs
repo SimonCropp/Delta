@@ -3,6 +3,9 @@
 public class PostgresTests
 {
     [Test]
+    #if DEBUG
+    [Explicit]
+    #endif
     public async Task GetLastTimeStamp()
     {
         await using var connection = new NpgsqlConnection(PostgresConnection.ConnectionString);

@@ -8,3 +8,5 @@ obj/
 *.received.*
 nugets/
 *claude*
+*TestResults*
+coverage-report/
