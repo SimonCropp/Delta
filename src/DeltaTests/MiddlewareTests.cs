@@ -90,4 +90,30 @@ public class MiddlewareTests
                 })
             .AddScrubber(_ => _.Replace(DeltaExtensions.AssemblyWriteTime, "AssemblyWriteTime"));
     }
+
+    [Test]
+    public void CacheControlExtensions()
+    {
+        var context = new DefaultHttpContext();
+        var response = context.Response;
+
+        response.NoStore();
+        AreEqual("no-store, max-age=0", response.Headers.CacheControl.ToString());
+
+        response.NoCache();
+        AreEqual("no-cache", response.Headers.CacheControl.ToString());
+
+        response.CacheForever();
+        AreEqual("public, max-age=31536000, immutable", response.Headers.CacheControl.ToString());
+    }
+
+    [Test]
+    public void ConnectionImplicitOperator()
+    {
+        using var dbConnection = new Microsoft.Data.SqlClient.SqlConnection();
+        Delta.Connection connection = dbConnection;
+
+        AreEqual(dbConnection, connection.SqlConnection);
+        IsNull(connection.DbTransaction);
+    }
 }
