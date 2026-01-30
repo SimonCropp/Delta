@@ -8,8 +8,8 @@ if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
 
-Write-Host "`nGenerating HTML coverage report..." -ForegroundColor Cyan
-reportgenerator -reports:"**/TestResults/**/coverage.cobertura.xml" -targetdir:"../coverage-report" -reporttypes:"Html;HtmlSummary"
+Write-Host "`nGenerating HTML coverage report (excluding WebApplication* projects)..." -ForegroundColor Cyan
+reportgenerator -reports:"**/TestResults/**/coverage.cobertura.xml" -targetdir:"../coverage-report" -reporttypes:"Html;HtmlSummary" -assemblyfilters:"-WebApplication*"
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "`nCoverage report generated successfully!" -ForegroundColor Green
