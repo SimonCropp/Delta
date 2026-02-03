@@ -90,15 +90,18 @@ public static partial class DeltaExtensions
             !allowAnonymous &&
             context.User.Identity?.IsAuthenticated != true)
         {
-            throw new InvalidOperationException(
-                "Delta: A suffix callback was provided but the user is not authenticated. " +
-                "This usually means UseDelta is registered before UseAuthentication/UseAuthorization in the middleware pipeline. " +
-                "Ensure authentication middleware runs before UseDelta so that User claims are available to the suffix callback. " +
-                "Example correct ordering:\n" +
-                "    app.UseAuthentication();\n" +
-                "    app.UseAuthorization();\n" +
-                "    app.UseDelta<TDbContext>(suffix: ...);\n\n" +
-                "If this endpoint intentionally allows anonymous access with a suffix, set allowAnonymous: true.");
+            throw new(
+                """
+                Delta: A suffix callback was provided but the user is not authenticated.
+                This usually means UseDelta is registered before UseAuthentication/UseAuthorization in the middleware pipeline.
+                Ensure authentication middleware runs before UseDelta so that User claims are available to the suffix callback.
+                Example correct ordering:
+                    app.UseAuthentication();
+                    app.UseAuthorization();
+                    app.UseDelta<TDbContext>(suffix: ...);
+
+                If this endpoint intentionally allows anonymous access with a suffix, set allowAnonymous: true.
+                """);
         }
 
         var timeStamp = await getTimeStamp(context);

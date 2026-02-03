@@ -115,7 +115,7 @@ app.UseDelta(
         return path.Contains("match");
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L20-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L19-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecute' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->
 
@@ -147,7 +147,7 @@ app.UseDelta(
         return $"{userId}-{tenantId}";
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L35-L53' title='Snippet source file'>snippet source</a> | <a href='#snippet-SuffixWithAuth' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L34-L52' title='Snippet source file'>snippet source</a> | <a href='#snippet-SuffixWithAuth' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -166,7 +166,7 @@ app.UseDelta(
     suffix: httpContext => httpContext.Request.Headers["X-Client-Version"].ToString(),
     allowAnonymous: true);
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L58-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowAnonymous' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L57-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowAnonymous' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->
 
@@ -213,7 +213,7 @@ application.UseDelta(
     getConnection: httpContext =>
         httpContext.RequestServices.GetRequiredService<NpgsqlConnection>());
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L376-L383' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionPostgres' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L375-L382' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection and transaction discovery:
@@ -231,7 +231,7 @@ application.UseDelta(
         return new(connection, transaction);
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L404-L416' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransactionPostgres' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L403-L415' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransactionPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -244,6 +244,6 @@ application.UseDelta(
 ```cs
 var timeStamp = await connection.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L227-L231' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L226-L230' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->

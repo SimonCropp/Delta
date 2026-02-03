@@ -1,5 +1,4 @@
 ﻿using System.Data.Common;
-using System.Security.Claims;
 using Npgsql;
 
 public class Usage :
