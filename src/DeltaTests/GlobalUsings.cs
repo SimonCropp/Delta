@@ -1,3 +1,4 @@
+global using System.Security.Claims;
 global using Delta;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Http;

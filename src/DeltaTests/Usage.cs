@@ -29,6 +29,44 @@ public class Usage :
         #endregion
     }
 
+    public static void SuffixWithAuth(WebApplicationBuilder builder)
+    {
+        #region SuffixWithAuth
+
+        var app = builder.Build();
+
+        // Authentication middleware must run before UseDelta
+        // so that User claims are available to the suffix callback
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseDelta(
+            suffix: httpContext =>
+            {
+                // Access user claims to create per-user cache keys
+                var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var tenantId = httpContext.User.FindFirst("TenantId")?.Value;
+                return $"{userId}-{tenantId}";
+            });
+
+        #endregion
+    }
+
+    public static void AllowAnonymous(WebApplicationBuilder builder)
+    {
+        #region AllowAnonymous
+
+        var app = builder.Build();
+
+        // For endpoints that intentionally allow anonymous access
+        // but still want a suffix for cache differentiation
+        app.UseDelta(
+            suffix: httpContext => httpContext.Request.Headers["X-Client-Version"].ToString(),
+            allowAnonymous: true);
+
+        #endregion
+    }
+
     [Test]
     public async Task LastTimeStamp([Values] bool tracking)
     {

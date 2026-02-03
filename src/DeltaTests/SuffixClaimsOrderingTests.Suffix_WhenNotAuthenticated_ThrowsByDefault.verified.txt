@@ -1,0 +1,16 @@
+﻿{
+  Type: Exception,
+  Message:
+Delta: A suffix callback was provided but the user is not authenticated.
+This usually means UseDelta is registered before UseAuthentication/UseAuthorization in the middleware pipeline.
+Ensure authentication middleware runs before UseDelta so that User claims are available to the suffix callback.
+Example correct ordering:
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.UseDelta<TDbContext>(suffix: ...);
+
+If this endpoint intentionally allows anonymous access with a suffix, set allowAnonymous: true.,
+  StackTrace:
+at Delta.DeltaExtensions.HandleRequest(HttpContext context, ILogger logger, Func`2 suffix, Func`2 getTimeStamp, Func`2 shouldExecute, LogLevel level, Boolean allowAnonymous)
+--- End of stack trace from previous location ---
+}

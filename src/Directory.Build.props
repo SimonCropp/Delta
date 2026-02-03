@@ -2,7 +2,7 @@
 <Project>
   <PropertyGroup>
     <NoWarn>CS1591;NU1608;NU1109</NoWarn>
-    <Version>7.0.1</Version>
+    <Version>8.0.0</Version>
     <LangVersion>preview</LangVersion>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>

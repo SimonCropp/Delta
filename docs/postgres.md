@@ -120,6 +120,57 @@ app.UseDelta(
 <!-- endInclude -->
 
 
+### Suffix and Authentication<!-- include: suffix-auth. path: /docs/mdsource/suffix-auth.include.md -->
+
+When using a `suffix` callback that accesses `HttpContext.User` claims, authentication middleware **must** run before `UseDelta`. If `UseDelta` runs first, the User claims won't be populated yet, and all users will get the same cache key.
+
+Delta automatically detects this misconfiguration and throws an `InvalidOperationException` with a helpful message if:
+- A `suffix` callback is provided
+- The user is not authenticated (`context.User.Identity?.IsAuthenticated != true`)
+
+<!-- snippet: SuffixWithAuth -->
+<a id='snippet-SuffixWithAuth'></a>
+```cs
+var app = builder.Build();
+
+// Authentication middleware must run before UseDelta
+// so that User claims are available to the suffix callback
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseDelta(
+    suffix: httpContext =>
+    {
+        // Access user claims to create per-user cache keys
+        var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var tenantId = httpContext.User.FindFirst("TenantId")?.Value;
+        return $"{userId}-{tenantId}";
+    });
+```
+<sup><a href='/src/DeltaTests/Usage.cs#L34-L52' title='Snippet source file'>snippet source</a> | <a href='#snippet-SuffixWithAuth' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### AllowAnonymous
+
+For endpoints that intentionally allow anonymous access but still want to use a suffix for cache differentiation (e.g., based on request headers rather than user claims), use `allowAnonymous: true`:
+
+<!-- snippet: AllowAnonymous -->
+<a id='snippet-AllowAnonymous'></a>
+```cs
+var app = builder.Build();
+
+// For endpoints that intentionally allow anonymous access
+// but still want a suffix for cache differentiation
+app.UseDelta(
+    suffix: httpContext => httpContext.Request.Headers["X-Client-Version"].ToString(),
+    allowAnonymous: true);
+```
+<sup><a href='/src/DeltaTests/Usage.cs#L57-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowAnonymous' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+<!-- endInclude -->
+
+
 ### Custom Connection discovery
 
 By default, Delta uses `HttpContext.RequestServices` to discover the NpgsqlConnection and NpgsqlTransaction:
@@ -162,7 +213,7 @@ application.UseDelta(
     getConnection: httpContext =>
         httpContext.RequestServices.GetRequiredService<NpgsqlConnection>());
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L337-L344' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionPostgres' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L375-L382' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 To use custom connection and transaction discovery:
@@ -180,7 +231,7 @@ application.UseDelta(
         return new(connection, transaction);
     });
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L365-L377' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransactionPostgres' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L403-L415' title='Snippet source file'>snippet source</a> | <a href='#snippet-CustomDiscoveryConnectionAndTransactionPostgres' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -193,6 +244,6 @@ application.UseDelta(
 ```cs
 var timeStamp = await connection.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L188-L192' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L226-L230' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->

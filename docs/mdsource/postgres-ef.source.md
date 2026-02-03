@@ -39,4 +39,7 @@ include: map-group-ef
 include: should-execute-ef
 
 
+include: suffix-auth-ef
+
+
 include: last-timestamp-ef

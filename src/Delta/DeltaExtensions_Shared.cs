@@ -53,7 +53,7 @@ public static partial class DeltaExtensions
 #endif
     }
 
-    internal static async Task<bool> HandleRequest(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, Task<string>> getTimeStamp, Func<HttpContext, bool>? shouldExecute, LogLevel level)
+    internal static async Task<bool> HandleRequest(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, Task<string>> getTimeStamp, Func<HttpContext, bool>? shouldExecute, LogLevel level, bool allowAnonymous = false)
     {
         var request = context.Request;
         var response = context.Response;
@@ -84,6 +84,24 @@ public static partial class DeltaExtensions
         {
             WriteNo304Header(response, "shouldExecute=false", level, logger, path, logEnabled);
             return false;
+        }
+
+        if (suffix is not null &&
+            !allowAnonymous &&
+            context.User.Identity?.IsAuthenticated != true)
+        {
+            throw new(
+                """
+                Delta: A suffix callback was provided but the user is not authenticated.
+                This usually means UseDelta is registered before UseAuthentication/UseAuthorization in the middleware pipeline.
+                Ensure authentication middleware runs before UseDelta so that User claims are available to the suffix callback.
+                Example correct ordering:
+                    app.UseAuthentication();
+                    app.UseAuthorization();
+                    app.UseDelta<TDbContext>(suffix: ...);
+
+                If this endpoint intentionally allows anonymous access with a suffix, set allowAnonymous: true.
+                """);
         }
 
         var timeStamp = await getTimeStamp(context);
