@@ -81,7 +81,8 @@ public class MiddlewareTests
             suffixFunc ? _ => suffixValue : null,
             _ => Task.FromResult("rowVersion"),
             executeFunc ? _ => trueExecuteFunc : null,
-            LogLevel.Information);
+            LogLevel.Information,
+            allowAnonymous: true);
         await Verify(
                 new
                 {

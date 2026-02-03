@@ -151,7 +151,58 @@ app.UseDelta<SampleDbContext>(
         return path.Contains("match");
     });
 ```
-<sup><a href='/src/Delta.EFTests/Usage.cs#L16-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecuteEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.EFTests/Usage.cs#L18-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecuteEF' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+<!-- endInclude -->
+
+
+### Suffix and Authentication<!-- include: suffix-auth-ef. path: /docs/mdsource/suffix-auth-ef.include.md -->
+
+When using a `suffix` callback that accesses `HttpContext.User` claims, authentication middleware **must** run before `UseDelta`. If `UseDelta` runs first, the User claims won't be populated yet, and all users will get the same cache key.
+
+Delta automatically detects this misconfiguration and throws an `InvalidOperationException` with a helpful message if:
+- A `suffix` callback is provided
+- The user is not authenticated (`context.User.Identity?.IsAuthenticated != true`)
+
+<!-- snippet: SuffixWithAuthEF -->
+<a id='snippet-SuffixWithAuthEF'></a>
+```cs
+var app = builder.Build();
+
+// Authentication middleware must run before UseDelta
+// so that User claims are available to the suffix callback
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseDelta<SampleDbContext>(
+    suffix: httpContext =>
+    {
+        // Access user claims to create per-user cache keys
+        var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var tenantId = httpContext.User.FindFirst("TenantId")?.Value;
+        return $"{userId}-{tenantId}";
+    });
+```
+<sup><a href='/src/Delta.EFTests/Usage.cs#L33-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-SuffixWithAuthEF' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+### AllowAnonymous
+
+For endpoints that intentionally allow anonymous access but still want to use a suffix for cache differentiation (e.g., based on request headers rather than user claims), use `allowAnonymous: true`:
+
+<!-- snippet: AllowAnonymousEF -->
+<a id='snippet-AllowAnonymousEF'></a>
+```cs
+var app = builder.Build();
+
+// For endpoints that intentionally allow anonymous access
+// but still want a suffix for cache differentiation
+app.UseDelta<SampleDbContext>(
+    suffix: httpContext => httpContext.Request.Headers["X-Client-Version"].ToString(),
+    allowAnonymous: true);
+```
+<sup><a href='/src/Delta.EFTests/Usage.cs#L56-L66' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowAnonymousEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->
 
@@ -167,7 +218,7 @@ It can be called on a DbContext:
 ```cs
 var timeStamp = await dbContext.GetLastTimeStamp();
 ```
-<sup><a href='/src/Delta.EFTests/Usage.cs#L41-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.EFTests/Usage.cs#L81-L85' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Or a DbConnection:
@@ -177,6 +228,6 @@ Or a DbConnection:
 ```cs
 var timeStamp = await connection.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L188-L192' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L227-L231' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->

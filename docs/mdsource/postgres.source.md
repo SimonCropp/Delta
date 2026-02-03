@@ -34,6 +34,9 @@ include: map-group
 include: should-execute
 
 
+include: suffix-auth
+
+
 ### Custom Connection discovery
 
 By default, Delta uses `HttpContext.RequestServices` to discover the NpgsqlConnection and NpgsqlTransaction:

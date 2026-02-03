@@ -1,4 +1,6 @@
-﻿public class Usage :
+﻿using System.Security.Claims;
+
+public class Usage :
     LocalDbTestBase
 {
     public static void Suffix(WebApplicationBuilder builder)
@@ -22,6 +24,44 @@
                 var path = httpContext.Request.Path.ToString();
                 return path.Contains("match");
             });
+
+        #endregion
+    }
+
+    public static void SuffixWithAuth(WebApplicationBuilder builder)
+    {
+        #region SuffixWithAuthEF
+
+        var app = builder.Build();
+
+        // Authentication middleware must run before UseDelta
+        // so that User claims are available to the suffix callback
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseDelta<SampleDbContext>(
+            suffix: httpContext =>
+            {
+                // Access user claims to create per-user cache keys
+                var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var tenantId = httpContext.User.FindFirst("TenantId")?.Value;
+                return $"{userId}-{tenantId}";
+            });
+
+        #endregion
+    }
+
+    public static void AllowAnonymous(WebApplicationBuilder builder)
+    {
+        #region AllowAnonymousEF
+
+        var app = builder.Build();
+
+        // For endpoints that intentionally allow anonymous access
+        // but still want a suffix for cache differentiation
+        app.UseDelta<SampleDbContext>(
+            suffix: httpContext => httpContext.Request.Headers["X-Client-Version"].ToString(),
+            allowAnonymous: true);
 
         #endregion
     }
