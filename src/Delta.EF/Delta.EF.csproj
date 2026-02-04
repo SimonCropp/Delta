@@ -8,7 +8,7 @@
   <ItemGroup>
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
-    <PackageReference Include="Microsoft.Sbom.Targets" PrivateAssets="all" Condition="$(Configuration)=='Release'" />
+    <PackageReference Include="Microsoft.Sbom.Targets" PrivateAssets="all" Condition="'$(CI)' == 'true'" />
     <Compile Include="..\Delta\DeltaExtensions_Sql.cs">
       <Link>DeltaExtensions_Sql.cs</Link>
     </Compile>
