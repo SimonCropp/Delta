@@ -4,8 +4,8 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="EfLocalDb" Version="23.4.2" />
-    <PackageVersion Include="LocalDb" Version="23.4.2" />
+    <PackageVersion Include="EfLocalDb" Version="23.4.3" />
+    <PackageVersion Include="LocalDb" Version="23.4.3" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.0.0-beta.25" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.4" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
@@ -17,13 +17,13 @@
     <PackageVersion Include="NUnit" Version="4.4.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="5.2.0" Pinned="true" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
-    <PackageVersion Include="ProjectDefaults" Version="1.0.170" />
+    <PackageVersion Include="ProjectDefaults" Version="1.0.171" />
     <PackageVersion Include="Verify.AspNetCore" Version="5.0.0" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
-    <PackageVersion Include="Verify.EntityFramework" Version="14.0.0" />
+    <PackageVersion Include="Verify.EntityFramework" Version="15.0.1" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="4.0.1" />
-    <PackageVersion Include="Verify.NUnit" Version="31.10.0" />
-    <PackageVersion Include="Verify.SqlServer" Version="11.2.0" />
+    <PackageVersion Include="Verify.NUnit" Version="31.11.0" />
+    <PackageVersion Include="Verify.SqlServer" Version="11.3.0" />
     <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.5" />
   </ItemGroup>
 </Project>
