@@ -23,7 +23,7 @@
     <PackageVersion Include="Verify.EntityFramework" Version="14.0.0" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="4.0.1" />
     <PackageVersion Include="Verify.NUnit" Version="31.10.0" />
-    <PackageVersion Include="Verify.SqlServer" Version="11.2.0" />
+    <PackageVersion Include="Verify.SqlServer" Version="11.3.0" />
     <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.5" />
   </ItemGroup>
 </Project>
