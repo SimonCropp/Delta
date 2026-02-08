@@ -6,10 +6,17 @@ public static partial class DeltaExtensions
     {
         getConnection ??= DiscoverConnection;
         var logger = builder.ApplicationServices.GetLogger();
+
+        Task<string> GetTimeStamp(HttpContext context)
+        {
+            var (connection, transaction) = getConnection(context);
+            return connection.GetLastTimeStamp(transaction);
+        }
+
         return builder.Use(
             async (context, next) =>
             {
-                if (await HandleRequest(context, getConnection, logger, suffix, shouldExecute, logLevel, allowAnonymous))
+                if (await HandleRequest(context, logger, suffix, GetTimeStamp, shouldExecute, logLevel, allowAnonymous))
                 {
                     return;
                 }
@@ -26,9 +33,16 @@ public static partial class DeltaExtensions
         return builder.AddEndpointFilterFactory((filterContext, next) =>
         {
             var logger = filterContext.ApplicationServices.GetLogger();
+
+            Task<string> GetTimeStamp(HttpContext context)
+            {
+                var (connection, transaction) = getConnection(context);
+                return connection.GetLastTimeStamp(transaction);
+            }
+
             return async invocationContext =>
             {
-                if (await HandleRequest(invocationContext.HttpContext, getConnection, logger, suffix, shouldExecute, logLevel, allowAnonymous))
+                if (await HandleRequest(invocationContext.HttpContext, logger, suffix, GetTimeStamp, shouldExecute, logLevel, allowAnonymous))
                 {
                     return Results.Empty;
                 }
@@ -37,27 +51,6 @@ public static partial class DeltaExtensions
             };
         });
     }
-
-    static Task<bool> HandleRequest(
-        HttpContext context,
-        GetConnection getConnection,
-        ILogger logger,
-        Func<HttpContext, string?>? suffix,
-        Func<HttpContext, bool>? shouldExecute,
-        LogLevel logLevel,
-        bool allowAnonymous = false) =>
-        HandleRequest(
-            context,
-            logger,
-            suffix,
-            _ =>
-            {
-                var (connection, transaction) = getConnection(_);
-                return connection.GetLastTimeStamp(transaction);
-            },
-            shouldExecute,
-            logLevel,
-            allowAnonymous);
 
     public static ComponentEndpointConventionBuilder UseDelta(
         this ComponentEndpointConventionBuilder builder,

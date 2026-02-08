@@ -60,10 +60,9 @@ public static partial class DeltaExtensions
         var path = request.Path;
 
         var logEnabled = logger.IsEnabled(level);
-        var method = request.Method;
-        if (method != "GET")
+        if (!HttpMethods.IsGet(request.Method))
         {
-            WriteNo304Header(response, $"Request Method={method}", level, logger, path, logEnabled);
+            WriteNo304Header(response, "Request method is not GET", level, logger, path, logEnabled);
             return false;
         }
 
@@ -123,7 +122,7 @@ public static partial class DeltaExtensions
             }
             else
             {
-                reason = $"Request has no If-None-Match. Request also has Cache-Control header ({cacheControl}) which can interfere with caching";
+                reason = "Request has no If-None-Match. Request Cache-Control header may interfere with caching";
             }
 
             WriteNo304Header(response, reason, level, logger, path, logEnabled);

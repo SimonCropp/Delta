@@ -1,4 +1,4 @@
-﻿{
+{
   target: {
     notModified: false,
     context: {
@@ -10,19 +10,19 @@
       Response: {
         StatusCode: OK,
         Headers: {
-          Delta-No304: Request Method=POST
+          Delta-No304: Request method is not GET
         }
       }
     }
   },
   log: {
-    Information: Delta /path: No 304. Request Method=POST,
+    Information: Delta /path: No 304. Request method is not GET,
     State: [
       {
         path: /path
       },
       {
-        reason: Request Method=POST
+        reason: Request method is not GET
       },
       {
         {OriginalFormat}: Delta {path}: No 304. {reason}
