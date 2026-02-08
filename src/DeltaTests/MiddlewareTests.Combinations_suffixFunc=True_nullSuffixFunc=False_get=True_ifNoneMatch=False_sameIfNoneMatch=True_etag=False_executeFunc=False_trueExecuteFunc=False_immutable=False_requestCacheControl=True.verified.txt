@@ -1,4 +1,4 @@
-﻿{
+{
   target: {
     notModified: false,
     context: {
@@ -10,7 +10,7 @@
       Response: {
         StatusCode: OK,
         Headers: {
-          Delta-No304: Request has no If-None-Match. Request also has Cache-Control header (no-cache) which can interfere with caching,
+          Delta-No304: Request has no If-None-Match. Request Cache-Control header may interfere with caching,
           ETag: "AssemblyWriteTime-rowVersion-suffix"
         }
       }
@@ -32,13 +32,13 @@
       ]
     },
     {
-      Information: Delta /path: No 304. Request has no If-None-Match. Request also has Cache-Control header (no-cache) which can interfere with caching,
+      Information: Delta /path: No 304. Request has no If-None-Match. Request Cache-Control header may interfere with caching,
       State: [
         {
           path: /path
         },
         {
-          reason: Request has no If-None-Match. Request also has Cache-Control header (no-cache) which can interfere with caching
+          reason: Request has no If-None-Match. Request Cache-Control header may interfere with caching
         },
         {
           {OriginalFormat}: Delta {path}: No 304. {reason}

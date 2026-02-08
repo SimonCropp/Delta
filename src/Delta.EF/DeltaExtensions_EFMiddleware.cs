@@ -6,10 +6,14 @@ public static partial class DeltaExtensions
         where TDbContext : DbContext
     {
         var logger = builder.ApplicationServices.GetLogger();
+
+        static Task<string> GetTimeStamp(HttpContext context) =>
+            context.RequestServices.GetRequiredService<TDbContext>().GetLastTimeStamp();
+
         return builder.Use(
             async (context, next) =>
             {
-                if (await HandleRequest<TDbContext>(context, logger, suffix, shouldExecute, logLevel, allowAnonymous))
+                if (await HandleRequest(context, logger, suffix, GetTimeStamp, shouldExecute, logLevel, allowAnonymous))
                 {
                     return;
                 }
@@ -24,9 +28,13 @@ public static partial class DeltaExtensions
         builder.AddEndpointFilterFactory((filterContext, next) =>
         {
             var logger = filterContext.ApplicationServices.GetLogger();
+
+            static Task<string> GetTimeStamp(HttpContext context) =>
+                context.RequestServices.GetRequiredService<TDbContext>().GetLastTimeStamp();
+
             return async invocationContext =>
             {
-                if (await HandleRequest<TDbContext>(invocationContext.HttpContext, logger, suffix, shouldExecute, logLevel, allowAnonymous))
+                if (await HandleRequest(invocationContext.HttpContext, logger, suffix, GetTimeStamp, shouldExecute, logLevel, allowAnonymous))
                 {
                     return Results.Empty;
                 }
@@ -34,19 +42,6 @@ public static partial class DeltaExtensions
                 return await next(invocationContext);
             };
         });
-
-    static Task<bool> HandleRequest<T>(HttpContext context, ILogger logger, Func<HttpContext, string?>? suffix, Func<HttpContext, bool>? shouldExecute, LogLevel logLevel, bool allowAnonymous = false)
-        where T : DbContext =>
-        HandleRequest(
-            context,
-            logger,
-            suffix,
-            _ => _.RequestServices
-                .GetRequiredService<T>()
-                .GetLastTimeStamp(),
-            shouldExecute,
-            logLevel,
-            allowAnonymous);
 
     public static Task<string> GetLastTimeStamp(this DbContext context, Cancel cancel = default)
     {
