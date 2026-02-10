@@ -8,9 +8,9 @@
     <PackageVersion Include="LocalDb" Version="23.4.3" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.0.0" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.4" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.2" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.2" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.3" />
     <PackageVersion Include="Npgsql" Version="10.0.1" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
@@ -22,7 +22,7 @@
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
     <PackageVersion Include="Verify.EntityFramework" Version="15.0.2" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="4.0.1" />
-    <PackageVersion Include="Verify.NUnit" Version="31.12.3" />
+    <PackageVersion Include="Verify.NUnit" Version="31.12.4" />
     <PackageVersion Include="Verify.SqlServer" Version="11.3.1" />
     <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.5" />
   </ItemGroup>
