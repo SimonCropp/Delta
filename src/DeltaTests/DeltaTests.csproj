@@ -7,6 +7,11 @@
     <PackageReference Include="LocalDb" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="Verify.NUnit" />
+    <PackageReference Include="Argon" />
+    <PackageReference Include="DiffEngine" />
+    <PackageReference Include="EmptyFiles" />
+    <PackageReference Include="SimpleInfoName" />
+    <PackageReference Include="Verify" />
     <PackageReference Include="Verify.SqlServer" />
     <PackageReference Include="Verify.DiffPlex" />
     <PackageReference Include="Verify.MicrosoftLogging" />
