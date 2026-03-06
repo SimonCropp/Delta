@@ -15,7 +15,6 @@ include: intro
 include: sponsors
 
 
-
 ## Jump to specific docs
 
  * [SQL Server Docs](/docs/sqlserver.md) when using [SQL Server SqlClient](https://github.com/dotnet/SqlClient)
