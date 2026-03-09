@@ -170,7 +170,7 @@ Documentation is specific to choice of database:
 
 ## UseResponseDiagnostics
 
-Response diagnostics is an opt-out feature that includes extra log information in the response headers.
+Response diagnostics is an opt-out feature that includes extra log information in the response headers. Consider disabling in production to avoid adding diagnostic headers to every response.
 
 Disable by setting UseResponseDiagnostics to false at startup:
 
