@@ -59,29 +59,28 @@ public static partial class DeltaExtensions
         var response = context.Response;
         var path = request.Path.Value!;
 
-        var logEnabled = logger.IsEnabled(level);
         if (!HttpMethods.IsGet(request.Method))
         {
-            WriteNo304Header(response, "Request method is not GET", level, logger, path, logEnabled);
+            WriteNo304Header(response, "Request method is not GET", level, logger, path);
             return false;
         }
 
         if (response.Headers.ETag.Count != 0)
         {
-            WriteNo304Header(response, "Response already has ETag", level, logger, path, logEnabled);
+            WriteNo304Header(response, "Response already has ETag", level, logger, path);
             return false;
         }
 
         if (response.IsImmutableCache())
         {
-            WriteNo304Header(response, "Response already has Cache-Control=immutable", level, logger, path, logEnabled);
+            WriteNo304Header(response, "Response already has Cache-Control=immutable", level, logger, path);
             return false;
         }
 
         if (shouldExecute != null &&
             !shouldExecute(context))
         {
-            WriteNo304Header(response, "shouldExecute=false", level, logger, path, logEnabled);
+            WriteNo304Header(response, "shouldExecute=false", level, logger, path);
             return false;
         }
 
@@ -107,10 +106,7 @@ public static partial class DeltaExtensions
         var suffixValue = suffix?.Invoke(context);
         var etag = BuildEtag(timeStamp, suffixValue);
         response.Headers.ETag = etag;
-        if (logEnabled)
-        {
-            logger.Log(level, "Delta {path}: ETag {etag}", path, etag);
-        }
+        LogEtag(logger, level, path, etag);
 
         if (!request.Headers.TryGetValue("If-None-Match", out var ifNoneMatch))
         {
@@ -125,53 +121,47 @@ public static partial class DeltaExtensions
                 reason = "Request has no If-None-Match. Request Cache-Control header may interfere with caching";
             }
 
-            WriteNo304Header(response, reason, level, logger, path, logEnabled);
+            WriteNo304Header(response, reason, level, logger, path);
 
             return false;
         }
 
         if (ifNoneMatch != etag)
         {
-            WriteNo304Header(response, "Request If-None-Match != ETag", level, logger, path, logEnabled);
-            if (logEnabled)
-            {
-                logger.Log(
-                    level,
-                    """
-                    Delta {path}: No 304. Request If-None-Match != ETag
-                    If-None-Match: {ifNoneMatch}
-                    ETag: {etag}
-                    """,
-                    path,
-                    ifNoneMatch.ToString(),
-                    etag);
-            }
+            WriteNo304Header(response, "Request If-None-Match != ETag", level, logger, path);
+            LogEtagMismatch(logger, level, path, ifNoneMatch.ToString(), etag);
 
             return false;
         }
 
-        if (logEnabled)
-        {
-            logger.Log(level, "Delta {path}: 304", path);
-        }
+        Log304(logger, level, path);
 
         response.StatusCode = 304;
         response.NoCache();
         return true;
     }
 
-    static void WriteNo304Header(HttpResponse response, string reason, LogLevel level, ILogger logger, PathString path, bool logEnabled)
+    static void WriteNo304Header(HttpResponse response, string reason, LogLevel level, ILogger logger, string path)
     {
         if (UseResponseDiagnostics)
         {
             response.Headers["Delta-No304"] = reason;
         }
 
-        if (logEnabled)
-        {
-            logger.Log(level, "Delta {path}: No 304. {reason}", path.Value, reason);
-        }
+        LogNo304(logger, level, path, reason);
     }
+
+    [LoggerMessage(Message = "Delta {path}: ETag {etag}")]
+    static partial void LogEtag(ILogger logger, LogLevel level, string path, string etag);
+
+    [LoggerMessage(Message = "Delta {path}: No 304. {reason}")]
+    static partial void LogNo304(ILogger logger, LogLevel level, string path, string reason);
+
+    [LoggerMessage(Message = "Delta {path}: No 304. Request If-None-Match != ETag\nIf-None-Match: {ifNoneMatch}\nETag: {etag}")]
+    static partial void LogEtagMismatch(ILogger logger, LogLevel level, string path, string ifNoneMatch, string etag);
+
+    [LoggerMessage(Message = "Delta {path}: 304")]
+    static partial void Log304(ILogger logger, LogLevel level, string path);
 
     static ILogger GetLogger(this IServiceProvider provider)
     {

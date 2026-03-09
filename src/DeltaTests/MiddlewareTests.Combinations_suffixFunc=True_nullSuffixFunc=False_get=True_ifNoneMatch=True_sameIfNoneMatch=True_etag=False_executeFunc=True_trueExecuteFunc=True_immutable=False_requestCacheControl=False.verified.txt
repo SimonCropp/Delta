@@ -19,6 +19,9 @@
   log: [
     {
       Information: Delta /path: ETag "AssemblyWriteTime-rowVersion-suffix",
+      EventId: {
+        Name: LogEtag
+      },
       State: [
         {
           path: /path
@@ -33,6 +36,9 @@
     },
     {
       Information: Delta /path: 304,
+      EventId: {
+        Name: Log304
+      },
       State: [
         {
           path: /path
