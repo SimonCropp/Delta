@@ -47,7 +47,7 @@ const string logRndLsnCommand =
     from sys.dm_db_log_stats(db_id())
     """;
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L87-L95' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampWithServerState' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L92-L100' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampWithServerState' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -66,7 +66,7 @@ if (@changeTracking is null)
 else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L127-L135' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampNoServerState' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L132-L140' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampNoServerState' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->
 
