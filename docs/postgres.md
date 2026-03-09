@@ -24,7 +24,7 @@ Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/ru
 ```cs
 select pg_last_committed_xact();
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L58-L60' title='Snippet source file'>snippet source</a> | <a href='#snippet-PostgresTimeStamp' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L68-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-PostgresTimeStamp' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

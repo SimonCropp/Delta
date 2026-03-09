@@ -4,9 +4,24 @@ public static partial class DeltaExtensions
 {
     public static async Task<string> GetLastTimeStamp(this DbConnection connection, DbTransaction? transaction = null, Cancel cancel = default)
     {
-        query ??= await ResolveQuery(connection, transaction, cancel);
+        // Cache the Task (not the result) so concurrent callers share a single ResolveQuery call.
+        // Interlocked.CompareExchange ensures only the first caller's Task wins;
+        // all others await that same already-in-flight Task.
+        var resolved = queryTask;
+        if (resolved is null)
+        {
+            resolved = ResolveQuery(connection, transaction, cancel);
+            var original = Interlocked.CompareExchange(ref queryTask, resolved, null);
+            if (original is not null)
+            {
+                resolved = original;
+            }
+        }
 
-        return await Execute(connection, transaction, query, cancel);
+        // Awaiting an already-completed Task is essentially free — the runtime short-circuits it without
+        // touching the thread pool or allocating a state machine. same cost as reading a field.
+        var execute = await resolved;
+        return await Execute(connection, transaction, execute, cancel);
     }
 
     static async Task<Func<DbCommand, Cancel, Task<string>>> ResolveQuery(DbConnection connection, DbTransaction? transaction, Cancel cancel)
@@ -134,7 +149,7 @@ public static partial class DeltaExtensions
         return result == 1;
     }
 
-    static Func<DbCommand, Cancel, Task<string>>? query;
+    static Task<Func<DbCommand, Cancel, Task<string>>>? queryTask;
 
-    internal static void Reset() => query = null;
+    internal static void Reset() => queryTask = null;
 }
