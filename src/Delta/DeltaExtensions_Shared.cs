@@ -57,7 +57,7 @@ public static partial class DeltaExtensions
     {
         var request = context.Request;
         var response = context.Response;
-        var path = request.Path;
+        var path = request.Path.Value!;
 
         var logEnabled = logger.IsEnabled(level);
         if (!HttpMethods.IsGet(request.Method))
@@ -143,7 +143,7 @@ public static partial class DeltaExtensions
                     ETag: {etag}
                     """,
                     path,
-                    ifNoneMatch,
+                    ifNoneMatch.ToString(),
                     etag);
             }
 
@@ -160,7 +160,7 @@ public static partial class DeltaExtensions
         return true;
     }
 
-    static void WriteNo304Header(HttpResponse response, string reason, LogLevel level, ILogger logger, string path, bool logEnabled)
+    static void WriteNo304Header(HttpResponse response, string reason, LogLevel level, ILogger logger, PathString path, bool logEnabled)
     {
         if (UseResponseDiagnostics)
         {
@@ -169,7 +169,7 @@ public static partial class DeltaExtensions
 
         if (logEnabled)
         {
-            logger.Log(level, "Delta {path}: No 304. {reason}", path, reason);
+            logger.Log(level, "Delta {path}: No 304. {reason}", path.Value, reason);
         }
     }
 

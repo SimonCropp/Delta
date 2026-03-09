@@ -1,8 +1,8 @@
 <Solution>
   <Folder Name="/.SolutionItems/">
     <File Path="../readme.md" />
-    <File Path="../readme.source.md" />
     <File Path="../.editorconfig" />
+    <File Path="..\readme.source.md" />
     <File Path="appveyor.yml" />
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
@@ -26,7 +26,6 @@
     <File Path="..\docs\mdsource\sqlserver-helpers.include.md" />
     <File Path="..\docs\mdsource\sqlserver-implemenation.include.md" />
     <File Path="..\docs\mdsource\sqlserver-timestamp.include.md" />
-    <File Path="..\docs\mdsource\zzz.include.md" />
   </Folder>
   <Folder Name="/EF/">
     <Project Path="Delta.EF/Delta.EF.csproj" />

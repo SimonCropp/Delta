@@ -55,9 +55,7 @@ ETag: "AssemblyWriteTime-rowVersion",
           path: /path
         },
         {
-          ifNoneMatch: [
-            diffEtag
-          ]
+          ifNoneMatch: diffEtag
         },
         {
           etag: "AssemblyWriteTime-rowVersion"
