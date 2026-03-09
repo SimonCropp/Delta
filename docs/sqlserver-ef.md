@@ -55,9 +55,7 @@ const string logRndLsnCommand =
 
 A combination of [change_tracking_current_version](https://learn.microsoft.com/en-us/sql/relational-databases/system-functions/change-tracking-current-version-transact-sql) (if tracking is enabled) and [@@DBTS (row version timestamp)](https://learn.microsoft.com/en-us/sql/t-sql/functions/dbts-transact-sql)
 
-<!-- snippet: SqlServerTimeStampNoServerState -->
-<a id='snippet-SqlServerTimeStampNoServerState'></a>
-```cs
+```sql
 declare @changeTracking bigint = change_tracking_current_version();
 declare @timeStamp bigint = convert(bigint, @@dbts);
 
@@ -66,8 +64,6 @@ if (@changeTracking is null)
 else
   select cast(@timeStamp as varchar) + '-' + cast(@changeTracking as varchar)
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L132-L140' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampNoServerState' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
 <!-- endInclude -->
 
 

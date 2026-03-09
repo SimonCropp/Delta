@@ -12,7 +12,9 @@ include: postgres-implemenation
 
 ## Timestamp calculation
 
-snippet: PostgresTimeStamp
+```sql
+select pg_last_committed_xact();
+```
 
 
 ## Usage

@@ -19,13 +19,9 @@ Postgres required [track_commit_timestamp](https://www.postgresql.org/docs/17/ru
 
 ## Timestamp calculation
 
-<!-- snippet: PostgresTimeStamp -->
-<a id='snippet-PostgresTimeStamp'></a>
-```cs
+```sql
 select pg_last_committed_xact();
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L73-L75' title='Snippet source file'>snippet source</a> | <a href='#snippet-PostgresTimeStamp' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
 
 
 ## Usage
