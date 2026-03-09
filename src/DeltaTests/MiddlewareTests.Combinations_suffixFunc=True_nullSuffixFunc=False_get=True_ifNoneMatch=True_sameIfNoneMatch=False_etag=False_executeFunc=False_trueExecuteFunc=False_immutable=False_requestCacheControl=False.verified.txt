@@ -19,6 +19,9 @@
   log: [
     {
       Information: Delta /path: ETag "AssemblyWriteTime-rowVersion-suffix",
+      EventId: {
+        Name: LogEtag
+      },
       State: [
         {
           path: /path
@@ -33,6 +36,9 @@
     },
     {
       Information: Delta /path: No 304. Request If-None-Match != ETag,
+      EventId: {
+        Name: LogNo304
+      },
       State: [
         {
           path: /path
@@ -50,6 +56,9 @@
 Delta /path: No 304. Request If-None-Match != ETag
 If-None-Match: diffEtag
 ETag: "AssemblyWriteTime-rowVersion-suffix",
+      EventId: {
+        Name: LogEtagMismatch
+      },
       State: [
         {
           path: /path

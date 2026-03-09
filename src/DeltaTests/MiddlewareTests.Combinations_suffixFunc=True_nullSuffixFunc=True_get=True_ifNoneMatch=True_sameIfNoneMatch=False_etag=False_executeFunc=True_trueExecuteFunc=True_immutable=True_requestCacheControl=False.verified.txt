@@ -18,6 +18,9 @@
   },
   log: {
     Information: Delta /path: No 304. Response already has Cache-Control=immutable,
+    EventId: {
+      Name: LogNo304
+    },
     State: [
       {
         path: /path

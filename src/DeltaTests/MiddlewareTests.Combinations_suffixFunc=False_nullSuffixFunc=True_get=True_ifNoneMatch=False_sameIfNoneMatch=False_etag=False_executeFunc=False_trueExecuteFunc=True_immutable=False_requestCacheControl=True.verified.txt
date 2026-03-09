@@ -1,4 +1,4 @@
-{
+﻿{
   target: {
     notModified: false,
     context: {
@@ -19,6 +19,9 @@
   log: [
     {
       Information: Delta /path: ETag "AssemblyWriteTime-rowVersion",
+      EventId: {
+        Name: LogEtag
+      },
       State: [
         {
           path: /path
@@ -33,6 +36,9 @@
     },
     {
       Information: Delta /path: No 304. Request has no If-None-Match. Request Cache-Control header may interfere with caching,
+      EventId: {
+        Name: LogNo304
+      },
       State: [
         {
           path: /path
