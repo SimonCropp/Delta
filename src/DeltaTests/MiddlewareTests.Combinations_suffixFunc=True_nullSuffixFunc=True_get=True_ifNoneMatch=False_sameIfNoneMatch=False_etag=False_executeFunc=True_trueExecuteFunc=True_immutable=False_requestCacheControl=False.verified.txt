@@ -15,6 +15,9 @@
   log: [
     {
       Information: Delta /path: ETag "AssemblyWriteTime-rowVersion",
+      EventId: {
+        Name: LogEtag
+      },
       State: [
         {
           path: /path
@@ -29,6 +32,9 @@
     },
     {
       Information: Delta /path: No 304. Request has no If-None-Match,
+      EventId: {
+        Name: LogNo304
+      },
       State: [
         {
           path: /path

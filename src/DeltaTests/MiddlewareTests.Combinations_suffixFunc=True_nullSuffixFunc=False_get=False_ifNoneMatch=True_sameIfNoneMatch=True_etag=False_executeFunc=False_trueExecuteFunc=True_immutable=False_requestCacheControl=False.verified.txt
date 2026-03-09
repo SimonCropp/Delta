@@ -1,4 +1,4 @@
-{
+﻿{
   target: {
     notModified: false,
     context: {
@@ -17,6 +17,9 @@
   },
   log: {
     Information: Delta /path: No 304. Request method is not GET,
+    EventId: {
+      Name: LogNo304
+    },
     State: [
       {
         path: /path

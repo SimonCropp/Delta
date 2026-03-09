@@ -13,6 +13,9 @@
   },
   log: {
     Information: Delta /path: No 304. shouldExecute=false,
+    EventId: {
+      Name: LogNo304
+    },
     State: [
       {
         path: /path
