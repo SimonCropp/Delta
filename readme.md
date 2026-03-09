@@ -135,7 +135,7 @@ internal static string BuildEtag(string timeStamp, string? suffix)
     return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L172-L184' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L285-L297' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -166,6 +166,31 @@ Documentation is specific to choice of database:
 
  * [EF with SQL Server Docs](/docs/sqlserver-ef.md) when using the [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli)
  * [EF with PostgreSQL Docs](/docs/postgres-ef.md) when using the [PostgreSQL EF Database Provider](https://www.npgsql.org/efcore)
+
+
+## Timestamp caching via request Cache-Control
+
+By default, Delta queries the database on every GET request to retrieve the current timestamp. Clients can opt into timestamp caching by sending `Cache-Control` request headers, allowing Delta to skip the database round-trip when a recent enough cached timestamp exists.
+
+Supported directives:
+
+ * `max-age=N` — accept a cached timestamp up to N seconds old
+ * `max-stale=N` — accept a cached timestamp up to N seconds old
+ * `max-stale` (no value) — accept any cached timestamp regardless of age
+
+If both `max-age` and `max-stale` are present, the larger (more permissive) value is used.
+
+Requests without these directives always query the database (existing behavior).
+
+Example request headers:
+
+```
+Cache-Control: max-age=5
+```
+
+```
+Cache-Control: max-stale
+```
 
 
 ## UseResponseDiagnostics

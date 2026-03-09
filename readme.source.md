@@ -119,6 +119,31 @@ Documentation is specific to choice of database:
  * [EF with PostgreSQL Docs](/docs/postgres-ef.md) when using the [PostgreSQL EF Database Provider](https://www.npgsql.org/efcore)
 
 
+## Timestamp caching via request Cache-Control
+
+By default, Delta queries the database on every GET request to retrieve the current timestamp. Clients can opt into timestamp caching by sending `Cache-Control` request headers, allowing Delta to skip the database round-trip when a recent enough cached timestamp exists.
+
+Supported directives:
+
+ * `max-age=N` — accept a cached timestamp up to N seconds old
+ * `max-stale=N` — accept a cached timestamp up to N seconds old
+ * `max-stale` (no value) — accept any cached timestamp regardless of age
+
+If both `max-age` and `max-stale` are present, the larger (more permissive) value is used.
+
+Requests without these directives always query the database (existing behavior).
+
+Example request headers:
+
+```
+Cache-Control: max-age=5
+```
+
+```
+Cache-Control: max-stale
+```
+
+
 ## UseResponseDiagnostics
 
 Response diagnostics is an opt-out feature that includes extra log information in the response headers. Consider disabling in production to avoid adding diagnostic headers to every response.

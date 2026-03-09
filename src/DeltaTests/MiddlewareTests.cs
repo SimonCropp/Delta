@@ -94,6 +94,224 @@ public class MiddlewareTests
     }
 
     [Test]
+    public async Task MaxAge_UsesCachedTimeStamp()
+    {
+        Recording.Start();
+        DeltaExtensions.Reset();
+        var callCount = 0;
+
+        Task<string> GetTimeStamp(HttpContext _)
+        {
+            callCount++;
+            return Task.FromResult("rowVersion");
+        }
+
+        // First request: no max-age, populates the cache
+        var context1 = new DefaultHttpContext();
+        context1.Request.Path = "/path";
+        context1.Request.Method = "GET";
+        context1.Request.Headers.IfNoneMatch = DeltaExtensions.BuildEtag("rowVersion", null);
+
+        await DeltaExtensions.HandleRequest(
+            context1,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        AreEqual(1, callCount);
+
+        // Second request: with max-age, should use cached timestamp
+        var context2 = new DefaultHttpContext();
+        context2.Request.Path = "/path";
+        context2.Request.Method = "GET";
+        context2.Request.Headers.CacheControl = "max-age=10";
+        context2.Request.Headers.IfNoneMatch = DeltaExtensions.BuildEtag("rowVersion", null);
+
+        var notModified = await DeltaExtensions.HandleRequest(
+            context2,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        // DB was NOT called again — cached timestamp used
+        AreEqual(1, callCount);
+        IsTrue(notModified);
+    }
+
+    [Test]
+    public async Task MaxAge_ExpiredCache_QueriesDb()
+    {
+        Recording.Start();
+        DeltaExtensions.Reset();
+        var callCount = 0;
+
+        Task<string> GetTimeStamp(HttpContext _)
+        {
+            callCount++;
+            return Task.FromResult("rowVersion");
+        }
+
+        // First request: populates the cache
+        var context1 = new DefaultHttpContext();
+        context1.Request.Path = "/path";
+        context1.Request.Method = "GET";
+
+        await DeltaExtensions.HandleRequest(
+            context1,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        AreEqual(1, callCount);
+
+        // Second request: max-age=0 means must be fresh
+        var context2 = new DefaultHttpContext();
+        context2.Request.Path = "/path";
+        context2.Request.Method = "GET";
+        context2.Request.Headers.CacheControl = "max-age=0";
+
+        await DeltaExtensions.HandleRequest(
+            context2,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        // max-age=0 requires fresh data, so DB was called again
+        AreEqual(2, callCount);
+    }
+
+    [Test]
+    public async Task NoMaxAge_AlwaysQueriesDb()
+    {
+        Recording.Start();
+        DeltaExtensions.Reset();
+        var callCount = 0;
+
+        Task<string> GetTimeStamp(HttpContext _)
+        {
+            callCount++;
+            return Task.FromResult("rowVersion");
+        }
+
+        // Two requests without max-age
+        for (var i = 0; i < 2; i++)
+        {
+            var context = new DefaultHttpContext();
+            context.Request.Path = "/path";
+            context.Request.Method = "GET";
+
+            await DeltaExtensions.HandleRequest(
+                context,
+                new RecordingLogger(),
+                null,
+                GetTimeStamp,
+                null,
+                LogLevel.Information);
+        }
+
+        // Both requests hit the DB
+        AreEqual(2, callCount);
+    }
+
+    [Test]
+    public async Task MaxStale_UsesCachedTimeStamp()
+    {
+        Recording.Start();
+        DeltaExtensions.Reset();
+        var callCount = 0;
+
+        Task<string> GetTimeStamp(HttpContext _)
+        {
+            callCount++;
+            return Task.FromResult("rowVersion");
+        }
+
+        // First request: populates the cache
+        var context1 = new DefaultHttpContext();
+        context1.Request.Path = "/path";
+        context1.Request.Method = "GET";
+
+        await DeltaExtensions.HandleRequest(
+            context1,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        AreEqual(1, callCount);
+
+        // Second request: max-stale=10, should use cached timestamp
+        var context2 = new DefaultHttpContext();
+        context2.Request.Path = "/path";
+        context2.Request.Method = "GET";
+        context2.Request.Headers.CacheControl = "max-stale=10";
+
+        await DeltaExtensions.HandleRequest(
+            context2,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        AreEqual(1, callCount);
+    }
+
+    [Test]
+    public async Task MaxStaleNoValue_UsesCachedTimeStamp()
+    {
+        Recording.Start();
+        DeltaExtensions.Reset();
+        var callCount = 0;
+
+        Task<string> GetTimeStamp(HttpContext _)
+        {
+            callCount++;
+            return Task.FromResult("rowVersion");
+        }
+
+        // First request: populates the cache
+        var context1 = new DefaultHttpContext();
+        context1.Request.Path = "/path";
+        context1.Request.Method = "GET";
+
+        await DeltaExtensions.HandleRequest(
+            context1,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        AreEqual(1, callCount);
+
+        // Second request: max-stale without a value means accept any staleness
+        var context2 = new DefaultHttpContext();
+        context2.Request.Path = "/path";
+        context2.Request.Method = "GET";
+        context2.Request.Headers.CacheControl = "max-stale";
+
+        await DeltaExtensions.HandleRequest(
+            context2,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        AreEqual(1, callCount);
+    }
+
+    [Test]
     public void CacheControlExtensions()
     {
         var context = new DefaultHttpContext();

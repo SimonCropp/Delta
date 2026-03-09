@@ -145,5 +145,9 @@ public static partial class DeltaExtensions
 
     static Task<Func<DbCommand, Cancel, Task<string>>>? queryTask;
 
-    internal static void Reset() => queryTask = null;
+    internal static void Reset()
+    {
+        queryTask = null;
+        timeStampCache = null;
+    }
 }

@@ -102,7 +102,18 @@ public static partial class DeltaExtensions
                 """);
         }
 
-        var timeStamp = await getTimeStamp(context);
+        string timeStamp;
+        if (TryGetCachedTimeStamp(request, out var cached))
+        {
+            timeStamp = cached;
+            LogTimeStampCacheHit(logger, level, path);
+        }
+        else
+        {
+            timeStamp = await getTimeStamp(context);
+            timeStampCache = new(timeStamp, Stopwatch.GetTimestamp());
+        }
+
         var suffixValue = suffix?.Invoke(context);
         var etag = BuildEtag(timeStamp, suffixValue);
         response.Headers.ETag = etag;
@@ -150,6 +161,108 @@ public static partial class DeltaExtensions
 
         LogNo304(logger, level, path, reason);
     }
+
+    sealed record TimeStampCache(string Value, long Ticks);
+
+    static TimeStampCache? timeStampCache;
+
+    static bool TryGetCachedTimeStamp(HttpRequest request, [NotNullWhen(true)] out string? timeStamp)
+    {
+        timeStamp = null;
+        var cache = timeStampCache;
+        if (cache is null)
+        {
+            return false;
+        }
+
+        if (!TryParseStaleness(request.Headers.CacheControl, out var maxSeconds))
+        {
+            return false;
+        }
+
+        if (maxSeconds != int.MaxValue)
+        {
+            var elapsed = Stopwatch.GetElapsedTime(cache.Ticks);
+            if (elapsed.TotalSeconds > maxSeconds)
+            {
+                return false;
+            }
+        }
+
+        timeStamp = cache.Value;
+        return true;
+    }
+
+    // Parses max-age and max-stale from Cache-Control.
+    // max-stale without a value means accept any staleness (returns int.MaxValue).
+    // If both are present, the larger (more permissive) value wins.
+    static bool TryParseStaleness(StringValues cacheControl, out int maxSeconds)
+    {
+        maxSeconds = 0;
+        var found = false;
+
+        foreach (var value in cacheControl)
+        {
+            if (value is null)
+            {
+                continue;
+            }
+
+            if (TryParseDirectiveValue(value, "max-age=", out var maxAge))
+            {
+                found = true;
+                maxSeconds = Math.Max(maxSeconds, maxAge);
+            }
+
+            var staleIndex = value.IndexOf("max-stale", StringComparison.OrdinalIgnoreCase);
+            if (staleIndex >= 0)
+            {
+                found = true;
+                var afterDirective = value.AsSpan(staleIndex + 9);
+                afterDirective = afterDirective.TrimStart();
+                if (afterDirective.Length > 0 &&
+                    afterDirective[0] == '=' &&
+                    TryParseDirectiveValue(value, "max-stale=", out var maxStale))
+                {
+                    maxSeconds = Math.Max(maxSeconds, maxStale);
+                }
+                else
+                {
+                    // max-stale without a value: accept any staleness
+                    maxSeconds = int.MaxValue;
+                }
+            }
+        }
+
+        return found;
+    }
+
+    static bool TryParseDirectiveValue(string header, string directive, out int seconds)
+    {
+        seconds = 0;
+        var index = header.IndexOf(directive, StringComparison.OrdinalIgnoreCase);
+        if (index < 0)
+        {
+            return false;
+        }
+
+        var span = header.AsSpan(index + directive.Length);
+        var end = 0;
+        while (end < span.Length && char.IsAsciiDigit(span[end]))
+        {
+            end++;
+        }
+
+        if (end == 0)
+        {
+            return false;
+        }
+
+        return int.TryParse(span[..end], out seconds);
+    }
+
+    [LoggerMessage(Message = "Delta {path}: Using cached timestamp")]
+    static partial void LogTimeStampCacheHit(ILogger logger, LogLevel level, string path);
 
     [LoggerMessage(Message = "Delta {path}: ETag {etag}")]
     static partial void LogEtag(ILogger logger, LogLevel level, string path, string etag);
