@@ -8,6 +8,7 @@ public class PostgresTests
     #endif
     public async Task GetLastTimeStamp()
     {
+        DeltaExtensions.Reset();
         await using var connection = new NpgsqlConnection(PostgresConnection.ConnectionString);
         await connection.OpenAsync();
         await PostgresDbBuilder.Create(connection);
