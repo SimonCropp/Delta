@@ -54,12 +54,22 @@ Frequency of updates to data is relatively low compared to reads
 ```mermaid
 graph TD
     Request
+    HasMaxAge{Has max-age<br/>or max-stale<br/>in Cache-Control?}
+    CacheValid{Cached timestamp<br/>within allowed<br/>staleness?}
+    FreshTimestamp[Get fresh timestamp<br/>from SQL]
+    UseCached[Use cached timestamp]
     CalculateEtag[Calculate current ETag<br/>based on timestamp<br/>from web assembly and SQL]
     IfNoneMatch{Has<br/>If-None-Match<br/>header?}
     EtagMatch{Current<br/>Etag matches<br/>If-None-Match?}
     AddETag[Add current ETag<br/>to Response headers]
     304[Respond with<br/>304 Not-Modified]
-    Request --> CalculateEtag
+    Request --> HasMaxAge
+    HasMaxAge -->|Yes| CacheValid
+    HasMaxAge -->|No| FreshTimestamp
+    CacheValid -->|Yes| UseCached
+    CacheValid -->|No| FreshTimestamp
+    UseCached --> CalculateEtag
+    FreshTimestamp --> CalculateEtag
     CalculateEtag --> IfNoneMatch
     IfNoneMatch -->|Yes| EtagMatch
     IfNoneMatch -->|No| AddETag
