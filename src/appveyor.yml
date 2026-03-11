@@ -24,7 +24,14 @@ build_script:
     Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
     ./dotnet-install.ps1 -JSonFile src/global.json -Architecture x64 -InstallDir 'C:\Program Files\dotnet'
 - dotnet build src --configuration Release
-- dotnet test src --configuration Release --no-build --no-restore
+- dotnet test src --configuration Release --no-build --no-restore --logger:trx --results-directory TestResults
+on_finish:
+- ps: |
+    Get-ChildItem TestResults\*.trx -ErrorAction SilentlyContinue | % {
+      (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", $_.FullName)
+    }
+on_failure:
+- ps: Get-ChildItem *.received.* -recurse | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
 test: off
 artifacts:
 - path: nugets\*.nupkg
