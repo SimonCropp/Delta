@@ -29,9 +29,10 @@ public class MiddlewareTests
     }
 
     [Test]
-    public async Task Combinations([Values] bool suffixFunc, [Values] bool nullSuffixFunc, [Values] bool get, [Values] bool ifNoneMatch, [Values] bool sameIfNoneMatch, [Values] bool etag, [Values] bool executeFunc, [Values] bool trueExecuteFunc, [Values] bool immutable, [Values] bool requestCacheControl)
+    public async Task Combinations([Values] bool suffixFunc, [Values] bool nullSuffixFunc, [Values] bool get, [Values] bool ifNoneMatch, [Values] bool sameIfNoneMatch, [Values] bool etag, [Values] bool executeFunc, [Values] bool trueExecuteFunc, [Values] bool immutable, [Values] bool noCache, [Values] bool minFresh)
     {
         Recording.Start();
+        DeltaExtensions.Reset();
         var context = new DefaultHttpContext();
 
         var suffixValue = suffixFunc && !nullSuffixFunc ? "suffix" : null;
@@ -53,9 +54,20 @@ public class MiddlewareTests
             request.Method = "POST";
         }
 
-        if (requestCacheControl)
+        var cacheDirectives = new List<string>();
+        if (noCache)
         {
-            request.Headers.CacheControl = "no-cache";
+            cacheDirectives.Add("no-cache");
+        }
+
+        if (minFresh)
+        {
+            cacheDirectives.Add("min-fresh=5");
+        }
+
+        if (cacheDirectives.Count > 0)
+        {
+            request.Headers.CacheControl = string.Join(", ", cacheDirectives);
         }
 
         if (ifNoneMatch)
@@ -107,10 +119,18 @@ public class MiddlewareTests
         }
 
         // First request: no max-age, populates the cache
-        var context1 = new DefaultHttpContext();
-        context1.Request.Path = "/path";
-        context1.Request.Method = "GET";
-        context1.Request.Headers.IfNoneMatch = DeltaExtensions.BuildEtag("rowVersion", null);
+        var context1 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET",
+                Headers =
+                {
+                    IfNoneMatch = DeltaExtensions.BuildEtag("rowVersion", null)
+                }
+            }
+        };
 
         await DeltaExtensions.HandleRequest(
             context1,
@@ -123,11 +143,19 @@ public class MiddlewareTests
         AreEqual(1, callCount);
 
         // Second request: with max-age, should use cached timestamp
-        var context2 = new DefaultHttpContext();
-        context2.Request.Path = "/path";
-        context2.Request.Method = "GET";
-        context2.Request.Headers.CacheControl = "max-age=10";
-        context2.Request.Headers.IfNoneMatch = DeltaExtensions.BuildEtag("rowVersion", null);
+        var context2 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET",
+                Headers =
+                {
+                    CacheControl = "max-age=10",
+                    IfNoneMatch = DeltaExtensions.BuildEtag("rowVersion", null)
+                }
+            }
+        };
 
         var notModified = await DeltaExtensions.HandleRequest(
             context2,
@@ -156,9 +184,14 @@ public class MiddlewareTests
         }
 
         // First request: populates the cache
-        var context1 = new DefaultHttpContext();
-        context1.Request.Path = "/path";
-        context1.Request.Method = "GET";
+        var context1 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET"
+            }
+        };
 
         await DeltaExtensions.HandleRequest(
             context1,
@@ -171,10 +204,18 @@ public class MiddlewareTests
         AreEqual(1, callCount);
 
         // Second request: max-age=0 means must be fresh
-        var context2 = new DefaultHttpContext();
-        context2.Request.Path = "/path";
-        context2.Request.Method = "GET";
-        context2.Request.Headers.CacheControl = "max-age=0";
+        var context2 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET",
+                Headers =
+                {
+                    CacheControl = "max-age=0"
+                }
+            }
+        };
 
         await DeltaExtensions.HandleRequest(
             context2,
@@ -204,9 +245,14 @@ public class MiddlewareTests
         // Two requests without max-age
         for (var i = 0; i < 2; i++)
         {
-            var context = new DefaultHttpContext();
-            context.Request.Path = "/path";
-            context.Request.Method = "GET";
+            var context = new DefaultHttpContext
+            {
+                Request =
+                {
+                    Path = "/path",
+                    Method = "GET"
+                }
+            };
 
             await DeltaExtensions.HandleRequest(
                 context,
@@ -235,9 +281,14 @@ public class MiddlewareTests
         }
 
         // First request: populates the cache
-        var context1 = new DefaultHttpContext();
-        context1.Request.Path = "/path";
-        context1.Request.Method = "GET";
+        var context1 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET"
+            }
+        };
 
         await DeltaExtensions.HandleRequest(
             context1,
@@ -250,10 +301,18 @@ public class MiddlewareTests
         AreEqual(1, callCount);
 
         // Second request: max-stale=10, should use cached timestamp
-        var context2 = new DefaultHttpContext();
-        context2.Request.Path = "/path";
-        context2.Request.Method = "GET";
-        context2.Request.Headers.CacheControl = "max-stale=10";
+        var context2 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET",
+                Headers =
+                {
+                    CacheControl = "max-stale=10"
+                }
+            }
+        };
 
         await DeltaExtensions.HandleRequest(
             context2,
@@ -280,9 +339,14 @@ public class MiddlewareTests
         }
 
         // First request: populates the cache
-        var context1 = new DefaultHttpContext();
-        context1.Request.Path = "/path";
-        context1.Request.Method = "GET";
+        var context1 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET"
+            }
+        };
 
         await DeltaExtensions.HandleRequest(
             context1,
@@ -295,10 +359,18 @@ public class MiddlewareTests
         AreEqual(1, callCount);
 
         // Second request: max-stale without a value means accept any staleness
-        var context2 = new DefaultHttpContext();
-        context2.Request.Path = "/path";
-        context2.Request.Method = "GET";
-        context2.Request.Headers.CacheControl = "max-stale";
+        var context2 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET",
+                Headers =
+                {
+                    CacheControl = "max-stale"
+                }
+            }
+        };
 
         await DeltaExtensions.HandleRequest(
             context2,
@@ -309,6 +381,246 @@ public class MiddlewareTests
             LogLevel.Information);
 
         AreEqual(1, callCount);
+    }
+
+    [Test]
+    public async Task NoCache_BypassesCachedTimeStamp()
+    {
+        Recording.Start();
+        DeltaExtensions.Reset();
+        var callCount = 0;
+
+        Task<string> GetTimeStamp(HttpContext _)
+        {
+            callCount++;
+            return Task.FromResult("rowVersion");
+        }
+
+        // First request: populates the cache
+        var context1 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET"
+            }
+        };
+
+        await DeltaExtensions.HandleRequest(
+            context1,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        AreEqual(1, callCount);
+
+        // Second request: no-cache forces fresh timestamp
+        var context2 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET",
+                Headers =
+                {
+                    CacheControl = "no-cache",
+                    IfNoneMatch = DeltaExtensions.BuildEtag("rowVersion", null)
+                }
+            }
+        };
+
+        await DeltaExtensions.HandleRequest(
+            context2,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        // no-cache bypasses cache, DB was called again
+        AreEqual(2, callCount);
+    }
+
+    [Test]
+    public async Task NoCache_WithMaxAge_StillQueriesDb()
+    {
+        Recording.Start();
+        DeltaExtensions.Reset();
+        var callCount = 0;
+
+        Task<string> GetTimeStamp(HttpContext _)
+        {
+            callCount++;
+            return Task.FromResult("rowVersion");
+        }
+
+        // First request: populates the cache
+        var context1 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET"
+            }
+        };
+
+        await DeltaExtensions.HandleRequest(
+            context1,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        AreEqual(1, callCount);
+
+        // Second request: no-cache wins over max-age
+        var context2 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET",
+                Headers =
+                {
+                    CacheControl = "no-cache, max-age=3600",
+                    IfNoneMatch = DeltaExtensions.BuildEtag("rowVersion", null)
+                }
+            }
+        };
+
+        await DeltaExtensions.HandleRequest(
+            context2,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        // no-cache takes precedence, DB was called again
+        AreEqual(2, callCount);
+    }
+
+    [Test]
+    public async Task MinFresh_SufficientFreshness_UsesCachedTimeStamp()
+    {
+        Recording.Start();
+        DeltaExtensions.Reset();
+        var callCount = 0;
+
+        Task<string> GetTimeStamp(HttpContext _)
+        {
+            callCount++;
+            return Task.FromResult("rowVersion");
+        }
+
+        // First request: populates the cache
+        var context1 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET"
+            }
+        };
+
+        await DeltaExtensions.HandleRequest(
+            context1,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        AreEqual(1, callCount);
+
+        // Second request: max-age=3600, min-fresh=5 — plenty of freshness remaining
+        var context2 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET",
+                Headers =
+                {
+                    CacheControl = "max-age=3600, min-fresh=5",
+                    IfNoneMatch = DeltaExtensions.BuildEtag("rowVersion", null)
+                }
+            }
+        };
+
+        var notModified = await DeltaExtensions.HandleRequest(
+            context2,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        // Cached timestamp used — enough freshness remaining
+        AreEqual(1, callCount);
+        IsTrue(notModified);
+    }
+
+    [Test]
+    public async Task MinFresh_InsufficientFreshness_QueriesDb()
+    {
+        Recording.Start();
+        DeltaExtensions.Reset();
+        var callCount = 0;
+
+        Task<string> GetTimeStamp(HttpContext _)
+        {
+            callCount++;
+            return Task.FromResult("rowVersion");
+        }
+
+        // First request: populates the cache
+        var context1 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET"
+            }
+        };
+
+        await DeltaExtensions.HandleRequest(
+            context1,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        AreEqual(1, callCount);
+
+        // Second request: max-age=1, min-fresh=3600 — min-fresh exceeds max-age so cache is rejected
+        var context2 = new DefaultHttpContext
+        {
+            Request =
+            {
+                Path = "/path",
+                Method = "GET",
+                Headers =
+                {
+                    CacheControl = "max-age=1, min-fresh=3600"
+                }
+            }
+        };
+
+        await DeltaExtensions.HandleRequest(
+            context2,
+            new RecordingLogger(),
+            null,
+            GetTimeStamp,
+            null,
+            LogLevel.Information);
+
+        // min-fresh requirement not met, DB was called again
+        AreEqual(2, callCount);
     }
 
     [Test]

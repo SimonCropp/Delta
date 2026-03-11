@@ -169,24 +169,36 @@ public static partial class DeltaExtensions
     static bool TryGetCachedTimeStamp(HttpRequest request, [NotNullWhen(true)] out string? timeStamp)
     {
         timeStamp = null;
+        var cacheControl = request.Headers.CacheControl;
+
+        if (HasDirective(cacheControl, "no-cache"))
+        {
+            return false;
+        }
+
         var cache = timeStampCache;
         if (cache is null)
         {
             return false;
         }
 
-        if (!TryParseStaleness(request.Headers.CacheControl, out var maxSeconds))
+        if (!TryParseStaleness(cacheControl, out var maxSeconds))
         {
             return false;
         }
 
-        if (maxSeconds != int.MaxValue)
+        var elapsed = Stopwatch.GetElapsedTime(cache.Ticks);
+
+        if (maxSeconds != int.MaxValue &&
+            elapsed.TotalSeconds > maxSeconds)
         {
-            var elapsed = Stopwatch.GetElapsedTime(cache.Ticks);
-            if (elapsed.TotalSeconds > maxSeconds)
-            {
-                return false;
-            }
+            return false;
+        }
+
+        if (TryParseDirectiveValue(cacheControl, "min-fresh=", out var minFresh) &&
+            elapsed.TotalSeconds + minFresh > maxSeconds)
+        {
+            return false;
         }
 
         timeStamp = cache.Value;
@@ -259,6 +271,35 @@ public static partial class DeltaExtensions
         }
 
         return int.TryParse(span[..end], out seconds);
+    }
+
+    static bool HasDirective(StringValues cacheControl, string directive)
+    {
+        foreach (var value in cacheControl)
+        {
+            if (value is not null &&
+                value.Contains(directive, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static bool TryParseDirectiveValue(StringValues cacheControl, string directive, out int seconds)
+    {
+        foreach (var value in cacheControl)
+        {
+            if (value is not null &&
+                TryParseDirectiveValue(value, directive, out seconds))
+            {
+                return true;
+            }
+        }
+
+        seconds = 0;
+        return false;
     }
 
     [LoggerMessage(Message = "Delta {path}: Using cached timestamp")]

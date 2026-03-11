@@ -54,8 +54,9 @@ Frequency of updates to data is relatively low compared to reads
 ```mermaid
 graph TD
     Request
+    NoCache{Has no-cache<br/>in Cache-Control?}
     HasMaxAge{Has max-age<br/>or max-stale<br/>in Cache-Control?}
-    CacheValid{Cached timestamp<br/>within allowed<br/>staleness?}
+    CacheValid{Cached timestamp<br/>within allowed<br/>staleness?<br/>Considers min-fresh}
     FreshTimestamp[Get fresh timestamp<br/>from SQL]
     UseCached[Use cached timestamp]
     CalculateEtag[Calculate current ETag<br/>based on timestamp<br/>from web assembly and SQL]
@@ -63,7 +64,9 @@ graph TD
     EtagMatch{Current<br/>Etag matches<br/>If-None-Match?}
     AddETag[Add current ETag<br/>to Response headers]
     304[Respond with<br/>304 Not-Modified]
-    Request --> HasMaxAge
+    Request --> NoCache
+    NoCache -->|Yes| FreshTimestamp
+    NoCache -->|No| HasMaxAge
     HasMaxAge -->|Yes| CacheValid
     HasMaxAge -->|No| FreshTimestamp
     CacheValid -->|Yes| UseCached
@@ -145,7 +148,7 @@ internal static string BuildEtag(string timeStamp, string? suffix)
     return $"\"{AssemblyWriteTime}-{timeStamp}-{suffix}\"";
 }
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L285-L297' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Shared.cs#L326-L338' title='Snippet source file'>snippet source</a> | <a href='#snippet-BuildEtag' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

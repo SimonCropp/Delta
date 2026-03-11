@@ -1,0 +1,37 @@
+﻿{
+  target: {
+    notModified: false,
+    context: {
+      Request: {
+        Headers: {
+          Cache-Control: min-fresh=5,
+          If-None-Match: diffEtag
+        }
+      },
+      Response: {
+        StatusCode: OK,
+        Headers: {
+          Delta-No304: Response already has ETag,
+          ETag: existingEtag
+        }
+      }
+    }
+  },
+  log: {
+    Information: Delta /path: No 304. Response already has ETag,
+    EventId: {
+      Name: LogNo304
+    },
+    State: [
+      {
+        path: /path
+      },
+      {
+        reason: Response already has ETag
+      },
+      {
+        {OriginalFormat}: Delta {path}: No 304. {reason}
+      }
+    ]
+  }
+}
