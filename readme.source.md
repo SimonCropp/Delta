@@ -33,12 +33,22 @@ Frequency of updates to data is relatively low compared to reads
 ```mermaid
 graph TD
     Request
+    HasMaxAge{Has max-age<br/>or max-stale<br/>in Cache-Control?}
+    CacheValid{Cached timestamp<br/>within allowed<br/>staleness?}
+    FreshTimestamp[Get fresh timestamp<br/>from SQL]
+    UseCached[Use cached timestamp]
     CalculateEtag[Calculate current ETag<br/>based on timestamp<br/>from web assembly and SQL]
     IfNoneMatch{Has<br/>If-None-Match<br/>header?}
     EtagMatch{Current<br/>Etag matches<br/>If-None-Match?}
     AddETag[Add current ETag<br/>to Response headers]
     304[Respond with<br/>304 Not-Modified]
-    Request --> CalculateEtag
+    Request --> HasMaxAge
+    HasMaxAge -->|Yes| CacheValid
+    HasMaxAge -->|No| FreshTimestamp
+    CacheValid -->|Yes| UseCached
+    CacheValid -->|No| FreshTimestamp
+    UseCached --> CalculateEtag
+    FreshTimestamp --> CalculateEtag
     CalculateEtag --> IfNoneMatch
     IfNoneMatch -->|Yes| EtagMatch
     IfNoneMatch -->|No| AddETag
@@ -117,6 +127,31 @@ Documentation is specific to choice of database:
 
  * [EF with SQL Server Docs](/docs/sqlserver-ef.md) when using the [SQL Server EF Database Provider](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/?tabs=dotnet-core-cli)
  * [EF with PostgreSQL Docs](/docs/postgres-ef.md) when using the [PostgreSQL EF Database Provider](https://www.npgsql.org/efcore)
+
+
+## Timestamp caching via request Cache-Control
+
+By default, Delta queries the database on every GET request to retrieve the current timestamp. Clients can opt into timestamp caching by sending `Cache-Control` request headers, allowing Delta to skip the database round-trip when a recent enough cached timestamp exists.
+
+Supported directives:
+
+ * `max-age=N` — accept a cached timestamp up to N seconds old
+ * `max-stale=N` — accept a cached timestamp up to N seconds old
+ * `max-stale` (no value) — accept any cached timestamp regardless of age
+
+If both `max-age` and `max-stale` are present, the larger (more permissive) value is used.
+
+Requests without these directives always query the database (existing behavior).
+
+Example request headers:
+
+```
+Cache-Control: max-age=5
+```
+
+```
+Cache-Control: max-stale
+```
 
 
 ## UseResponseDiagnostics
