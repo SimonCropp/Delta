@@ -1,0 +1,36 @@
+﻿{
+  target: {
+    notModified: false,
+    context: {
+      Request: {
+        Headers: {
+          Cache-Control: no-cache, min-fresh=5,
+          If-None-Match: "AssemblyWriteTime-rowVersion-suffix"
+        }
+      },
+      Response: {
+        StatusCode: OK,
+        Headers: {
+          Delta-No304: shouldExecute=false
+        }
+      }
+    }
+  },
+  log: {
+    Information: Delta /path: No 304. shouldExecute=false,
+    EventId: {
+      Name: LogNo304
+    },
+    State: [
+      {
+        path: /path
+      },
+      {
+        reason: shouldExecute=false
+      },
+      {
+        {OriginalFormat}: Delta {path}: No 304. {reason}
+      }
+    ]
+  }
+}

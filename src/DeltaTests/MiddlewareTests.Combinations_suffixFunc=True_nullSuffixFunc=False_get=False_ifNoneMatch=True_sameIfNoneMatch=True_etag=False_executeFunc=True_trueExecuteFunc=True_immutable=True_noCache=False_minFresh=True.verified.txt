@@ -1,0 +1,37 @@
+﻿{
+  target: {
+    notModified: false,
+    context: {
+      Request: {
+        Headers: {
+          Cache-Control: min-fresh=5,
+          If-None-Match: "AssemblyWriteTime-rowVersion-suffix"
+        }
+      },
+      Response: {
+        StatusCode: OK,
+        Headers: {
+          Cache-Control: public, max-age=31536000, immutable,
+          Delta-No304: Request method is not GET
+        }
+      }
+    }
+  },
+  log: {
+    Information: Delta /path: No 304. Request method is not GET,
+    EventId: {
+      Name: LogNo304
+    },
+    State: [
+      {
+        path: /path
+      },
+      {
+        reason: Request method is not GET
+      },
+      {
+        {OriginalFormat}: Delta {path}: No 304. {reason}
+      }
+    ]
+  }
+}
