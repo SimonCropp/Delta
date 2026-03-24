@@ -23,7 +23,7 @@
     <PackageVersion Include="Verify.EntityFramework" Version="15.0.2" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="4.0.1" />
     <PackageVersion Include="Verify.NUnit" Version="31.13.5" />
-    <PackageVersion Include="Verify.SqlServer" Version="12.0.0" />
+    <PackageVersion Include="Verify.SqlServer" Version="12.0.1" />
     <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.5" />
     <PackageVersion Include="Argon" Version="0.33.5" />
     <PackageVersion Include="DiffEngine" Version="19.1.2" />
