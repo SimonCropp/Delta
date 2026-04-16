@@ -29,6 +29,6 @@
     <PackageVersion Include="DiffEngine" Version="19.1.2" />
     <PackageVersion Include="EmptyFiles" Version="8.17.2" />
     <PackageVersion Include="SimpleInfoName" Version="3.2.0" />
-    <PackageVersion Include="Verify" Version="31.15.0" />
+    <PackageVersion Include="Verify" Version="31.16.0" />
   </ItemGroup>
 </Project>
