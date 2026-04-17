@@ -22,13 +22,13 @@
     <PackageVersion Include="Verify.DiffPlex" Version="3.1.2" />
     <PackageVersion Include="Verify.EntityFramework" Version="15.1.0" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="5.0.0" />
-    <PackageVersion Include="Verify.NUnit" Version="31.15.0" />
+    <PackageVersion Include="Verify.NUnit" Version="31.16.1" />
     <PackageVersion Include="Verify.SqlServer" Version="12.1.0" />
     <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.5" />
     <PackageVersion Include="Argon" Version="0.33.5" />
     <PackageVersion Include="DiffEngine" Version="19.1.2" />
     <PackageVersion Include="EmptyFiles" Version="8.17.2" />
     <PackageVersion Include="SimpleInfoName" Version="3.2.0" />
-    <PackageVersion Include="Verify" Version="31.15.0" />
+    <PackageVersion Include="Verify" Version="31.16.1" />
   </ItemGroup>
 </Project>
