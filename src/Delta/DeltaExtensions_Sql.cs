@@ -4,23 +4,24 @@ public static partial class DeltaExtensions
 {
     public static async Task<string> GetLastTimeStamp(this DbConnection connection, DbTransaction? transaction = null, Cancel cancel = default)
     {
-        // Cache the Task (not the result) so concurrent callers share a single ResolveQuery call.
-        // Interlocked.CompareExchange ensures only the first caller's Task wins;
-        // all others await that same already-in-flight Task.
-        var resolved = queryTask;
-        if (resolved is null)
+        // Serialize ResolveQuery so at most one caller ever runs it.
+        // A CompareExchange-on-Task approach would still let losing callers
+        // execute ResolveQuery to completion against their own connection,
+        // racing the caller's subsequent Execute on the same connection.
+        var execute = query;
+        if (execute is null)
         {
-            resolved = ResolveQuery(connection, transaction, cancel);
-            var original = Interlocked.CompareExchange(ref queryTask, resolved, null);
-            if (original is not null)
+            await queryLock.WaitAsync(cancel);
+            try
             {
-                resolved = original;
+                execute = query ??= await ResolveQuery(connection, transaction, cancel);
+            }
+            finally
+            {
+                queryLock.Release();
             }
         }
 
-        // Awaiting an already-completed Task is essentially free — the runtime short-circuits it without
-        // touching the thread pool or allocating a state machine. same cost as reading a field.
-        var execute = await resolved;
         return await Execute(connection, transaction, execute, cancel);
     }
 
@@ -143,11 +144,12 @@ public static partial class DeltaExtensions
         return result == 1;
     }
 
-    static Task<Func<DbCommand, Cancel, Task<string>>>? queryTask;
+    static Func<DbCommand, Cancel, Task<string>>? query;
+    static readonly SemaphoreSlim queryLock = new(1, 1);
 
     internal static void Reset()
     {
-        queryTask = null;
+        query = null;
         timeStampCache = null;
     }
 }
