@@ -47,7 +47,7 @@ const string logRndLsnCommand =
     from sys.dm_db_log_stats(db_id())
     """;
 ```
-<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L88-L96' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampWithServerState' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta/DeltaExtensions_Sql.cs#L89-L97' title='Snippet source file'>snippet source</a> | <a href='#snippet-SqlServerTimeStampWithServerState' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

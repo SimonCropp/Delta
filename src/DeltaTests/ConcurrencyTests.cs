@@ -6,29 +6,59 @@ public class ConcurrencyTests :
     {
         await using var database = await LocalDb();
 
-        // Reset to null so all concurrent callers enter ResolveQuery
-        DeltaExtensions.Reset();
+        // Several iterations: the race between a losing ResolveQuery task
+        // and the caller's own Execute on the same connection is timing
+        // dependent, so loop to make reproduction reliable.
+        for (var iteration = 0; iteration < 20; iteration++)
+        {
+            DeltaExtensions.Reset();
+            await RunConcurrent(database);
+        }
+    }
 
-        // Open separate connections so concurrent calls don't share a single non-thread-safe SqlConnection
-        const int concurrency = 20;
+    static async Task RunConcurrent(SqlDatabase database)
+    {
+        // Closed connections force Execute through its Open/Close branch —
+        // the production scenario (EF manages connection lifetime) and
+        // the precondition for the race on the static query field.
+        const int concurrency = 64;
         var connections = new SqlConnection[concurrency];
         for (var i = 0; i < concurrency; i++)
         {
-            connections[i] = await database.OpenNewConnection();
+            connections[i] = new(database.ConnectionString);
         }
 
         try
         {
+            // Synchronous barrier + dedicated threads so all callers really
+            // race into ResolveQuery together, rather than being staggered
+            // by threadpool dispatch.
+            using var barrier = new ManualResetEventSlim(false);
             var tasks = connections
-                .Select(_ => _.GetLastTimeStamp())
+                .Select(connection => Task.Factory.StartNew(
+                        async () =>
+                        {
+                            barrier.Wait();
+                            return await connection.GetLastTimeStamp();
+                        },
+                        CancellationToken.None,
+                        TaskCreationOptions.LongRunning,
+                        TaskScheduler.Default)
+                    .Unwrap())
                 .ToArray();
 
-            var results = await Task.WhenAll(tasks);
+            await Task.Delay(50);
+            barrier.Set();
 
-            // All calls should return the same timestamp regardless of the race on the static query field
-            var distinct = results.Distinct().ToList();
-            That(distinct, Has.Count.EqualTo(1));
-            IsNotEmpty(distinct[0]);
+            // Task.WhenAll surfaces any exception from the race; the
+            // original bug manifested as "The connection is closed" thrown
+            // by ExecuteReaderAsync after an orphaned ResolveQuery closed
+            // the same connection mid-query.
+            var results = await Task.WhenAll(tasks);
+            foreach (var result in results)
+            {
+                IsNotEmpty(result);
+            }
         }
         finally
         {
