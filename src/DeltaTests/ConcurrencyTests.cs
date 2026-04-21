@@ -38,10 +38,11 @@ public class ConcurrencyTests :
                 .Select(connection => Task.Factory.StartNew(
                         async () =>
                         {
+                            // ReSharper disable once AccessToDisposedClosure
                             barrier.Wait();
                             return await connection.GetLastTimeStamp();
                         },
-                        CancellationToken.None,
+                        Cancel.None,
                         TaskCreationOptions.LongRunning,
                         TaskScheduler.Default)
                     .Unwrap())
