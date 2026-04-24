@@ -31,7 +31,12 @@ on_finish:
       (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)", $_.FullName)
     }
 on_failure:
-- ps: Get-ChildItem *.received.* -recurse | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+  - ps: |
+      $root = (Get-Location).Path
+      Get-ChildItem *.received.* -Recurse | % {
+        $rel = $_.FullName.Substring($root.Length + 1)
+        Push-AppveyorArtifact $_.FullName -FileName $rel
+      }
 test: off
 artifacts:
 - path: nugets\*.nupkg
