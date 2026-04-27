@@ -7,7 +7,7 @@
     <PackageVersion Include="EfLocalDb" Version="24.0.0" />
     <PackageVersion Include="LocalDb" Version="24.0.0" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.2.0" />
-    <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.0.1" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.7" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.7" />
@@ -23,7 +23,7 @@
     <PackageVersion Include="Verify.EntityFramework" Version="15.1.0" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="5.0.0" />
     <PackageVersion Include="Verify.NUnit" Version="31.16.2" />
-    <PackageVersion Include="Verify.SqlServer" Version="12.1.0" />
+    <PackageVersion Include="Verify.SqlServer" Version="12.1.1" />
     <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.5" />
     <PackageVersion Include="Argon" Version="0.33.5" />
     <PackageVersion Include="DiffEngine" Version="19.1.3" />
