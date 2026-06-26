@@ -7,7 +7,7 @@
     <PackageVersion Include="EfLocalDb" Version="24.1.2" />
     <PackageVersion Include="LocalDb" Version="24.1.2" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.3.1" />
-    <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.0.1" />
+    <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.0.2" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.9" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.9" />
