@@ -4,17 +4,17 @@ public static partial class DeltaExtensions
 {
     public static bool UseResponseDiagnostics { get; set; } = true;
 
-    static StringValues noStore = new("no-store, max-age=0");
+    static StringValues noStore = [with("no-store, max-age=0")];
 
     public static void NoStore(this HttpResponse response) =>
         response.Headers[HeaderNames.CacheControl] = noStore;
 
-    static StringValues noCache = new("no-cache");
+    static StringValues noCache = [with("no-cache")];
 
     public static void NoCache(this HttpResponse response) =>
         response.Headers[HeaderNames.CacheControl] = noCache;
 
-    static StringValues cacheForever = new("public, max-age=31536000, immutable");
+    static StringValues cacheForever = [with("public, max-age=31536000, immutable")];
 
     public static void CacheForever(this HttpResponse response) =>
         response.Headers[HeaderNames.CacheControl] = cacheForever;
