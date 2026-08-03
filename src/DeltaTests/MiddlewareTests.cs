@@ -101,7 +101,7 @@ public class MiddlewareTests
                     notModified,
                     context
                 })
-            .AddScrubber(_ => _.Replace(DeltaExtensions.AssemblyWriteTime, "AssemblyWriteTime"))
+            .ScrubReplace(DeltaExtensions.AssemblyWriteTime, "AssemblyWriteTime")
             .IgnoreMember("Id");
     }
 
