@@ -8,9 +8,9 @@
     <PackageVersion Include="LocalDb" Version="25.0.0" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.4.2" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.0.2" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.11" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.11" />
     <PackageVersion Include="Npgsql" Version="10.0.3" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
@@ -20,7 +20,7 @@
     <PackageVersion Include="ProjectDefaults" Version="1.0.176" />
     <PackageVersion Include="Verify.AspNetCore" Version="5.0.0" />
     <PackageVersion Include="Verify.DiffPlex" Version="3.3.1" />
-    <PackageVersion Include="Verify.EntityFramework" Version="15.3.1" />
+    <PackageVersion Include="Verify.EntityFramework" Version="15.4.0" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="5.0.0" />
     <PackageVersion Include="Verify.NUnit" Version="31.28.0" />
     <PackageVersion Include="Verify.SqlServer" Version="12.2.0" />
