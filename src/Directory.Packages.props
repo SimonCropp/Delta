@@ -26,9 +26,9 @@
     <PackageVersion Include="Verify.SqlServer" Version="12.2.0" />
     <PackageVersion Include="Microsoft.Sbom.Targets" Version="4.1.5" />
     <PackageVersion Include="Argon" Version="0.35.2" />
-    <PackageVersion Include="DiffEngine" Version="20.0.0-beta.34" />
+    <PackageVersion Include="DiffEngine" Version="20.0.0" />
     <PackageVersion Include="EmptyFiles" Version="8.18.2" />
     <PackageVersion Include="SimpleInfoName" Version="3.2.0" />
-    <PackageVersion Include="Verify" Version="32.0.0-beta.14" />
+    <PackageVersion Include="Verify" Version="32.0.0" />
   </ItemGroup>
 </Project>
