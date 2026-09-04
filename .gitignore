@@ -9,3 +9,4 @@ obj/
 nugets/
 *TestResults*
 coverage-report/
+*.lnk
