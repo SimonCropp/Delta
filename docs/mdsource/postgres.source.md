@@ -30,6 +30,11 @@ snippet: PostgresSchema
 snippet: UseDeltaPostgres
 
 
+### Add to HostBuilder
+
+snippet: UseDeltaHostBuilderPostgres
+
+
 include: map-group
 
 

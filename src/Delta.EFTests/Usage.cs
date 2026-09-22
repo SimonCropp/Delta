@@ -1,8 +1,26 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 public class Usage :
     LocalDbTestBase
 {
+    public static void HostBuilder(string connectionString)
+    {
+        #region UseDeltaHostBuilderEF
+
+        var host = Host.CreateDefaultBuilder()
+            .ConfigureWebHostDefaults(_ =>
+            {
+                _.ConfigureServices(services => services.AddSqlServer<SampleDbContext>(connectionString));
+                _.Configure(app => app.UseDelta<SampleDbContext>());
+            })
+            .Build();
+
+        #endregion
+    }
+
     public static void Suffix(WebApplicationBuilder builder)
     {
         #region SuffixEF

@@ -147,7 +147,7 @@ app.UseDelta<SampleDbContext>(
         return path.Contains("match");
     });
 ```
-<sup><a href='/src/Delta.EFTests/Usage.cs#L18-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecuteEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.EFTests/Usage.cs#L36-L46' title='Snippet source file'>snippet source</a> | <a href='#snippet-ShouldExecuteEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->
 
@@ -179,7 +179,7 @@ app.UseDelta<SampleDbContext>(
         return $"{userId}-{tenantId}";
     });
 ```
-<sup><a href='/src/Delta.EFTests/Usage.cs#L33-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-SuffixWithAuthEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.EFTests/Usage.cs#L51-L69' title='Snippet source file'>snippet source</a> | <a href='#snippet-SuffixWithAuthEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -198,7 +198,7 @@ app.UseDelta<SampleDbContext>(
     suffix: httpContext => httpContext.Request.Headers["X-Client-Version"].ToString(),
     allowAnonymous: true);
 ```
-<sup><a href='/src/Delta.EFTests/Usage.cs#L56-L66' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowAnonymousEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.EFTests/Usage.cs#L74-L84' title='Snippet source file'>snippet source</a> | <a href='#snippet-AllowAnonymousEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->
 
@@ -214,7 +214,7 @@ It can be called on a DbContext:
 ```cs
 var timeStamp = await dbContext.GetLastTimeStamp();
 ```
-<sup><a href='/src/Delta.EFTests/Usage.cs#L81-L85' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampEF' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Delta.EFTests/Usage.cs#L99-L103' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampEF' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Or a DbConnection:
@@ -224,6 +224,6 @@ Or a DbConnection:
 ```cs
 var timeStamp = await connection.GetLastTimeStamp();
 ```
-<sup><a href='/src/DeltaTests/Usage.cs#L226-L230' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/DeltaTests/Usage.cs#L258-L262' title='Snippet source file'>snippet source</a> | <a href='#snippet-GetLastTimeStampConnection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 <!-- endInclude -->

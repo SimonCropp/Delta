@@ -28,6 +28,11 @@ snippet: Usage.Schema.verified.sql
 
 snippet: UseDeltaSqlServer
 
+
+### Add to HostBuilder
+
+snippet: UseDeltaHostBuilderSqlServer
+
 include: map-group
 
 

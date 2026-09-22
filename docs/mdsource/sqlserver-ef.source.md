@@ -34,6 +34,11 @@ snippet: SampleSqlServerDbContext
 snippet: UseDeltaSQLServerEF
 
 
+### Add to HostBuilder
+
+snippet: UseDeltaHostBuilderEF
+
+
 include: map-group-ef
 
 

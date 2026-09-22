@@ -1,9 +1,41 @@
 ﻿using System.Data.Common;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Npgsql;
 
 public class Usage :
     LocalDbTestBase
 {
+    public static void HostBuilderSqlServer(string connectionString)
+    {
+        #region UseDeltaHostBuilderSqlServer
+
+        var host = Host.CreateDefaultBuilder()
+            .ConfigureWebHostDefaults(_ =>
+            {
+                _.ConfigureServices(services => services.AddScoped(provider => new SqlConnection(connectionString)));
+                _.Configure(app => app.UseDelta());
+            })
+            .Build();
+
+        #endregion
+    }
+
+    public static void HostBuilderPostgres(string connectionString)
+    {
+        #region UseDeltaHostBuilderPostgres
+
+        var host = Host.CreateDefaultBuilder()
+            .ConfigureWebHostDefaults(_ =>
+            {
+                _.ConfigureServices(services => services.AddScoped(provider => new NpgsqlConnection(connectionString)));
+                _.Configure(app => app.UseDelta());
+            })
+            .Build();
+
+        #endregion
+    }
+
     public static void Suffix(WebApplicationBuilder builder)
     {
         #region Suffix
