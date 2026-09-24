@@ -1,0 +1,121 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ['*']
+  pull_request:
+  workflow_dispatch:
+
+# Read only by default. The publish job asks for the OIDC token it needs itself.
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_NOLOGO: true
+
+jobs:
+  build:
+    # LocalDB ships on windows-2022 images, not on windows-2025 (windows-latest).
+    runs-on: windows-2022
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      # Keyed on everything that decides the package graph. restore-keys lets a changed graph start
+      # from the previous cache rather than empty.
+      - name: Cache NuGet packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('global.json', '**/Directory.Packages.props', '**/Directory.Build.props', '**/*.csproj', '**/*.fsproj') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      # The tag is the version: tag 1.2.3 (or v1.2.3) builds 1.2.3. Other builds use the
+      # Version in Directory.Build.props.
+      - name: Resolve the version from the tag
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: echo "VERSION_ARGUMENT=-p:Version=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+
+      # The image has PostgreSQL installed but stopped. The tests expect the password and
+      # database below, and commit timestamps, which only take effect after a restart.
+      - name: Start PostgreSQL
+        shell: pwsh
+        run: |
+          $service = Get-Service postgresql*
+          Set-Service $service.Name -StartupType Manual
+          Start-Service $service.Name
+          $env:PGPASSWORD = "root"
+          & "$env:PGBIN\psql.exe" -U postgres -c "ALTER USER postgres PASSWORD 'Password12!'"
+          $env:PGPASSWORD = "Password12!"
+          & "$env:PGBIN\psql.exe" -U postgres -c "ALTER SYSTEM SET track_commit_timestamp to 'on'"
+          & "$env:PGBIN\createdb.exe" -U postgres delta
+          Restart-Service $service.Name
+
+      - name: Build
+        run: dotnet build src --configuration Release ${{ env.VERSION_ARGUMENT }}
+
+      - name: Test
+        run: dotnet test src --configuration Release --no-build --no-restore
+
+      - name: Upload received on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: received
+          path: '**/*.received.*'
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload packages
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: nupkgs
+          path: nugets/**/*.nupkg
+          if-no-files-found: warn
+          retention-days: 30
+
+  # Trusted publishing: no stored API key. nuget.org validates GitHub's OIDC token against the
+  # policy naming this repository and this workflow file, and returns a key good for an hour.
+  publish:
+    needs: build
+    environment: nuget
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Download packages
+        uses: actions/download-artifact@v8
+        with:
+          name: nupkgs
+          path: packages
+
+      - name: NuGet login
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: SimonCropp
+
+      - name: Push to nuget.org
+        run: >
+          dotnet nuget push "packages/**/*.nupkg"
+          --api-key ${{ steps.login.outputs.NUGET_API_KEY }}
+          --source https://api.nuget.org/v3/index.json
+          --skip-duplicate

@@ -4,7 +4,7 @@
 
     static PostgresConnection()
     {
-        if (Environment.GetEnvironmentVariable("AppVeyor") == "True")
+        if (Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true")
         {
             ConnectionString = "User ID=postgres;Password=Password12!;Host=localhost;Port=5432;Database=delta";
             return;
