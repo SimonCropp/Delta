@@ -71,7 +71,7 @@ jobs:
       # One test project at a time: DeltaTests and Delta.EFTests both start LocalDB instances, and
       # started together on a fresh runner the second fails with "SQL Server process failed to start".
       - name: Test
-        run: dotnet test src --configuration Release --no-build --no-restore -m:1
+        run: dotnet test --solution src/Delta.slnx --configuration Release --no-build --no-restore --max-parallel-test-modules 1
 
       - name: Upload received on failure
         if: failure()

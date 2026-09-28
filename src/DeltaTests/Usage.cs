@@ -1,8 +1,9 @@
-﻿using System.Data.Common;
+using System.Data.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
 
+[NotInParallel]
 public class Usage :
     LocalDbTestBase
 {
@@ -100,7 +101,8 @@ public class Usage :
     }
 
     [Test]
-    public async Task LastTimeStamp([Values] bool tracking)
+    [MatrixDataSource]
+    public async Task LastTimeStamp([Matrix] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -114,31 +116,32 @@ public class Usage :
     static async Task AssertTimestamps(bool tracking, SqlDatabase database, Func<SqlConnection, Task> action)
     {
         var lsnTimeStamp = await GetLsnTimeStamp(database);
-        IsNotEmpty(lsnTimeStamp);
-        IsNotNull(lsnTimeStamp);
+        await Assert.That(lsnTimeStamp).IsNotEmpty();
+        await Assert.That(lsnTimeStamp).IsNotNull();
 
         var trackingTimeStamp = await GetTrackingTimeStamp(database);
-        IsNotEmpty(trackingTimeStamp);
-        IsNotNull(trackingTimeStamp);
+        await Assert.That(trackingTimeStamp).IsNotEmpty();
+        await Assert.That(trackingTimeStamp).IsNotNull();
 
         await action(database);
 
         if (tracking)
         {
             var newTackingTimeStamp = await GetTrackingTimeStamp(database);
-            IsNotEmpty(newTackingTimeStamp);
-            IsNotNull(newTackingTimeStamp);
-            AreNotEqual(newTackingTimeStamp, trackingTimeStamp);
+            await Assert.That(newTackingTimeStamp).IsNotEmpty();
+            await Assert.That(newTackingTimeStamp).IsNotNull();
+            await Assert.That(trackingTimeStamp).IsNotEqualTo(newTackingTimeStamp);
         }
 
         var newLsnTimeStamp = await GetLsnTimeStamp(database);
-        IsNotEmpty(newLsnTimeStamp);
-        IsNotNull(newLsnTimeStamp);
-        AreNotEqual(newLsnTimeStamp, lsnTimeStamp);
+        await Assert.That(newLsnTimeStamp).IsNotEmpty();
+        await Assert.That(newLsnTimeStamp).IsNotNull();
+        await Assert.That(lsnTimeStamp).IsNotEqualTo(newLsnTimeStamp);
     }
 
     [Test]
-    public async Task LastTimeStampOnUpdate([Values] bool tracking)
+    [MatrixDataSource]
+    public async Task LastTimeStampOnUpdate([Matrix] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -165,7 +168,8 @@ public class Usage :
     }
 
     [Test]
-    public async Task LastTimeStampOnDelete([Values] bool tracking)
+    [MatrixDataSource]
+    public async Task LastTimeStampOnDelete([Matrix] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -179,7 +183,8 @@ public class Usage :
     }
 
     [Test]
-    public async Task LastTimeStampReadTwice([Values] bool tracking)
+    [MatrixDataSource]
+    public async Task LastTimeStampReadTwice([Matrix] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -191,7 +196,7 @@ public class Usage :
 
         var timeStamp = await DeltaExtensions.GetLastTimeStamp(database);
         var newTimeStamp = await DeltaExtensions.GetLastTimeStamp(database);
-        AreEqual(newTimeStamp, timeStamp);
+        await Assert.That(timeStamp).IsEqualTo(newTimeStamp);
     }
 
     static async Task<Guid> AddEntity(SqlConnection connection)
@@ -245,7 +250,8 @@ public class Usage :
     }
 
     [Test]
-    public async Task GetLastTimeStampSqlServer([Values] bool tracking)
+    [MatrixDataSource]
+    public async Task GetLastTimeStampSqlServer([Matrix] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -261,7 +267,7 @@ public class Usage :
 
         #endregion
 
-        IsNotNull(timeStamp);
+        await Assert.That(timeStamp).IsNotNull();
     }
 
     [Test]
@@ -281,7 +287,7 @@ public class Usage :
 
         #endregion
 
-        IsNotEmpty(trackedDatabases);
+        await Assert.That(trackedDatabases).IsNotEmpty();
     }
 
     [Test]
@@ -327,7 +333,7 @@ public class Usage :
         await connection.SetTrackedTables(["Companies"]);
         await connection.SetTrackedTables(["COMPANIES"]);
         var trackedTables = await connection.GetTrackedTables();
-        That(trackedTables, Has.Count.EqualTo(1));
+        await Assert.That(trackedTables).Count().IsEqualTo(1);
     }
 
     [Test]
@@ -367,7 +373,7 @@ public class Usage :
 
         #endregion
 
-        IsFalse(await sqlConnection.IsTrackingEnabled());
+        await Assert.That(await sqlConnection.IsTrackingEnabled()).IsFalse();
     }
 
     [Test]
@@ -388,7 +394,7 @@ public class Usage :
 
         #endregion
 
-        IsTrue(isTrackingEnabled);
+        await Assert.That(isTrackingEnabled).IsTrue();
     }
 
     static void CustomDiscoveryConnectionSqlServer(WebApplicationBuilder webApplicationBuilder)

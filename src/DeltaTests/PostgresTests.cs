@@ -1,5 +1,6 @@
-﻿using Npgsql;
+using Npgsql;
 
+[NotInParallel]
 public class PostgresTests
 {
     [Test]
@@ -22,7 +23,7 @@ public class PostgresTests
 
         var timeStamp = await connection.GetLastTimeStamp();
 
-        IsNotNull(timeStamp);
-        IsNotEmpty(timeStamp);
+        await Assert.That(timeStamp).IsNotNull();
+        await Assert.That(timeStamp).IsNotEmpty();
     }
 }

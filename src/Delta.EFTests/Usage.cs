@@ -1,8 +1,9 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+[NotInParallel]
 public class Usage :
     LocalDbTestBase
 {
@@ -85,8 +86,8 @@ public class Usage :
     }
 
     [Test]
-    [TestCase(false)]
-    public async Task GetLastTimeStamp([Values] bool tracking)
+    [MatrixDataSource]
+    public async Task GetLastTimeStamp([Matrix] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -102,11 +103,12 @@ public class Usage :
 
         #endregion
 
-        IsNotNull(timeStamp);
+        await Assert.That(timeStamp).IsNotNull();
     }
 
     [Test]
-    public async Task LastTimeStamp([Values] bool tracking)
+    [MatrixDataSource]
+    public async Task LastTimeStamp([Matrix] bool tracking)
     {
         await using var database = await LocalDb();
         if (tracking)
@@ -121,8 +123,8 @@ public class Usage :
                 Content = "The company"
             });
         var emptyTimeStamp = await context.GetLastTimeStamp();
-        IsNotEmpty(emptyTimeStamp);
-        IsNotNull(emptyTimeStamp);
+        await Assert.That(emptyTimeStamp).IsNotEmpty();
+        await Assert.That(emptyTimeStamp).IsNotNull();
 
         var entity = new Company
         {
@@ -130,16 +132,16 @@ public class Usage :
         };
         await database.AddData(entity);
         var addTimeStamp = await context.GetLastTimeStamp();
-        IsNotEmpty(addTimeStamp);
-        IsNotNull(addTimeStamp);
-        AreNotEqual(addTimeStamp, emptyTimeStamp);
+        await Assert.That(addTimeStamp).IsNotEmpty();
+        await Assert.That(addTimeStamp).IsNotNull();
+        await Assert.That(emptyTimeStamp).IsNotEqualTo(addTimeStamp);
 
         entity.Content = "The company2";
         await context.SaveChangesAsync();
         var updateTimeStamp = await context.GetLastTimeStamp();
-        IsNotEmpty(updateTimeStamp);
-        IsNotNull(updateTimeStamp);
-        AreNotEqual(updateTimeStamp, addTimeStamp);
-        AreNotEqual(updateTimeStamp, emptyTimeStamp);
+        await Assert.That(updateTimeStamp).IsNotEmpty();
+        await Assert.That(updateTimeStamp).IsNotNull();
+        await Assert.That(addTimeStamp).IsNotEqualTo(updateTimeStamp);
+        await Assert.That(emptyTimeStamp).IsNotEqualTo(updateTimeStamp);
     }
 }

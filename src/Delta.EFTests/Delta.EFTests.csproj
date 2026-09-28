@@ -1,13 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EfLocalDb" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="Verify.NUnit" />
+    <PackageReference Include="TUnit" />
+    <PackageReference Include="Verify.TUnit" />
     <PackageReference Include="Argon" />
     <PackageReference Include="DiffEngine" />
     <PackageReference Include="EmptyFiles" />
@@ -18,14 +19,10 @@
     <PackageReference Include="Verify.EntityFramework" />
     <PackageReference Include="Verify.MicrosoftLogging" />
     <PackageReference Include="Verify.AspNetCore" />
-    <PackageReference Include="NUnit3TestAdapter" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="coverlet.collector" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
     <ProjectReference Include="..\Delta.EF\Delta.EF.csproj" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
     <ProjectReference Include="..\Delta.SqlServer\Delta.SqlServer.csproj" />
     <ProjectReference Include="..\WebApplicationSqlServerEF\WebApplicationSqlServerEF.csproj" />
-    <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
-    <Using Include="NUnit.Framework.Assert" Static="True" />
   </ItemGroup>
 </Project>

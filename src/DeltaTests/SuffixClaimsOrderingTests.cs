@@ -1,4 +1,4 @@
-[TestFixture]
+[NotInParallel]
 public class SuffixClaimsOrderingTests
 {
     [Test]
@@ -72,7 +72,7 @@ public class SuffixClaimsOrderingTests
 
         // Verify the suffix was used correctly
         var etag = context.Response.Headers.ETag.ToString();
-        That(etag, Does.Contain("user1-GroupA"));
+        await Assert.That(etag).Contains("user1-GroupA");
     }
 
     [Test]
@@ -86,10 +86,10 @@ public class SuffixClaimsOrderingTests
         var user1AgainEtag = await GetEtagForAuthenticatedUser("user1", "GroupA");
 
         // Different users get different ETags (correct behavior when auth runs first)
-        AreNotEqual(user1Etag, user2Etag);
+        await Assert.That(user2Etag).IsNotEqualTo(user1Etag);
 
         // Same user gets same ETag
-        AreEqual(user1Etag, user1AgainEtag);
+        await Assert.That(user1AgainEtag).IsEqualTo(user1Etag);
     }
 
     [Test]
@@ -119,7 +119,7 @@ public class SuffixClaimsOrderingTests
             allowAnonymous: true);
 
         var etag = context.Response.Headers.ETag.ToString();
-        That(etag, Does.Contain("static-suffix"));
+        await Assert.That(etag).Contains("static-suffix");
     }
 
     [Test]
@@ -147,7 +147,7 @@ public class SuffixClaimsOrderingTests
             LogLevel.Information);
 
         // Should complete without exception
-        AreEqual(200, context.Response.StatusCode);
+        await Assert.That(context.Response.StatusCode).IsEqualTo(200);
     }
 
     static async Task<string> GetEtagForAuthenticatedUser(string userData, string accessGroup)

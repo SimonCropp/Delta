@@ -1,3 +1,4 @@
+[NotInParallel]
 public class ConcurrencyTests :
     LocalDbTestBase
 {
@@ -58,7 +59,7 @@ public class ConcurrencyTests :
             var results = await Task.WhenAll(tasks);
             foreach (var result in results)
             {
-                IsNotEmpty(result);
+                await Assert.That(result).IsNotEmpty();
             }
         }
         finally

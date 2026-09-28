@@ -1,10 +1,11 @@
-﻿[TestFixture]
+[NotInParallel]
 public class MiddlewareTests
 {
-    [TestCase("immutable")]
-    [TestCase("IMMUTABLE")]
-    [TestCase("Immutable")]
-    [TestCase("public, max-age=31536000, IMMUTABLE")]
+    [Test]
+    [Arguments("immutable")]
+    [Arguments("IMMUTABLE")]
+    [Arguments("Immutable")]
+    [Arguments("public, max-age=31536000, IMMUTABLE")]
     public async Task ImmutableCacheControlCaseInsensitive(string cacheControlValue)
     {
         Recording.Start();
@@ -24,12 +25,13 @@ public class MiddlewareTests
             null,
             LogLevel.Information);
 
-        IsFalse(notModified);
-        That(response.Headers["Delta-No304"].ToString(), Does.Contain("immutable"));
+        await Assert.That(notModified).IsFalse();
+        await Assert.That(response.Headers["Delta-No304"].ToString()).Contains("immutable");
     }
 
     [Test]
-    public async Task Combinations([Values] bool suffixFunc, [Values] bool nullSuffixFunc, [Values] bool get, [Values] bool ifNoneMatch, [Values] bool sameIfNoneMatch, [Values] bool etag, [Values] bool executeFunc, [Values] bool trueExecuteFunc, [Values] bool immutable, [Values] bool noCache, [Values] bool minFresh)
+    [MatrixDataSource]
+    public async Task Combinations([Matrix] bool suffixFunc, [Matrix] bool nullSuffixFunc, [Matrix] bool get, [Matrix] bool ifNoneMatch, [Matrix] bool sameIfNoneMatch, [Matrix] bool etag, [Matrix] bool executeFunc, [Matrix] bool trueExecuteFunc, [Matrix] bool immutable, [Matrix] bool noCache, [Matrix] bool minFresh)
     {
         Recording.Start();
         DeltaExtensions.Reset();
@@ -140,7 +142,7 @@ public class MiddlewareTests
             null,
             LogLevel.Information);
 
-        AreEqual(1, callCount);
+        await Assert.That(callCount).IsEqualTo(1);
 
         // Second request: with max-age, should use cached timestamp
         var context2 = new DefaultHttpContext
@@ -166,8 +168,8 @@ public class MiddlewareTests
             LogLevel.Information);
 
         // DB was NOT called again — cached timestamp used
-        AreEqual(1, callCount);
-        IsTrue(notModified);
+        await Assert.That(callCount).IsEqualTo(1);
+        await Assert.That(notModified).IsTrue();
     }
 
     [Test]
@@ -201,7 +203,7 @@ public class MiddlewareTests
             null,
             LogLevel.Information);
 
-        AreEqual(1, callCount);
+        await Assert.That(callCount).IsEqualTo(1);
 
         // Second request: max-age=0 means must be fresh
         var context2 = new DefaultHttpContext
@@ -226,7 +228,7 @@ public class MiddlewareTests
             LogLevel.Information);
 
         // max-age=0 requires fresh data, so DB was called again
-        AreEqual(2, callCount);
+        await Assert.That(callCount).IsEqualTo(2);
     }
 
     [Test]
@@ -264,7 +266,7 @@ public class MiddlewareTests
         }
 
         // Both requests hit the DB
-        AreEqual(2, callCount);
+        await Assert.That(callCount).IsEqualTo(2);
     }
 
     [Test]
@@ -298,7 +300,7 @@ public class MiddlewareTests
             null,
             LogLevel.Information);
 
-        AreEqual(1, callCount);
+        await Assert.That(callCount).IsEqualTo(1);
 
         // Second request: max-stale=10, should use cached timestamp
         var context2 = new DefaultHttpContext
@@ -322,7 +324,7 @@ public class MiddlewareTests
             null,
             LogLevel.Information);
 
-        AreEqual(1, callCount);
+        await Assert.That(callCount).IsEqualTo(1);
     }
 
     [Test]
@@ -356,7 +358,7 @@ public class MiddlewareTests
             null,
             LogLevel.Information);
 
-        AreEqual(1, callCount);
+        await Assert.That(callCount).IsEqualTo(1);
 
         // Second request: max-stale without a value means accept any staleness
         var context2 = new DefaultHttpContext
@@ -380,7 +382,7 @@ public class MiddlewareTests
             null,
             LogLevel.Information);
 
-        AreEqual(1, callCount);
+        await Assert.That(callCount).IsEqualTo(1);
     }
 
     [Test]
@@ -414,7 +416,7 @@ public class MiddlewareTests
             null,
             LogLevel.Information);
 
-        AreEqual(1, callCount);
+        await Assert.That(callCount).IsEqualTo(1);
 
         // Second request: no-cache forces fresh timestamp
         var context2 = new DefaultHttpContext
@@ -440,7 +442,7 @@ public class MiddlewareTests
             LogLevel.Information);
 
         // no-cache bypasses cache, DB was called again
-        AreEqual(2, callCount);
+        await Assert.That(callCount).IsEqualTo(2);
     }
 
     [Test]
@@ -474,7 +476,7 @@ public class MiddlewareTests
             null,
             LogLevel.Information);
 
-        AreEqual(1, callCount);
+        await Assert.That(callCount).IsEqualTo(1);
 
         // Second request: no-cache wins over max-age
         var context2 = new DefaultHttpContext
@@ -500,7 +502,7 @@ public class MiddlewareTests
             LogLevel.Information);
 
         // no-cache takes precedence, DB was called again
-        AreEqual(2, callCount);
+        await Assert.That(callCount).IsEqualTo(2);
     }
 
     [Test]
@@ -534,7 +536,7 @@ public class MiddlewareTests
             null,
             LogLevel.Information);
 
-        AreEqual(1, callCount);
+        await Assert.That(callCount).IsEqualTo(1);
 
         // Second request: max-age=3600, min-fresh=5 — plenty of freshness remaining
         var context2 = new DefaultHttpContext
@@ -560,8 +562,8 @@ public class MiddlewareTests
             LogLevel.Information);
 
         // Cached timestamp used — enough freshness remaining
-        AreEqual(1, callCount);
-        IsTrue(notModified);
+        await Assert.That(callCount).IsEqualTo(1);
+        await Assert.That(notModified).IsTrue();
     }
 
     [Test]
@@ -595,7 +597,7 @@ public class MiddlewareTests
             null,
             LogLevel.Information);
 
-        AreEqual(1, callCount);
+        await Assert.That(callCount).IsEqualTo(1);
 
         // Second request: max-age=1, min-fresh=3600 — min-fresh exceeds max-age so cache is rejected
         var context2 = new DefaultHttpContext
@@ -620,32 +622,32 @@ public class MiddlewareTests
             LogLevel.Information);
 
         // min-fresh requirement not met, DB was called again
-        AreEqual(2, callCount);
+        await Assert.That(callCount).IsEqualTo(2);
     }
 
     [Test]
-    public void CacheControlExtensions()
+    public async Task CacheControlExtensions()
     {
         var context = new DefaultHttpContext();
         var response = context.Response;
 
         response.NoStore();
-        AreEqual("no-store, max-age=0", response.Headers.CacheControl.ToString());
+        await Assert.That(response.Headers.CacheControl.ToString()).IsEqualTo("no-store, max-age=0");
 
         response.NoCache();
-        AreEqual("no-cache", response.Headers.CacheControl.ToString());
+        await Assert.That(response.Headers.CacheControl.ToString()).IsEqualTo("no-cache");
 
         response.CacheForever();
-        AreEqual("public, max-age=31536000, immutable", response.Headers.CacheControl.ToString());
+        await Assert.That(response.Headers.CacheControl.ToString()).IsEqualTo("public, max-age=31536000, immutable");
     }
 
     [Test]
-    public void ConnectionImplicitOperator()
+    public async Task ConnectionImplicitOperator()
     {
         using var dbConnection = new SqlConnection();
         Connection connection = dbConnection;
 
-        AreEqual(dbConnection, connection.SqlConnection);
-        IsNull(connection.DbTransaction);
+        await Assert.That(connection.SqlConnection).IsEqualTo(dbConnection);
+        await Assert.That(connection.DbTransaction).IsNull();
     }
 }

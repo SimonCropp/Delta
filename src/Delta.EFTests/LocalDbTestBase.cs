@@ -1,4 +1,3 @@
-﻿[TestFixture]
 public abstract class LocalDbTestBase
 {
     static SqlInstance<SampleDbContext> sqlInstance;
@@ -27,11 +26,11 @@ public abstract class LocalDbTestBase
 
     static string GetName(string? suffix)
     {
-        var test = TestContext.CurrentContext.Test;
-        var method = test.MethodName!;
+        var details = TestContext.Current!.Metadata.TestDetails;
+        var method = details.MethodName;
         var arguments = string.Join(
             ' ',
-            test.Arguments.Select(VerifierSettings.GetNameForParameter));
+            details.TestMethodArguments.Select(VerifierSettings.GetNameForParameter));
 
         return $"{method}_{arguments}_{suffix}";
     }

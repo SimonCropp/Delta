@@ -10,3 +10,4 @@ nugets/
 *TestResults*
 coverage-report/
 *.lnk
+TestResults/
