@@ -14,7 +14,6 @@
     <PackageReference Include="SimpleInfoName" />
     <PackageReference Include="Verify" />
     <PackageReference Include="Verify.SqlServer" />
-    <PackageReference Include="Verify.DiffPlex" />
     <PackageReference Include="Verify.MicrosoftLogging" />
     <PackageReference Include="Verify.AspNetCore" />
     <PackageReference Include="coverlet.collector" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" />
