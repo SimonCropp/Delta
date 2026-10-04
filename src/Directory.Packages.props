@@ -4,8 +4,8 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="EfLocalDb" Version="27.2.2" />
-    <PackageVersion Include="LocalDb" Version="27.2.2" />
+    <PackageVersion Include="EfLocalDb" Version="27.2.3" />
+    <PackageVersion Include="LocalDb" Version="27.2.3" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.5.0" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.1.1" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
@@ -20,11 +20,11 @@
     <PackageVersion Include="Verify.EntityFramework" Version="15.5.0" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="5.0.0" />
     <PackageVersion Include="Verify.TUnit" Version="33.2.0" />
-    <PackageVersion Include="TUnit" Version="1.72.4" />
+    <PackageVersion Include="TUnit" Version="1.72.16" />
     <PackageVersion Include="Verify.SqlServer" Version="12.2.0" />
     <PackageVersion Include="Argon" Version="0.37.0" />
     <PackageVersion Include="DiffEngine" Version="20.6.0" />
-    <PackageVersion Include="EmptyFiles" Version="8.19.0" />
+    <PackageVersion Include="EmptyFiles" Version="8.20.0" />
     <PackageVersion Include="SimpleInfoName" Version="3.2.0" />
     <PackageVersion Include="Verify" Version="33.2.0" />
   </ItemGroup>
