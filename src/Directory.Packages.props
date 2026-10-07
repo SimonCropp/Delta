@@ -14,18 +14,18 @@
     <PackageVersion Include="Npgsql" Version="10.0.3" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <PackageVersion Include="coverlet.collector" Version="10.1.0" />
-    <PackageVersion Include="ProjectDefaults" Version="1.0.182" />
+    <PackageVersion Include="ProjectDefaults" Version="1.0.184" />
     <PackageVersion Include="Sbom" Version="0.3.1" />
     <PackageVersion Include="Verify.AspNetCore" Version="5.0.0" />
     <PackageVersion Include="Verify.EntityFramework" Version="15.5.0" />
     <PackageVersion Include="Verify.MicrosoftLogging" Version="5.0.0" />
-    <PackageVersion Include="Verify.TUnit" Version="33.3.0" />
+    <PackageVersion Include="Verify.TUnit" Version="33.3.2-beta.1" />
     <PackageVersion Include="TUnit" Version="1.72.16" />
     <PackageVersion Include="Verify.SqlServer" Version="12.2.0" />
-    <PackageVersion Include="Argon" Version="0.37.0" />
+    <PackageVersion Include="Argon" Version="0.38.0" />
     <PackageVersion Include="DiffEngine" Version="20.7.0" />
     <PackageVersion Include="EmptyFiles" Version="8.20.0" />
     <PackageVersion Include="SimpleInfoName" Version="3.2.0" />
-    <PackageVersion Include="Verify" Version="33.3.0" />
+    <PackageVersion Include="Verify" Version="33.3.2-beta.1" />
   </ItemGroup>
 </Project>
