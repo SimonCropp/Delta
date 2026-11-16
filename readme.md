@@ -25,7 +25,8 @@ Effectively consumers will always receive the most current data, while the load 
 
 ## Sponsors
 
-### Entity Framework Extensions<!-- include: sponsors. path: /docs/mdsource/sponsors.include.md -->
+<!-- include: sponsors. path: /docs/mdsource/sponsors.include.md -->
+### Entity Framework Extensions
 
 [Entity Framework Extensions](https://entityframework-extensions.net/?utm_source=simoncropp&utm_medium=Delta) is a major sponsor and is proud to contribute to the development this project.
 

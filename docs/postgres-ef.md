@@ -109,7 +109,8 @@ app.UseDelta<SampleDbContext>();
 <!-- endSnippet -->
 
 
-### Add to a Route Group<!-- include: map-group-ef. path: /docs/mdsource/map-group-ef.include.md -->
+<!-- include: map-group-ef. path: /docs/mdsource/map-group-ef.include.md -->
+### Add to a Route Group
 
 To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
 
@@ -132,7 +133,8 @@ app.MapGroup("/group")
 <!-- endInclude -->
 
 
-### ShouldExecute<!-- include: should-execute-ef. path: /docs/mdsource/should-execute-ef.include.md -->
+<!-- include: should-execute-ef. path: /docs/mdsource/should-execute-ef.include.md -->
+### ShouldExecute
 
 Optionally control what requests Delta is executed on.
 
@@ -152,7 +154,8 @@ app.UseDelta<SampleDbContext>(
 <!-- endInclude -->
 
 
-### Suffix and Authentication<!-- include: suffix-auth-ef. path: /docs/mdsource/suffix-auth-ef.include.md -->
+<!-- include: suffix-auth-ef. path: /docs/mdsource/suffix-auth-ef.include.md -->
+### Suffix and Authentication
 
 When using a `suffix` callback that accesses `HttpContext.User` claims, authentication middleware **must** run before `UseDelta`. If `UseDelta` runs first, the User claims won't be populated yet, and all users will get the same cache key.
 
@@ -203,7 +206,8 @@ app.UseDelta<SampleDbContext>(
 <!-- endInclude -->
 
 
-### GetLastTimeStamp:<!-- include: last-timestamp-ef. path: /docs/mdsource/last-timestamp-ef.include.md -->
+<!-- include: last-timestamp-ef. path: /docs/mdsource/last-timestamp-ef.include.md -->
+### GetLastTimeStamp:
 
 `GetLastTimeStamp` is a helper method to get the DB timestamp that Delta uses to calculate the etag.
 

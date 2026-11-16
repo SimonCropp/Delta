@@ -140,7 +140,8 @@ var host = Host.CreateDefaultBuilder()
 <sup><a href='/src/DeltaTests/Usage.cs#L12-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseDeltaHostBuilderSqlServer' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-### Add to a Route Group<!-- include: map-group. path: /docs/mdsource/map-group.include.md -->
+<!-- include: map-group. path: /docs/mdsource/map-group.include.md -->
+### Add to a Route Group
 
 To add to a specific [Route Group](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/route-handlers#route-groups):
 
@@ -156,7 +157,8 @@ app.MapGroup("/group")
 <!-- endInclude -->
 
 
-### ShouldExecute<!-- include: should-execute. path: /docs/mdsource/should-execute.include.md -->
+<!-- include: should-execute. path: /docs/mdsource/should-execute.include.md -->
+### ShouldExecute
 
 Optionally control what requests Delta is executed on.
 
@@ -176,7 +178,8 @@ app.UseDelta(
 <!-- endInclude -->
 
 
-### Suffix and Authentication<!-- include: suffix-auth. path: /docs/mdsource/suffix-auth.include.md -->
+<!-- include: suffix-auth. path: /docs/mdsource/suffix-auth.include.md -->
+### Suffix and Authentication
 
 When using a `suffix` callback that accesses `HttpContext.User` claims, authentication middleware **must** run before `UseDelta`. If `UseDelta` runs first, the User claims won't be populated yet, and all users will get the same cache key.
 
@@ -291,7 +294,8 @@ application.UseDelta(
 <!-- endSnippet -->
 
 
-### GetLastTimeStamp:<!-- include: last-timestamp. path: /docs/mdsource/last-timestamp.include.md -->
+<!-- include: last-timestamp. path: /docs/mdsource/last-timestamp.include.md -->
+### GetLastTimeStamp:
 
 `GetLastTimeStamp` is a helper method to get the DB timestamp that Delta uses to calculate the etag.
 
@@ -305,7 +309,8 @@ var timeStamp = await connection.GetLastTimeStamp();
 <!-- endInclude -->
 
 
-## Delta.SqlServer<!-- include: sqlserver-helpers. path: /docs/mdsource/sqlserver-helpers.include.md -->
+<!-- include: sqlserver-helpers. path: /docs/mdsource/sqlserver-helpers.include.md -->
+## Delta.SqlServer
 
 A set of helper methods for working with [SQL Server Change Tracking](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/track-data-changes-sql-server) and [SQL Server Row Versioning](https://learn.microsoft.com/en-us/sql/t-sql/data-types/rowversion-transact-sql)
 
